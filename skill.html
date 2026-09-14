@@ -1,17 +1,16 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>我的星球 · 星愈</title>
-  <link rel="stylesheet" href="css/style.css?v=100">
+  <title>个人中心 · Skill Orbit</title>
   <style>
     :root {
       --ink: #eafcff;
       --muted: #8eb8c3;
       --cyan: #7cecff;
       --deep: #02090d;
-      --card-w: clamp(200px, 20vw, 320px);
+      --card-w: clamp(108.2px, 10.82vw, 161px);
     }
 
     * { box-sizing: border-box; }
@@ -53,14 +52,19 @@
       place-items: center;
       overflow: hidden;
       background:
-        radial-gradient(ellipse at 50% 86%, rgba(7, 133, 162, .22), transparent 42%),
+        radial-gradient(circle at 15% 88%, rgba(220, 170, 235, .08), transparent 35%),
+        radial-gradient(circle at 85% 88%, rgba(220, 170, 235, .08), transparent 35%),
+        radial-gradient(ellipse 80% 30% at 50% 90%, rgba(200, 130, 210, .2), transparent 60%),
         linear-gradient(180deg, #010304 0%, #02090d 72%, #06161b 100%);
     }
     .orbit-section::after {
       content: "";
       position: absolute;
-      inset: 72% -15% -12%;
-      background: radial-gradient(ellipse, rgba(87, 222, 245, .16), transparent 66%);
+      left: -10%;
+      right: -10%;
+      bottom: -12%;
+      height: 35%;
+      background: radial-gradient(ellipse 60% 100% at 50% 100%, rgba(210, 150, 225, .16), transparent 70%);
       filter: blur(26px);
       pointer-events: none;
     }
@@ -139,25 +143,17 @@
 
     .sphere--main {
       /* Exactly the same diameter and top anchor as the rear sphere. */
-      width: min(48vw, 610px, 58vh);
+      width: min(50.4vw, 640.5px, 60.9vh);
       aspect-ratio: 1;
       left: 50%;
       top: 7%;
       transform: translateX(-50%);
       z-index: 38;
-      --planet-light: rgba(212, 250, 255, .92);
-      --planet-bright: rgb(29, 214, 241);
-      --planet-mid: rgb(8, 126, 155);
-      --planet-dark: rgb(3, 39, 52);
-      --planet-glow: rgba(1, 101, 129, .85);
-      --planet-tint: rgba(18, 203, 229, .72);
-      background:
-        radial-gradient(circle at 29% 25%, rgba(255, 255, 255, .98) 0 5%, var(--planet-light) 19%, transparent 43%),
-        radial-gradient(circle at 66% 58%, var(--planet-bright), var(--planet-mid) 52%, var(--planet-dark) 82%);
+      background: url('planet.png') no-repeat center / 160%;
       box-shadow:
-        -24px -16px 45px rgba(255, 255, 255, .7),
-        24px 22px 70px var(--planet-glow),
-        inset -36px -28px 52px rgba(0, 24, 34, .5);
+        0 0 20px rgba(124, 236, 255, .6),
+        0 0 60px rgba(124, 236, 255, .25),
+        0 0 88px rgba(50, 168, 201, .2);
       overflow: hidden;
       cursor: pointer;
       transition: filter .25s ease;
@@ -165,16 +161,11 @@
     .sphere--main::before {
       content: "";
       position: absolute;
-      inset: -6%;
+      inset: 0;
       border-radius: inherit;
-      opacity: .72;
-      background:
-        radial-gradient(ellipse at 35% 32%, rgba(255,255,255,.55), transparent 7%),
-        radial-gradient(ellipse at 59% 42%, rgba(255,255,255,.2), transparent 13%),
-        radial-gradient(ellipse at 43% 69%, rgba(4, 91, 113, .62), transparent 20%),
-        repeating-radial-gradient(ellipse at 50% 50%, rgba(255,255,255,.11) 0 2px, transparent 3px 12px);
-      mix-blend-mode: screen;
-      filter: blur(2px);
+      pointer-events: none;
+      z-index: 5;
+      box-shadow: inset 0 0 0 2px rgba(124, 236, 255, .35);
     }
     .sphere__color-layer {
       position: absolute;
@@ -185,7 +176,7 @@
       pointer-events: none;
     }
     .sphere__color-layer--current {
-      opacity: .78;
+      opacity: 0;
     }
     .sphere__color-layer--next {
       opacity: 0;
@@ -238,19 +229,18 @@
       aspect-ratio: .86;
       transform-origin: center center;
       border: 1px solid rgba(228, 253, 255, .9);
-      border-radius: 22px;
+      border-radius: 14px;
       color: #e8fcff;
-      background: linear-gradient(145deg, rgba(172, 248, 255, .64), rgba(16, 138, 165, .36) 58%, rgba(7, 47, 65, .38));
+      background: linear-gradient(145deg, rgba(255, 190, 220, .55), rgba(77, 212, 237, .38) 55%, rgba(7, 47, 65, .4));
       box-shadow:
-        0 0 12px rgba(177, 246, 255, .88),
-        0 0 36px rgba(77, 212, 237, .32),
-        inset 0 0 22px rgba(226, 255, 255, .19);
+        0 0 8px rgba(200, 230, 255, .85),
+        0 0 24px rgba(77, 212, 237, .32),
+        inset 0 0 18px rgba(240, 220, 255, .2);
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 24px 20px;
-      text-align: center;
+      justify-content: flex-end;
+      padding: 14px 12px;
+      text-align: left;
       transition: filter .3s ease, border-color .3s ease, box-shadow .3s ease;
       will-change: transform, opacity;
       cursor: pointer;
@@ -258,18 +248,23 @@
     .card::before {
       content: "";
       position: absolute;
-      inset: 12px;
+      inset: 8px;
       border-left: 1px solid rgba(236, 255, 255, .62);
-      border-radius: 8px;
+      border-radius: 4px;
       pointer-events: none;
     }
-    .card__title { position: relative; z-index: 1; }
+    .card__title, .card__tag { position: relative; z-index: 1; }
     .card__title {
-      font-size: clamp(18px, 2.2vw, 28px);
+      font-size: clamp(14px, 1.25vw, 19px);
+      letter-spacing: .08em;
+      line-height: 1.2;
+      text-shadow: 0 0 12px rgba(209, 252, 255, .88);
+    }
+    .card__tag {
+      margin-top: 7px;
+      color: rgba(225, 253, 255, .75);
+      font-size: 11px;
       letter-spacing: .12em;
-      line-height: 1.3;
-      text-shadow: 0 0 16px rgba(209, 252, 255, .88);
-      font-weight: 500;
     }
     .card.is-active {
       border-color: #fff;
@@ -311,20 +306,20 @@
     .toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
 
     @media (max-height: 760px) {
-      :root { --card-w: clamp(148px, 14.6vw, 204px); }
+      :root { --card-w: clamp(97.7px, 9.64vw, 134.6px); }
       .scene { height: calc(100vh - 28px); min-height: 520px; }
-      .sphere--main { top: 7%; width: min(48vw, 610px, 58vh); }
+      .sphere--main { top: 7%; width: min(50.4vw, 640.5px, 60.9vh); }
       .sphere--rear { top: 7%; width: min(48vw, 610px, 58vh); }
       .scene__hint { bottom: .8%; }
     }
     @media (max-width: 760px) {
-      :root { --card-w: clamp(136px, 36vw, 192px); }
+      :root { --card-w: clamp(89.8px, 23.76vw, 126.7px); }
       body { min-width: 0; }
       .page-placeholder { min-height: 26vh; padding: 40px 8vw; }
       .orbit-section { min-height: 86vh; }
       .scene { width: 100vw; height: 650px; min-height: 0; }
-      .sphere--rear,
-      .sphere--main { width: min(72vw, 410px, 55vh); }
+      .sphere--rear { width: min(72vw, 410px, 55vh); }
+      .sphere--main { width: min(75.6vw, 430.5px, 57.75vh); }
       .sphere--rear,
       .sphere--main { top: 7%; }
       .sphere__label { right: 8%; font-size: 14px; }
@@ -335,51 +330,48 @@
 <body>
   <section class="page-placeholder">
     <div>
-      <h1>选择你的星球</h1>
-      <p>探索七大方向 · 点击星球进入</p>
+      <h1>个人中心</h1>
+      <p>探索你的专属空间</p>
     </div>
   </section>
 
-  <main class="orbit-section" aria-label="星球环绕导航">
+  <main class="orbit-section" aria-label="个人中心导航">
     <div class="scene">
-      <button class="sphere sphere--rear" type="button" aria-label="进入双盲棱镜">
-        <span class="sphere__label">双盲棱镜</span>
+      <button class="sphere sphere--rear" type="button" aria-label="进入历史记录">
+        <span class="sphere__label">历史记录</span>
       </button>
-      <button class="sphere sphere--main" type="button" aria-label="进入当前选中的星球">
+      <button class="sphere sphere--main" type="button" aria-label="进入当前选中的 skill">
         <span class="sphere__color-layer sphere__color-layer--current" aria-hidden="true"></span>
         <span class="sphere__color-layer sphere__color-layer--next" aria-hidden="true"></span>
       </button>
-      <div class="orbit" aria-label="星球卡片列表"></div>
-      <p class="scene__hint">拖动、滚轮或滑动来探索更多星球</p>
+      <div class="orbit" aria-label="个人中心卡片列表"></div>
+      <p class="scene__hint">拖动、滚轮或滑动来探索更多内容</p>
     </div>
   </main>
 
   <section class="page-placeholder">
     <div>
-      <p>拖动、滚轮或滑动来探索</p>
+      <p>更多功能正在完善中</p>
     </div>
   </section>
 
   <div class="toast" role="status" aria-live="polite"></div>
 
-  <!-- 星愈站点顶部导航 -->
-  <script src="js/store.js?v=100"></script>
-  <script src="js/app.js?v=100"></script>
-  <script>
-    if (window.StarhealApp) StarhealApp.injectTopNav();
-    document.body.style.paddingTop = '70px';
-  </script>
-
   <script>
     (() => {
       const skills = [
-        { title: "爱好星球", sub: "萌宠·游戏·二次元·影视综·音乐·读书·运动·手工", theme: "violet", topic: "hobby" },
-        { title: "成长星球", sub: "校园·考试·语言·编程·技能·自律打卡",           theme: "green",  topic: "growth" },
-        { title: "情绪星球", sub: "树洞·治愈·失恋·独居·关系·心理·玄学",           theme: "rose",   topic: "emotion" },
-        { title: "生活星球", sub: "穿搭·家居·旅行·省钱·养生",                     theme: "warm",   topic: "life" },
-        { title: "职场星球", sub: "求职·打工人·副业·职业·创业",                   theme: "gold",   topic: "career" },
-        { title: "身份星球", sub: "同城·校友·同龄·留学生·老乡",                   theme: "blue",   topic: "identity" },
-        { title: "潮流星球", sub: "饭圈·吃瓜·数码·梗文化·亚文化",                 theme: "violet", topic: "trend" }
+        ["我的观点", "观点", "my-views.html"],
+        ["我的收藏", "收藏", "my-favorites.html"],
+        ["我的星球", "星球", "my-planets.html"],
+        ["同频匹配报告", "匹配", "match-report.html"],
+        ["共鸣星图", "共鸣", "resonance-map.html"],
+        ["我的匿名身份", "身份", "my-identity.html"],
+        ["匿名模式设置", "匿名", "anonymous-settings.html"],
+        ["账号与安全", "安全", "account-security.html"],
+        ["消息通知", "通知", "notifications.html"],
+        ["隐私设置", "隐私", "privacy-settings.html"],
+        ["通用设置", "设置", "general-settings.html"],
+        ["退出登录", "退出", "logout.html"]
       ];
 
       const orbit = document.querySelector(".orbit");
@@ -389,23 +381,22 @@
       const rearSphere = document.querySelector(".sphere--rear");
       const toast = document.querySelector(".toast");
       const section = document.querySelector(".orbit-section");
-      const cards = skills.map((s, index) => {
+      const cards = skills.map(([title, tag, href], index) => {
         const card = document.createElement("button");
         card.type = "button";
         card.className = "card";
         card.dataset.index = index;
         card.dataset.id = `card-${String(index + 1).padStart(2, "0")}`;
-        card.setAttribute("aria-label", s.title);
-        card.innerHTML = `<span class="card__title">${s.title}</span>`;
+        card.dataset.href = href;
+        card.setAttribute("aria-label", `${title}，${tag}`);
+        card.innerHTML = `<span class="card__title">${title}</span><span class="card__tag">${tag}</span>`;
         card.addEventListener("click", (event) => {
           event.stopPropagation();
-          if (pointerSelected) { pointerSelected = false; return; }
-          if (moved) return;
-          // 选中 + 直接跳转
-          selectCard(index);
-          const s2 = skills[index];
-          showToast(`正在进入：${s2.title}`);
-          setTimeout(() => { location.href = `home.html?topic=${s2.topic}`; }, 700);
+          if (pointerSelected) {
+            pointerSelected = false;
+            return;
+          }
+          if (!moved) selectCard(index);
         });
         orbit.appendChild(card);
         return card;
@@ -430,10 +421,9 @@
       let selectedIndex = 0;
 
       const themeByTag = {
-        "灵感": "violet", "创作": "violet", "陪伴": "warm", "生活": "green",
-        "探索": "gold", "聆听": "violet", "知识": "blue", "视觉": "rose",
-        "表达": "rose", "成长": "green", "效率": "blue", "健康": "red",
-        "日常": "warm", "观察": "blue", "娱乐": "violet", "工具": "blue"
+        "观点": "blue", "收藏": "gold", "星球": "violet", "匹配": "rose",
+        "共鸣": "violet", "身份": "violet", "匿名": "violet", "安全": "red",
+        "通知": "warm", "隐私": "blue", "设置": "blue", "退出": "red"
       };
       const themePalette = {
         warm:   { light: "rgba(255,231,198,.9)", bright: "#ffb45c", mid: "#c95a37", dark: "#34131b", glow: "rgba(194,77,51,.9)", tint: "rgba(255,126,72,.76)" },
@@ -469,8 +459,8 @@
       function layout() {
         const width = orbit.clientWidth;
         const height = orbit.clientHeight;
-          const rx = Math.min(width * .48, 640);
-          const ry = Math.min(height * .22, 160);
+          const rx = Math.min(width * .31, 416);
+          const ry = Math.min(height * .128, 94);
         let activeIndex = 0;
         let smallest = Infinity;
 
@@ -528,51 +518,29 @@
         if (transitionLock) return;
         transitionLock = true;
         cards.forEach((card, cardIndex) => card.classList.toggle("is-selected", cardIndex === index));
-        selectionPaused = false;
-        const applyPlanet = () => {
-          const s = skills[index];
-          selectedIndex = index;
-          const theme = s.theme;
-          const palette = themePalette[theme] || themePalette.blue;
-          applyThemeStyles(theme);
-          currentLayer.style.background = planetGradient(palette);
-          nextLayer.style.background = [
-            "linear-gradient(135deg, rgba(255,255,255,.22), transparent 42%, rgba(255,255,255,.08))",
-            planetGradient(palette)
-          ].join(", ");
-          nextLayer.style.opacity = "0";
-          nextLayer.style.webkitMaskImage = "linear-gradient(135deg, transparent 0%, transparent 20%, #000 80%, #000 100%)";
-          nextLayer.style.maskImage = "linear-gradient(135deg, transparent 0%, transparent 20%, #000 80%, #000 100%)";
-          nextLayer.style.webkitMaskPosition = "100% 100%";
-          nextLayer.style.maskPosition = "100% 100%";
-          nextLayer.classList.remove("is-wiping");
-          void nextLayer.offsetWidth;
-          selectionPaused = true;
-          velocity = 0;
-          snap = null;
-          nextLayer.classList.add("is-wiping");
-          setTimeout(() => {
-            mainSphere.dataset.theme = theme;
-            nextLayer.classList.remove("is-wiping");
-            nextLayer.style.opacity = "0";
-            nextLayer.style.webkitMaskPosition = "100% 100%";
-            nextLayer.style.maskPosition = "100% 100%";
-            showToast(`已选择：${s.title} · 点击星球进入`);
-          }, 2000);
-          setTimeout(() => { transitionLock = false; }, 2100);
-        };
-        const active = Math.abs(normalize(index * step + rotation)) < 1.2;
-        if (active) applyPlanet();
-        else beginSnap(index, applyPlanet);
+        selectionPaused = true;
+        selectedIndex = index;
+        velocity = 0;
+        snap = null;
+        const [title] = skills[index];
+        showToast(`已选择：${title} · 点击主星球进入个人中心`);
+        setTimeout(() => { transitionLock = false; }, 300);
       }
 
       mainSphere.addEventListener("click", () => {
         if (transitionLock) return;
-        const s = skills[selectedIndex];
-        showToast(`正在进入：${s.title}`);
-        setTimeout(() => {
-          location.href = `home.html?topic=${s.topic}`;
-        }, 800);
+        const [title, tag, href] = skills[selectedIndex];
+        showToast(`正在进入：个人中心`);
+        notifyNavigation({
+          type: "sphere",
+          id: "personal-center",
+          title: "个人中心",
+          href: "profile.html",
+          selectedCard: {
+            id: `card-${String(selectedIndex + 1).padStart(2, "0")}`,
+            title, tag, href, theme: themeByTag[tag] || "blue"
+          }
+        });
       });
 
       orbit.addEventListener("pointerdown", (event) => {
@@ -623,8 +591,8 @@
         orbit._wheelTimer = setTimeout(finishInertia, 170);
       }, { passive: false });
       rearSphere.addEventListener("click", () => {
-        showToast("即将进入：双盲棱镜");
-        setTimeout(() => { location.href = "prism.html"; }, 600);
+        showToast("即将进入：历史记录");
+        notifyNavigation({ type: "sphere", id: "history-record", title: "历史记录" });
       });
 
       const visibilityObserver = new IntersectionObserver(([entry]) => {
