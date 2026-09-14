@@ -10,7 +10,7 @@
       --muted: #8eb8c3;
       --cyan: #7cecff;
       --deep: #02090d;
-      --card-w: clamp(108.2px, 10.82vw, 161px);
+      --card-w: 140px;
     }
 
     * { box-sizing: border-box; }
@@ -23,12 +23,12 @@
     }
     .orbit-title {
       position: absolute;
-      top: 5%;
+      top: 40px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 50;
       margin: 0;
-      font-size: clamp(28px, 4vw, 54px);
+      font-size: 42px;
       letter-spacing: .12em;
       font-weight: 500;
       color: var(--ink);
@@ -83,8 +83,8 @@
 
     .scene {
       position: relative;
-      width: min(1280px, 96vw);
-      height: clamp(560px, 82vh, 760px);
+      width: 1200px;
+      height: 680px;
       perspective: 1200px;
       user-select: none;
       touch-action: pan-y;
@@ -113,10 +113,10 @@
     .sphere--rear {
       /* The rear planet keeps its existing top anchor, while its diameter
          is capped so the complete planet remains visible in the hero. */
-      width: min(48vw, 610px, 58vh);
+      width: 580px;
       aspect-ratio: 1;
       left: 50%;
-      top: 7%;
+      top: 48px;
       transform: translateX(-33%);
       z-index: 4;
       background:
@@ -147,7 +147,7 @@
       top: 18%;
       z-index: 2;
       color: #d9fbff;
-      font-size: clamp(14px, 1.4vw, 22px);
+      font-size: 18px;
       letter-spacing: .18em;
       text-shadow: 0 0 16px #9ceeff;
       writing-mode: vertical-rl;
@@ -155,10 +155,10 @@
 
     .sphere--main {
       /* Exactly the same diameter and top anchor as the rear sphere. */
-      width: min(50.4vw, 640.5px, 60.9vh);
+      width: 610px;
       aspect-ratio: 1;
       left: 50%;
-      top: 7%;
+      top: 48px;
       transform: translateX(-50%);
       z-index: 38;
       background: url('planet.png') no-repeat center / 160%;
@@ -267,7 +267,7 @@
     }
     .card__title, .card__tag { position: relative; z-index: 1; }
     .card__title {
-      font-size: clamp(14px, 1.25vw, 19px);
+      font-size: 16px;
       letter-spacing: .08em;
       line-height: 1.2;
       text-shadow: 0 0 12px rgba(209, 252, 255, .88);
@@ -316,27 +316,6 @@
       letter-spacing: .08em;
     }
     .toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
-
-    @media (max-height: 760px) {
-      :root { --card-w: clamp(97.7px, 9.64vw, 134.6px); }
-      .scene { height: calc(100vh - 28px); min-height: 520px; }
-      .sphere--main { top: 7%; width: min(50.4vw, 640.5px, 60.9vh); }
-      .sphere--rear { top: 7%; width: min(48vw, 610px, 58vh); }
-      .scene__hint { bottom: .8%; }
-    }
-    @media (max-width: 760px) {
-      :root { --card-w: clamp(89.8px, 23.76vw, 126.7px); }
-      body { min-width: 0; }
-      .page-placeholder { min-height: 26vh; padding: 40px 8vw; }
-      .orbit-section { min-height: 86vh; }
-      .scene { width: 100vw; height: 650px; min-height: 0; }
-      .sphere--rear { width: min(72vw, 410px, 55vh); }
-      .sphere--main { width: min(75.6vw, 430.5px, 57.75vh); }
-      .sphere--rear,
-      .sphere--main { top: 7%; }
-      .sphere__label { right: 8%; font-size: 14px; }
-      .scene__hint { bottom: 2%; font-size: 11px; letter-spacing: .08em; }
-    }
   </style>
 </head>
 <body>
