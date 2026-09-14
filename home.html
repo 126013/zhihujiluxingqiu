@@ -133,7 +133,7 @@
         <div class="cosmos-tab active" data-tab="all">✦ 全部星球</div>
         <div class="cosmos-tab prism-tab" data-tab="prism">✧ 双盲棱镜</div>
         <div class="cosmos-tab" data-tab="messages" onclick="location.href='messages.html?v=5'">✦ 消息</div>
-        <div class="cosmos-tab" data-tab="me" onclick="location.href='profile.html?v=5'">◉ 我的星球</div>
+        <div class="cosmos-tab" data-tab="me" onclick="location.href='skill.html?v=5'">◉ 我的星球</div>
       </div>
     </div>
   </div>
@@ -971,8 +971,8 @@ document.querySelectorAll('.cosmos-tab').forEach(function(tab){
     document.querySelectorAll('.cosmos-tab').forEach(function(t){t.classList.remove('active');});
     tab.classList.add('active');
     const k = tab.dataset.tab;
-    if(k==='prism') location.href='prism.html?v=9';
-    else if(k==='me') location.href='profile.html?v=9';
+    if(k==='prism') location.href='shangman/?v=9';
+    else if(k==='me') location.href='skill.html?v=9';
   });
 });
 

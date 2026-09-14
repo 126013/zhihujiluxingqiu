@@ -193,7 +193,7 @@ window.StarhealApp = (function () {
     // 双盲棱镜核心按钮
     const core = document.createElement('a');
     core.className = 'nav-core';
-    core.href = 'prism.html';
+    core.href = 'shangman/';
     core.innerHTML = '<span>✧</span><span>双盲棱镜</span>';
     core.title = '双盲棱镜';
     nav.appendChild(core);
@@ -206,7 +206,7 @@ window.StarhealApp = (function () {
     // 我的
     const me = document.createElement('a');
     me.className = 'nav-item' + (active === 'profile' || active === 'settings' ? ' active' : '');
-    me.href = 'profile.html';
+    me.href = 'skill.html';
     me.innerHTML = '<span class="nav-icon">◉</span><span>我的</span>';
     nav.appendChild(me);
     document.body.appendChild(nav);

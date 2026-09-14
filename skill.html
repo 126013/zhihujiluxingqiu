@@ -599,6 +599,22 @@
         beginSnap(active);
       }
 
+      function doLogout() {
+        try {
+          localStorage.removeItem('starheal-user');
+          sessionStorage.clear();
+          document.cookie = 'starheal_user=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+        } catch (e) {}
+        showToast('已退出登录');
+        // 在 iframe 中时通知父窗口
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage('doLogout', '*');
+        } else {
+          // 独立页面则跳转回双盲棱镜
+          setTimeout(function(){ location.href = 'shangman/'; }, 1000);
+        }
+      }
+
       function selectCard(index) {
         if (transitionLock) return;
         transitionLock = true;
@@ -615,6 +631,11 @@
       mainSphere.addEventListener("click", () => {
         if (transitionLock) return;
         const [title, tag, href] = skills[selectedIndex];
+        // 退出登录卡片：直接执行退出
+        if (title === '退出登录') {
+          doLogout();
+          return;
+        }
         showToast(`正在进入：个人中心`);
         notifyNavigation({
           type: "sphere",

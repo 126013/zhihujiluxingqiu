@@ -218,6 +218,31 @@
       70%{box-shadow:0 0 0 8px rgba(217,167,108,0)}
       100%{box-shadow:0 0 0 0 rgba(217,167,108,0)}
     }
+    /* 顶部导航 */
+    .top-nav{display:flex;gap:8px;margin:0 auto}
+    .top-nav-btn{
+      padding:8px 20px;border-radius:999px;border:1px solid rgba(138,180,255,.18);
+      background:rgba(138,180,255,.06);color:var(--muted);font-size:14px;
+      letter-spacing:.1em;cursor:pointer;transition:all .25s;
+    }
+    .top-nav-btn:hover{color:#fff;border-color:rgba(138,180,255,.4);background:rgba(138,180,255,.12)}
+    .top-nav-btn.active{color:#fff;border-color:var(--accent);background:rgba(138,180,255,.2);box-shadow:0 0 16px rgba(138,180,255,.25)}
+    /* 个人中心视图 */
+    #prismView{display:block}
+    #meView{display:none;position:fixed;inset:0;z-index:90;background:#010304}
+    #meView iframe{width:100%;height:100%;border:0}
+    body.view-me #prismView{display:none}
+    body.view-me #meView{display:block}
+    body.view-me .planet-bg,body.view-me .starfield{display:none}
+    /* 个人中心退出按钮 */
+    .me-logout-btn{
+      position:fixed;top:70px;right:24px;z-index:95;
+      padding:8px 18px;border-radius:999px;border:1px solid rgba(255,100,100,.3);
+      background:rgba(255,80,80,.1);color:#ff9999;font-size:13px;
+      letter-spacing:.1em;cursor:pointer;transition:all .25s;display:none;
+    }
+    .me-logout-btn:hover{background:rgba(255,80,80,.2);color:#fff;border-color:rgba(255,100,100,.6)}
+    body.view-me .me-logout-btn{display:block}
 
     /* Section layout */
     .section{
@@ -1829,13 +1854,17 @@
       <strong>双盲诗</strong>
       <span>DOUBLE-BLIND POEM</span>
     </div>
+    <nav class="top-nav">
+      <button class="top-nav-btn active" data-view="prism" onclick="switchView('prism')">双盲棱镜</button>
+      <button class="top-nav-btn" data-view="me" onclick="switchView('me')">我的</button>
+    </nav>
     <div class="status-badge" id="topStatus">
       <span class="dot"></span>
       <span>模拟体验模式</span>
     </div>
   </header>
 
-  <main>
+  <main id="prismView">
     <!-- Intro Section -->
     <section class="section" id="introSection">
       <div class="section-inner">
@@ -4333,6 +4362,66 @@
         draw();
       }
     })();
+  </script>
+
+  <!-- 个人中心视图（内嵌 skill.html） -->
+  <div id="meView">
+    <iframe id="meIframe" src="" referrerpolicy="no-referrer"></iframe>
+    <button class="me-logout-btn" onclick="doLogout()">退出登录</button>
+  </div>
+
+  <script>
+    function switchView(view){
+      const prismView = document.getElementById('prismView');
+      const meView = document.getElementById('meView');
+      const buttons = document.querySelectorAll('.top-nav-btn');
+      buttons.forEach(b => b.classList.toggle('active', b.dataset.view === view));
+
+      if(view === 'me'){
+        document.body.classList.add('view-me');
+        const iframe = document.getElementById('meIframe');
+        if(!iframe.dataset.loaded){
+          iframe.src = '../skill.html?v=shangman';
+          iframe.dataset.loaded = '1';
+        }
+      } else {
+        document.body.classList.remove('view-me');
+      }
+    }
+
+    function showToast(msg, duration){
+      duration = duration || 1800;
+      let t = document.getElementById('logoutToast');
+      if(!t){
+        t = document.createElement('div');
+        t.id = 'logoutToast';
+        t.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(15,20,35,.95);color:#fff;padding:14px 28px;border-radius:999px;border:1px solid rgba(138,180,255,.3);font-size:14px;letter-spacing:.1em;z-index:9999;box-shadow:0 4px 24px rgba(0,0,0,.5);transition:opacity .3s;opacity:0;';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      requestAnimationFrame(function(){ t.style.opacity = '1'; });
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function(){
+        t.style.opacity = '0';
+      }, duration);
+    }
+
+    function doLogout(){
+      try {
+        localStorage.removeItem('starheal-user');
+        sessionStorage.clear();
+        document.cookie = 'starheal_user=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+      } catch(e){}
+      switchView('prism');
+      showToast('已退出登录');
+    }
+
+    // 监听来自 iframe 的退出登录消息
+    window.addEventListener('message', function(e){
+      if(e.data && (e.data === 'doLogout' || (typeof e.data === 'object' && e.data.action === 'logout'))){
+        doLogout();
+      }
+    });
   </script>
 </body>
 </html>
