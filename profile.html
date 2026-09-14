@@ -35,132 +35,137 @@
     .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:10px;background:rgba(20,16,40,.95);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:13px;z-index:999;animation:toastIn .3s}
     @keyframes toastIn{from{opacity:0;transform:translate(-50%,-10px)}to{opacity:1;transform:translate(-50%,0)}}
 
-    /* ========= 手机端：图一个人中心样式 ========= */
-    .mobile-hero{display:none}
-    @media(max-width:768px){
-      body{overflow-x:hidden}
-      /* 隐藏桌面端元素 */
-      .profile-card,.stat-row,.section.desktop-only{display:none}
-      .page{padding:0;margin:0;max-width:none;min-height:100vh;position:relative;overflow:hidden}
-      /* 个人中心大标题 */
-      .mobile-hero{
-        display:block;
-        position:relative;
-        min-height:100vh;
-        padding:0;
-        overflow:hidden;
-      }
-      .mobile-title{
-        position:absolute;
-        top:calc(env(safe-area-inset-top,0px) + 60px);
-        left:0;right:0;
-        text-align:center;
-        font-size:42px;
-        font-weight:300;
-        letter-spacing:.15em;
-        color:#eef1ff;
-        text-shadow:0 0 30px rgba(138,180,255,.4),0 2px 8px rgba(0,0,0,.6);
-        z-index:5;
-        font-family:Georgia,"Noto Serif CJK SC",serif;
-      }
-      /* 右侧大星球 */
-      .mobile-planet{
-        position:absolute;
-        right:-30%;
-        top:50%;
-        transform:translateY(-50%);
-        width:140vw;
-        max-width:none;
-        aspect-ratio:1;
-        z-index:1;
-        pointer-events:none;
-        background-image:url('planet.png');
-        background-size:contain;
-        background-repeat:no-repeat;
-        background-position:center center;
-        filter:drop-shadow(0 0 60px rgba(120,180,220,.35)) drop-shadow(0 0 120px rgba(80,140,200,.25)) blur(1px);
-        opacity:.9;
-      }
-      /* 星球光环 */
-      .mobile-planet::after{
-        content:'';
-        position:absolute;
-        top:50%;left:50%;
-        width:88%;height:88%;
-        transform:translate(-50%,-50%);
-        border-radius:50%;
-        border:2px solid rgba(150,210,240,.25);
-        box-shadow:0 0 40px rgba(120,180,220,.2),inset 0 0 40px rgba(120,180,220,.1);
-      }
-      /* 扇形卡片容器 */
-      .fanned-cards{
-        position:absolute;
-        bottom:calc(env(safe-area-inset-bottom,0px) + 40px);
-        left:0;
-        right:0;
-        height:360px;
-        z-index:6;
-        padding:0 20px;
-      }
-      .fan-card{
-        position:absolute;
-        bottom:0;
-        width:160px;
-        height:220px;
-        border-radius:20px;
-        background:linear-gradient(145deg,rgba(40,60,110,.55),rgba(20,30,60,.65));
-        border:1px solid rgba(140,180,255,.22);
-        backdrop-filter:blur(14px);
-        -webkit-backdrop-filter:blur(14px);
-        box-shadow:0 12px 40px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.08);
-        padding:24px 18px;
-        display:flex;
-        flex-direction:column;
-        justify-content:flex-end;
-        cursor:pointer;
-        transition:transform .3s ease,box-shadow .3s ease;
-        color:#eef1ff;
-      }
-      .fan-card:active{transform:translateY(-4px) scale(1.02)!important}
-      .fan-card .fan-title{
-        font-size:17px;
-        font-weight:500;
-        letter-spacing:.05em;
-        margin-bottom:6px;
-      }
-      .fan-card .fan-sub{
-        font-size:12px;
-        color:rgba(180,200,240,.65);
-        letter-spacing:.1em;
-      }
-      /* 每张卡片的位置与旋转角度 —— 扇形层叠 */
-      .fan-card:nth-child(1){left:0;transform:rotate(-12deg) translateY(20px);z-index:1}
-      .fan-card:nth-child(2){left:80px;transform:rotate(-4deg) translateY(0);z-index:2}
-      .fan-card:nth-child(3){left:170px;transform:rotate(6deg) translateY(-10px);z-index:3}
-      .fan-card:nth-child(4){left:250px;transform:rotate(16deg) translateY(5px);z-index:4}
-      /* 不同色调 */
-      .fan-card.c1{background:linear-gradient(145deg,rgba(100,80,160,.5),rgba(50,40,100,.6))}
-      .fan-card.c2{background:linear-gradient(145deg,rgba(80,120,180,.5),rgba(40,70,130,.6))}
-      .fan-card.c3{background:linear-gradient(145deg,rgba(60,150,170,.5),rgba(30,90,110,.6))}
-      .fan-card.c4{background:linear-gradient(145deg,rgba(150,100,180,.5),rgba(80,50,120,.6))}
-      /* 退出登录按钮 —— 手机端固定 */
-      .mobile-logout{
-        position:absolute;
-        top:calc(env(safe-area-inset-top,0px) + 16px);
-        right:16px;
-        z-index:10;
-        width:36px;height:36px;
-        border-radius:50%;
-        background:rgba(255,255,255,.06);
-        border:1px solid rgba(255,255,255,.12);
-        color:rgba(255,150,150,.8);
-        font-size:16px;
-        display:flex;align-items:center;justify-content:center;
-        cursor:pointer;
-      }
-      /* 顶部导航在手机端个人中心隐藏 */
-      .topnav,.bottom-nav{display:none}
+    /* ========= 全局：图一个人中心扇形布局 ========= */
+    /* 隐藏桌面端列表式元素 */
+    .profile-card,.stat-row,.section.desktop-only{display:none}
+    .page{padding:0;margin:0;max-width:none;min-height:100vh;position:relative;overflow:hidden}
+    body{overflow-x:hidden}
+    .mobile-hero{
+      display:block;
+      position:relative;
+      min-height:100vh;
+      padding:0;
+      overflow:hidden;
     }
+    .mobile-title{
+      position:absolute;
+      top:calc(env(safe-area-inset-top,0px) + 60px);
+      left:0;right:0;
+      text-align:center;
+      font-size:42px;
+      font-weight:300;
+      letter-spacing:.15em;
+      color:#eef1ff;
+      text-shadow:0 0 30px rgba(138,180,255,.4),0 2px 8px rgba(0,0,0,.6);
+      z-index:5;
+      font-family:Georgia,"Noto Serif CJK SC",serif;
+    }
+    .mobile-planet{
+      position:absolute;
+      right:-30%;
+      top:50%;
+      transform:translateY(-50%);
+      width:140vw;
+      max-width:none;
+      aspect-ratio:1;
+      z-index:1;
+      pointer-events:none;
+      background-image:url('planet.png');
+      background-size:contain;
+      background-repeat:no-repeat;
+      background-position:center center;
+      filter:drop-shadow(0 0 60px rgba(120,180,220,.35)) drop-shadow(0 0 120px rgba(80,140,200,.25)) blur(1px);
+      opacity:.9;
+    }
+    .mobile-planet::after{
+      content:'';
+      position:absolute;
+      top:50%;left:50%;
+      width:88%;height:88%;
+      transform:translate(-50%,-50%);
+      border-radius:50%;
+      border:2px solid rgba(150,210,240,.25);
+      box-shadow:0 0 40px rgba(120,180,220,.2),inset 0 0 40px rgba(120,180,220,.1);
+    }
+    .fanned-cards{
+      position:absolute;
+      bottom:calc(env(safe-area-inset-bottom,0px) + 40px);
+      left:0;
+      right:0;
+      height:360px;
+      z-index:6;
+      padding:0 20px;
+    }
+    .fan-card{
+      position:absolute;
+      bottom:0;
+      width:160px;
+      height:220px;
+      border-radius:20px;
+      background:linear-gradient(145deg,rgba(40,60,110,.55),rgba(20,30,60,.65));
+      border:1px solid rgba(140,180,255,.22);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      box-shadow:0 12px 40px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.08);
+      padding:24px 18px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      cursor:pointer;
+      transition:transform .3s ease,box-shadow .3s ease;
+      color:#eef1ff;
+    }
+    .fan-card:active{transform:translateY(-4px) scale(1.02)!important}
+    .fan-card .fan-title{
+      font-size:17px;
+      font-weight:500;
+      letter-spacing:.05em;
+      margin-bottom:6px;
+    }
+    .fan-card .fan-sub{
+      font-size:12px;
+      color:rgba(180,200,240,.65);
+      letter-spacing:.1em;
+    }
+    .fan-card:nth-child(1){left:0;transform:rotate(-12deg) translateY(20px);z-index:1}
+    .fan-card:nth-child(2){left:80px;transform:rotate(-4deg) translateY(0);z-index:2}
+    .fan-card:nth-child(3){left:170px;transform:rotate(6deg) translateY(-10px);z-index:3}
+    .fan-card:nth-child(4){left:250px;transform:rotate(16deg) translateY(5px);z-index:4}
+    .fan-card.c1{background:linear-gradient(145deg,rgba(100,80,160,.5),rgba(50,40,100,.6))}
+    .fan-card.c2{background:linear-gradient(145deg,rgba(80,120,180,.5),rgba(40,70,130,.6))}
+    .fan-card.c3{background:linear-gradient(145deg,rgba(60,150,170,.5),rgba(30,90,110,.6))}
+    .fan-card.c4{background:linear-gradient(145deg,rgba(150,100,180,.5),rgba(80,50,120,.6))}
+    .mobile-logout{
+      position:absolute;
+      top:calc(env(safe-area-inset-top,0px) + 16px);
+      right:16px;
+      z-index:10;
+      width:36px;height:36px;
+      border-radius:50%;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,150,150,.8);
+      font-size:16px;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+    }
+    .mobile-back{
+      position:absolute;
+      top:calc(env(safe-area-inset-top,0px) + 16px);
+      left:16px;
+      z-index:10;
+      width:36px;height:36px;
+      border-radius:50%;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(200,220,255,.8);
+      font-size:16px;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+      text-decoration:none;
+    }
+    /* 个人中心隐藏顶部和底部导航 */
+    .topnav,.bottom-nav{display:none}
     @media(max-width:420px){
       .fan-card{width:140px;height:200px}
       .fan-card:nth-child(1){left:0}
@@ -174,6 +179,7 @@
   <main class="page">
     <!-- ========= 手机端：个人中心扇形布局 ========= -->
     <div class="mobile-hero">
+      <a class="mobile-back" href="home.html" title="返回">←</a>
       <div class="mobile-title">个人中心</div>
       <div class="mobile-planet"></div>
       <button class="mobile-logout" title="退出登录" onclick="logout()">⏻</button>
