@@ -4422,6 +4422,14 @@
         doLogout();
       }
     });
+
+    // 检测 URL 参数 ?view=me 自动切换到个人中心
+    (function(){
+      var params = new URLSearchParams(window.location.search);
+      if(params.get('view') === 'me'){
+        switchView('me');
+      }
+    })();
   </script>
 </body>
 </html>

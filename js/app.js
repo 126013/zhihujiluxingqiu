@@ -206,7 +206,7 @@ window.StarhealApp = (function () {
     // 我的
     const me = document.createElement('a');
     me.className = 'nav-item' + (active === 'profile' || active === 'settings' ? ' active' : '');
-    me.href = 'skill.html';
+    me.href = 'shangman/?view=me';
     me.innerHTML = '<span class="nav-icon">◉</span><span>我的</span>';
     nav.appendChild(me);
     document.body.appendChild(nav);

@@ -481,7 +481,14 @@
             pointerSelected = false;
             return;
           }
-          if (!moved) selectCard(index);
+          if (!moved) {
+            selectCard(index);
+            // 退出登录卡片直接执行退出
+            const [cardTitle] = skills[index];
+            if (cardTitle === '退出登录') {
+              setTimeout(doLogout, 350);
+            }
+          }
         });
         orbit.appendChild(card);
         return card;
