@@ -741,5 +741,14 @@
       requestAnimationFrame(frame);
     })();
   </script>
+
+  <!-- 共享导航（仅独立页面显示，iframe 内嵌时不显示） -->
+  <script src="js/app.js?v=205"></script>
+  <script>
+    if (window.parent === window) {
+      StarhealApp.injectBackground();
+      StarhealApp.injectTopNav('profile');
+    }
+  </script>
 </body>
 </html>

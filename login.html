@@ -145,7 +145,7 @@
       </div>
       <div class="zh-tabs">
         <div class="zh-tab active" data-zh="qr">扫码登录</div>
-        <div class="zh-tab" data-zh="pwd">密码登录</div>
+        <div class="zh-tab" data-zh="phone">手机号登录</div>
       </div>
       <div class="zh-body">
         <!-- 扫码登录 -->
@@ -162,21 +162,23 @@
           <div class="qr-sub">二维码 60 秒内有效</div>
           <button class="qr-refresh" onclick="refreshQr()">刷新二维码</button>
         </div>
-        <!-- 密码登录 -->
-        <div class="zh-pane" id="zhPanePwd">
+        <!-- 手机号登录 -->
+        <div class="zh-pane" id="zhPanePhone">
           <div class="zh-field">
-            <label>手机号 / 邮箱</label>
-            <input type="text" id="zhAccount" placeholder="请输入知乎账号" autocomplete="off">
+            <label>手机号</label>
+            <input type="tel" id="zhPhone" placeholder="请输入知乎绑定的手机号" maxlength="11" autocomplete="tel">
           </div>
           <div class="zh-field">
-            <label>密码</label>
-            <input type="password" id="zhPassword" placeholder="请输入密码" autocomplete="off">
+            <label>验证码</label>
+            <div style="display:flex;gap:8px">
+              <input type="text" id="zhCode" placeholder="6位验证码" maxlength="6" autocomplete="one-time-code">
+              <button type="button" class="qr-refresh" id="zhCodeBtn" onclick="sendZhCode(this)" style="margin:0;white-space:nowrap">获取验证码</button>
+            </div>
           </div>
           <div class="zh-row">
             <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" style="width:auto"> 记住我</label>
-            <a href="#">忘记密码？</a>
           </div>
-          <button class="btn-zh-login" id="zhPwdBtn" onclick="zhihuPwdLogin()">登 录</button>
+          <button class="btn-zh-login" id="zhPhoneBtn" onclick="zhihuPhoneLogin()">登 录</button>
         </div>
       </div>
     </div>
@@ -232,7 +234,7 @@
     function switchZhTab(name){
       document.querySelectorAll('.zh-tab').forEach(x=>x.classList.toggle('active',x.dataset.zh===name));
       document.getElementById('zhPaneQr').classList.toggle('active',name==='qr');
-      document.getElementById('zhPanePwd').classList.toggle('active',name==='pwd');
+      document.getElementById('zhPanePhone').classList.toggle('active',name==='phone');
     }
     // 绘制模拟二维码
     function drawQr(){
@@ -283,13 +285,19 @@
         setTimeout(()=>doLogin(),900);
       },2500);
     }
-    // 密码登录
-    function zhihuPwdLogin(){
-      const acc=document.getElementById('zhAccount').value.trim();
-      const pwd=document.getElementById('zhPassword').value;
-      const btn=document.getElementById('zhPwdBtn');
-      if(!acc){alert('请输入知乎账号');return;}
-      if(!pwd){alert('请输入密码');return;}
+    // 手机号登录
+    function sendZhCode(btn){
+      const phone=document.getElementById('zhPhone').value.trim();
+      if(!/^1\d{10}$/.test(phone)){alert('请输入正确的手机号');return;}
+      let n=60;btn.disabled=true;
+      const t=setInterval(()=>{btn.textContent=n+'s';if(--n<0){clearInterval(t);btn.disabled=false;btn.textContent='获取验证码'}},1000);
+    }
+    function zhihuPhoneLogin(){
+      const phone=document.getElementById('zhPhone').value.trim();
+      const code=document.getElementById('zhCode').value.trim();
+      const btn=document.getElementById('zhPhoneBtn');
+      if(!/^1\d{10}$/.test(phone)){alert('请输入正确的手机号');return;}
+      if(code.length!==6){alert('请输入6位验证码');return;}
       btn.disabled=true;
       btn.textContent='登录中...';
       setTimeout(()=>doLogin(),800);

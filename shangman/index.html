@@ -219,14 +219,29 @@
       100%{box-shadow:0 0 0 0 rgba(217,167,108,0)}
     }
     /* 顶部导航 */
-    .top-nav{display:flex;gap:8px;margin:0 auto}
+    .top-nav{display:flex;gap:8px;margin:0 auto;align-items:center}
     .top-nav-btn{
-      padding:8px 20px;border-radius:999px;border:1px solid rgba(138,180,255,.18);
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:8px 16px;border-radius:999px;border:1px solid rgba(138,180,255,.18);
       background:rgba(138,180,255,.06);color:var(--muted);font-size:14px;
-      letter-spacing:.1em;cursor:pointer;transition:all .25s;
+      letter-spacing:.05em;cursor:pointer;transition:all .25s;text-decoration:none;white-space:nowrap;
     }
     .top-nav-btn:hover{color:#fff;border-color:rgba(138,180,255,.4);background:rgba(138,180,255,.12)}
     .top-nav-btn.active{color:#fff;border-color:var(--accent);background:rgba(138,180,255,.2);box-shadow:0 0 16px rgba(138,180,255,.25)}
+    .nav-search{
+      display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;
+      border:1px solid rgba(138,180,255,.18);background:rgba(138,180,255,.06);
+    }
+    .nav-search .s-ico{font-size:13px;opacity:.6}
+    .nav-search input{
+      background:none;border:none;outline:none;color:#fff;font-size:13px;width:140px;
+      font-family:inherit;
+    }
+    .nav-search input::placeholder{color:rgba(255,255,255,.3)}
+    @media(max-width:768px){
+      .nav-search input{width:80px}
+      .top-nav-btn{padding:6px 10px;font-size:12px}
+    }
     /* 个人中心视图 */
     #prismView{display:block}
     #meView{display:none;position:fixed;inset:0;z-index:90;background:#010304}
@@ -1855,7 +1870,14 @@
       <span>DOUBLE-BLIND POEM</span>
     </div>
     <nav class="top-nav">
+      <a class="top-nav-btn" href="../home.html" onclick="event.preventDefault();if(history.length>1)history.back();else location.href='../home.html'">返回</a>
+      <a class="top-nav-btn" href="../home.html">星系</a>
+      <label class="nav-search">
+        <span class="s-ico">🔍</span>
+        <input type="text" placeholder="搜索社区，回车直达" onkeydown="if(event.key==='Enter'&&this.value.trim())location.href='../community.html?q='+encodeURIComponent(this.value.trim())" />
+      </label>
       <button class="top-nav-btn active" data-view="prism" onclick="switchView('prism')">双盲棱镜</button>
+      <a class="top-nav-btn" href="../messages.html">消息</a>
       <button class="top-nav-btn" data-view="me" onclick="switchView('me')">我的</button>
     </nav>
     <div class="status-badge" id="topStatus">
