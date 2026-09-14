@@ -14,13 +14,25 @@
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html, body { height: 100%; overflow: hidden; }
     body {
       margin: 0;
       color: var(--ink);
       background: #010304;
       font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
-      overflow-x: hidden;
+    }
+    .orbit-title {
+      position: absolute;
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      margin: 0;
+      font-size: clamp(28px, 4vw, 54px);
+      letter-spacing: .12em;
+      font-weight: 500;
+      color: var(--ink);
+      text-shadow: 0 0 16px rgba(200, 140, 220, .5);
     }
 
     .page-placeholder {
@@ -328,14 +340,8 @@
   </style>
 </head>
 <body>
-  <section class="page-placeholder">
-    <div>
-      <h1>个人中心</h1>
-      <p>探索你的专属空间</p>
-    </div>
-  </section>
-
   <main class="orbit-section" aria-label="个人中心导航">
+    <h1 class="orbit-title">个人中心</h1>
     <div class="scene">
       <button class="sphere sphere--rear" type="button" aria-label="进入历史记录">
         <span class="sphere__label">历史记录</span>
@@ -348,12 +354,6 @@
       <p class="scene__hint">拖动、滚轮或滑动来探索更多内容</p>
     </div>
   </main>
-
-  <section class="page-placeholder">
-    <div>
-      <p>更多功能正在完善中</p>
-    </div>
-  </section>
 
   <div class="toast" role="status" aria-live="polite"></div>
 
