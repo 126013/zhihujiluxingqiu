@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#07070f">
+  <title>帖子详情 — 星愈·双盲棱镜</title>
+  <link rel="stylesheet" href="css/style.css?v=100">
+  <style>
+    .page { padding-top: 80px; }
+    .back-link { font-size: 12px; color: var(--text-dim); cursor: pointer; margin-bottom: 14px; display: inline-flex; align-items: center; gap: 4px; }
+    .back-link:hover { color: var(--accent-cyan); }
+
+    .post-detail.glass-strong { padding: 22px; margin-bottom: 18px; }
+    .post-detail .head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; font-size: 12px; color: var(--text-dim); }
+    .post-detail .head .avatar { width: 32px; height: 32px; }
+    .post-detail .head .name.anon { color: var(--text-dim); font-style: italic; }
+    .post-detail .head .name { color: var(--text-glow); cursor: pointer; }
+    .post-detail .head .name.real:hover { color: var(--accent-cyan); }
+    .post-detail .head .time { margin-left: auto; }
+
+    .post-detail .q {
+      font-family: var(--font-serif); font-size: 20px; line-height: 1.6; color: var(--text-star);
+      margin-bottom: 12px; letter-spacing: 0.02em;
+    }
+    .post-detail .poetic {
+      font-family: var(--font-serif); font-style: italic; font-size: 14px;
+      color: var(--accent-cyan); margin-bottom: 16px; opacity: 0.9;
+      padding-left: 12px; border-left: 2px solid rgba(168,216,234,0.3);
+    }
+
+    .section-title {
+      font-size: 11px; letter-spacing: 0.24em; color: var(--text-faint);
+      margin: 18px 0 8px; text-transform: uppercase;
+    }
+    .original-block {
+      padding: 14px; border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
+      font-family: var(--font-serif); font-size: 14px; line-height: 1.8; color: var(--text-glow);
+    }
+
+    .ai-block {
+      padding: 16px; border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, rgba(107,91,149,0.06), rgba(74,111,165,0.06));
+      border: 1px solid rgba(168,216,234,0.18);
+    }
+    .ai-block .ai-summary { font-size: 14px; color: var(--text-star); font-weight: 500; margin-bottom: 10px; line-height: 1.6; }
+    .ai-block .ai-body { font-size: 13px; line-height: 1.85; color: var(--text-glow); }
+    .ai-block .ai-tag { margin-bottom: 10px; }
+
+    .source-meta {
+      margin-top: 14px; font-size: 11px; color: var(--text-faint);
+      display: flex; flex-wrap: wrap; gap: 12px;
+    }
+
+    .interaction-bar {
+      display: flex; gap: 8px; flex-wrap: wrap; padding: 14px 0;
+      border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06);
+      margin: 18px 0;
+    }
+    .interaction-bar .btn { flex: 1; min-width: 80px; }
+    .interaction-bar .btn.active { background: linear-gradient(90deg, rgba(168,216,234,0.25), rgba(107,91,149,0.25)); color: var(--accent-cyan); }
+
+    .comments-section h3 {
+      font-size: 13px; color: var(--text-glow); letter-spacing: 0.12em;
+      margin: 18px 0 12px; font-weight: 500;
+    }
+    .comment-input-row {
+      display: flex; gap: 10px; margin-bottom: 18px;
+    }
+    .comment-input-row .avatar { width: 28px; height: 28px; margin-top: 4px; }
+    .comment-input-row .input { padding: 10px 14px; }
+    .comment-input-row .btn { padding: 10px 16px; }
+
+    .comment-tree { font-size: 13px; }
+    .comment-item {
+      display: flex; gap: 10px; padding: 12px 0;
+      border-bottom: 1px dashed rgba(255,255,255,0.05);
+    }
+    .comment-item .avatar { width: 28px; height: 28px; flex-shrink: 0; }
+    .comment-item .body { flex: 1; }
+    .comment-item .meta { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-faint); margin-bottom: 4px; }
+    .comment-item .meta .name.anon { color: var(--text-dim); font-style: italic; }
+    .comment-item .meta .name { color: var(--text-glow); }
+    .comment-item .text { font-size: 13px; line-height: 1.7; color: var(--text-glow); }
+    .comment-item .actions { display: flex; gap: 12px; margin-top: 6px; font-size: 11px; color: var(--text-faint); }
+    .comment-item .actions a { cursor: pointer; }
+    .comment-item .actions a:hover { color: var(--accent-cyan); }
+
+    .reply-list { margin-left: 38px; margin-top: 8px; padding-left: 12px; border-left: 1px dashed rgba(255,255,255,0.06); }
+    .reply-list .comment-item { padding: 8px 0; border-bottom: none; }
+
+    .reply-box { display: none; margin: 6px 0 10px; }
+    .reply-box.show { display: flex; gap: 8px; }
+    .reply-box .input { flex: 1; padding: 8px 12px; font-size: 13px; }
+    .reply-box .btn { padding: 8px 14px; font-size: 12px; }
+  </style>
+</head>
+<body class="topic-emotion">
+  <main class="page">
+    <a class="back-link" href="community.html">← 返回社区</a>
+    <div id="postContainer">加载中…</div>
+  </main>
+
+  <script src="js/store.js?v=100"></script>
+  <script src="js/api.js?v=100"></script>
+  <script src="js/app.js?v=100"></script>
+  <script>
+    StarhealApp.injectBackground();
+    StarhealApp.injectTopNav('community');
+
+    const postId = StarhealApp.qs('id');
+    if (!postId) { StarhealApp.toast('缺少帖子 ID'); setTimeout(function(){ StarhealApp.go('community.html'); }, 800); }
+
+    let post = null;
+    let myInteractions = { liked: false, favorited: false, followed: false };
+
+    async function loadPost() {
+      try {
+        const res = await StarhealAPI.getPublication(postId);
+        post = res.data;
+        const topicObj = StarhealStore.getTopicsList().find(function (t) { return t.id === post.topic_id; });
+        if (topicObj) document.body.className = topicObj.topic_class;
+        renderPost();
+      } catch (e) {
+        StarhealApp.handleError(e, '加载失败');
+        document.getElementById('postContainer').innerHTML = '<div class="empty-state glass"><div class="ico">✧</div>帖子不存在或已下架</div>';
+      }
+    }
+
+    function renderPost() {
+      const isAnon = post.author_mode === 'anonymous';
+      const topicObj = StarhealStore.getTopicsList().find(function (t) { return t.id === post.topic_id; });
+      const html = '' +
+      '<article class="post-detail glass-strong">' +
+        '<div class="head">' +
+          (isAnon
+            ? '<div class="avatar anon"></div><span class="name anon">匿名星客</span>'
+            : '<div class="avatar"></div><span class="name real" id="authorLink">星海漫游者</span>') +
+          '<span class="time">' + StarhealApp.timeAgo(post.created_at) + '</span>' +
+        '</div>' +
+        '<div class="q">' + StarhealApp.escapeHtml(post.question) + '</div>' +
+        (post.poetic_phrase ? '<div class="poetic">「' + StarhealApp.escapeHtml(post.poetic_phrase) + '」</div>' : '') +
+
+        '<div class="section-title">原始观点</div>' +
+        '<div class="original-block">' + StarhealApp.escapeHtml(post.original_answer) + '</div>' +
+
+        '<div class="section-title">AI 棱镜阐释</div>' +
+        '<div class="ai-block">' +
+          '<span class="ai-tag">AI 阐释优化版</span>' +
+          '<div class="ai-summary">' + StarhealApp.escapeHtml(post.ai_summary) + '</div>' +
+          '<div class="ai-body">' + StarhealApp.escapeHtml(post.ai_body) + '</div>' +
+          '<div class="source-meta">' +
+            '<span>【本内容为 AI 阐释优化版，非用户原始原文】</span>' +
+            '<span>topic：' + (topicObj ? topicObj.name : '—') + '</span>' +
+            '<span>引用 ' + (post.stats.quoted || 0) + ' · 匹配 ' + (post.stats.matched || 0) + ' · 复用 ' + (post.stats.reused || 0) + '</span>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="interaction-bar">' +
+          '<button class="btn btn-ghost' + (myInteractions.liked ? ' active' : '') + '" id="likeBtn">✦ 喜欢</button>' +
+          '<button class="btn btn-ghost' + (myInteractions.favorited ? ' active' : '') + '" id="favBtn">☆ 收藏</button>' +
+          '<button class="btn btn-ghost' + (myInteractions.followed ? ' active' : '') + '" id="followBtn">◉ 关注</button>' +
+          '<button class="btn btn-soft" id="reportBtn">△ 举报</button>' +
+        '</div>' +
+
+        '<div class="comments-section">' +
+          '<h3>' + (post.comments ? post.comments.length : 0) + ' 条评论</h3>' +
+          '<div class="comment-input-row">' +
+            '<div class="avatar' + (StarhealStore.getState().user.anonymous_default ? ' anon' : '') + '"></div>' +
+            '<input class="input" id="commentInput" placeholder="写下你的温和观点…（支持二级回复）" />' +
+            '<button class="btn btn-primary" id="commentBtn">发送</button>' +
+          '</div>' +
+          '<div class="comment-tree" id="commentTree">' + renderComments(post.comments || []) + '</div>' +
+        '</div>' +
+      '</article>';
+
+      document.getElementById('postContainer').innerHTML = html;
+      bindInteractions();
+      bindComments();
+    }
+
+    function renderComments(comments) {
+      return comments.map(function (c) {
+        const isAnon = c.author_mode === 'anonymous';
+        return '' +
+        '<div class="comment-item" data-id="' + c.id + '">' +
+          '<div class="avatar' + (isAnon ? ' anon' : '') + '"></div>' +
+          '<div class="body">' +
+            '<div class="meta">' +
+              '<span class="name' + (isAnon ? ' anon' : '') + '">' + (isAnon ? '匿名星客' : '星海漫游者') + '</span>' +
+              '<span>·</span><span>' + StarhealApp.timeAgo(c.created_at) + '</span>' +
+            '</div>' +
+            '<div class="text">' + StarhealApp.escapeHtml(c.body) + '</div>' +
+            '<div class="actions"><a class="reply-link">回复</a></div>' +
+            '<div class="reply-box"><input class="input" placeholder="回复 ' + (isAnon ? '匿名星客' : '星海漫游者') + '…" /><button class="btn btn-ghost">回复</button></div>' +
+            (c.replies && c.replies.length ? '<div class="reply-list">' + renderComments(c.replies) + '</div>' : '') +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    function bindInteractions() {
+      document.getElementById('likeBtn').onclick = async function () {
+        try {
+          const next = !myInteractions.liked;
+          await StarhealAPI.interact(post.id, { type: 'like', action: next ? 'add' : 'remove' });
+          myInteractions.liked = next;
+          this.classList.toggle('active', next);
+          StarhealApp.toast(next ? '已喜欢' : '已取消喜欢');
+        } catch (e) { StarhealApp.handleError(e, '操作失败'); }
+      };
+      document.getElementById('favBtn').onclick = async function () {
+        try {
+          const next = !myInteractions.favorited;
+          await StarhealAPI.interact(post.id, { type: 'favorite', action: next ? 'add' : 'remove' });
+          myInteractions.favorited = next;
+          this.classList.toggle('active', next);
+          StarhealApp.toast(next ? '已收藏' : '已取消收藏');
+        } catch (e) { StarhealApp.handleError(e, '操作失败'); }
+      };
+      document.getElementById('followBtn').onclick = async function () {
+        try {
+          const next = !myInteractions.followed;
+          await StarhealAPI.interact(post.id, { type: 'follow', action: next ? 'add' : 'remove' });
+          myInteractions.followed = next;
+          this.classList.toggle('active', next);
+          StarhealApp.toast(next ? '已关注作者' : '已取消关注');
+        } catch (e) { StarhealApp.handleError(e, '操作失败'); }
+      };
+      document.getElementById('reportBtn').onclick = async function () {
+        const ok = await StarhealApp.confirm({
+          title: '举报此帖子', body: '举报后将进入审核流程。请确保举报真实，恶意举报将影响你的账号信誉。',
+          confirm: '提交举报', danger: true
+        });
+        if (!ok) return;
+        try {
+          await StarhealAPI.interact(post.id, { type: 'report', action: 'add' });
+          StarhealApp.toast('已提交举报，审核团队将处理', { tone: 'success' });
+        } catch (e) { StarhealApp.handleError(e, '提交失败'); }
+      };
+      // 实名帖子：点击头像跳转（Demo 模拟跳转至首页）
+      const al = document.getElementById('authorLink');
+      if (al) al.onclick = function () { StarhealApp.toast('Demo：跳转知乎个人主页（未实现真实跳转）'); };
+    }
+
+    function bindComments() {
+      document.getElementById('commentBtn').onclick = async function () {
+        const input = document.getElementById('commentInput');
+        const body = input.value.trim();
+        if (!body) { StarhealApp.toast('请输入评论内容'); return; }
+        try {
+          const res = await StarhealAPI.postComment(post.id, {
+            body: body, author_mode: StarhealStore.getState().user.anonymous_default ? 'anonymous' : 'real_name'
+          });
+          post.comments.push(res.data);
+          input.value = '';
+          renderPost();
+          StarhealApp.toast('评论已发布', { tone: 'success' });
+        } catch (e) { StarhealApp.handleError(e, '评论失败'); }
+      };
+      document.getElementById('commentInput').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { document.getElementById('commentBtn').click(); }
+      });
+
+      // 二级回复
+      document.querySelectorAll('.reply-link').forEach(function (link) {
+        link.onclick = function () {
+          const box = this.nextElementSibling;
+          box.classList.toggle('show');
+          if (box.classList.contains('show')) { box.querySelector('input').focus(); }
+        };
+      });
+      document.querySelectorAll('.reply-box').forEach(function (box) {
+        const btn = box.querySelector('button');
+        const input = box.querySelector('input');
+        btn.onclick = async function () {
+          const text = input.value.trim();
+          if (!text) return;
+          const parentItem = box.closest('.comment-item');
+          const parentId = parentItem.dataset.id;
+          try {
+            const res = await StarhealAPI.postComment(post.id, {
+              body: text, parent_id: parentId, author_mode: StarhealStore.getState().user.anonymous_default ? 'anonymous' : 'real_name'
+            });
+            // 找到对应的评论并 append
+            (function walk(arr) {
+              arr.some(function (c) {
+                if (c.id === parentId) { c.replies = c.replies || []; c.replies.push(res.data); return true; }
+                return walk(c.replies || []);
+              });
+            })(post.comments);
+            renderPost();
+            StarhealApp.toast('回复已发布', { tone: 'success' });
+          } catch (e) { StarhealApp.handleError(e, '回复失败'); }
+        };
+        input.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') { btn.click(); }
+        });
+      });
+    }
+
+    loadPost();
+  </script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#07070f">
+  <title>我的 — 星愈·双盲棱镜</title>
+  <link rel="stylesheet" href="css/style.css?v=100">
+  <style>
+    .page{padding-top:72px;padding-bottom:60px;max-width:860px;margin:0 auto}
+    .profile-card{display:flex;align-items:center;gap:18px;padding:24px;margin-bottom:18px}
+    .profile-card .avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#6b5b95,#4a6fa5);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;box-shadow:0 0 30px rgba(107,91,149,.4)}
+    .profile-card .info{flex:1}
+    .profile-card .name{font-size:20px;font-weight:600;color:#fff;margin-bottom:6px}
+    .profile-card .meta{font-size:13px;color:var(--text-dim);display:flex;gap:12px;flex-wrap:wrap}
+    .profile-card .meta span{display:flex;align-items:center;gap:4px}
+    .profile-card .actions{display:flex;gap:8px}
+    .icon-btn{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center}
+    .icon-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+    .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+    .stat-card{padding:18px 12px;text-align:center;border-radius:14px}
+    .stat-card .num{font-size:22px;font-weight:600;color:#fff;margin-bottom:4px}
+    .stat-card .label{font-size:12px;color:var(--text-dim)}
+    .section{margin-bottom:18px}
+    .section-title{font-size:13px;color:var(--text-dim);padding:0 8px 10px;letter-spacing:.08em}
+    .menu-list{border-radius:14px;overflow:hidden}
+    .menu-item{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;transition:all .2s;border-bottom:1px solid rgba(255,255,255,.04)}
+    .menu-item:last-child{border-bottom:none}
+    .menu-item:hover{background:rgba(255,255,255,.03)}
+    .menu-item .ico{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+    .menu-item .label{flex:1;font-size:14px;color:var(--text-star)}
+    .menu-item .arrow{color:var(--text-faint);font-size:14px}
+    .menu-item.danger .label{color:#ff8080}
+    .menu-item.danger .ico{background:rgba(255,80,80,.08)}
+    .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:10px;background:rgba(20,16,40,.95);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:13px;z-index:999;animation:toastIn .3s}
+    @keyframes toastIn{from{opacity:0;transform:translate(-50%,-10px)}to{opacity:1;transform:translate(-50%,0)}}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <!-- 个人信息卡 -->
+    <div class="profile-card glass">
+      <div class="avatar">🌌</div>
+      <div class="info">
+        <div class="name">星海漫游者</div>
+        <div class="meta">
+          <span>✦ demo_95gdaj</span>
+          <span>· 默认匿名</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="icon-btn" title="编辑资料" onclick="toast('编辑资料功能开发中…')">✎</button>
+        <button class="icon-btn" title="设置" onclick="location.href='settings.html?v=100'">⚙</button>
+      </div>
+    </div>
+
+    <!-- 数据统计 -->
+    <div class="stat-row">
+      <div class="stat-card glass"><div class="num">12</div><div class="label">发布观点</div></div>
+      <div class="stat-card glass"><div class="num">156</div><div class="label">收到共鸣</div></div>
+      <div class="stat-card glass"><div class="num">8</div><div class="label">关注星球</div></div>
+      <div class="stat-card glass"><div class="num">34</div><div class="label">收藏</div></div>
+    </div>
+
+    <!-- 账号与内容 -->
+    <div class="section">
+      <div class="section-title">账号与内容</div>
+      <div class="menu-list glass">
+        <div class="menu-item" onclick="toast('我的观点功能开发中…')">
+          <div class="ico">✦</div><span class="label">我的观点</span><span class="arrow">›</span>
+        </div>
+        <div class="menu-item" onclick="toast('我的匿名身份功能开发中…')">
+          <div class="ico">🎭</div><span class="label">我的匿名身份</span><span class="arrow">›</span>
+        </div>
+        <div class="menu-item" onclick="toast('我的收藏功能开发中…')">
+          <div class="ico">★</div><span class="label">我的收藏</span><span class="arrow">›</span>
+        </div>
+        <div class="menu-item" onclick="toast('我的星球功能开发中…')">
+          <div class="ico">🪐</div><span class="label">我的星球</span><span class="arrow">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 双盲棱镜 -->
+    <div class="section">
+      <div class="section-title">双盲棱镜</div>
+      <div class="menu-list glass">
+        <div class="menu-item" onclick="toast('同频匹配报告功能开发中…')">
+          <div class="ico">🔮</div><span class="label">同频匹配报告</span><span class="arrow">›</span>
+        </div>
+        <div class="menu-item" onclick="toast('共鸣星图功能开发中…')">
+          <div class="ico">✨</div><span class="label">共鸣星图</span><span class="arrow">›</span>
+        </div>
+        <div class="menu-item" onclick="toast('匿名模式设置功能开发中…')">
+          <div class="ico">🕶</div><span class="label">匿名模式设置</span><span class="arrow">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 通用设置 -->
+    <div class="section">
+      <div class="section-title">设置</div>
+      <div class="menu-list glass">
+        <div class="menu-item" onclick="location.href='settings.html?v=100'">
+          <div class="ico">🔒</div><span class="label">账号与安全</span><span class="arrow">›</span>
+        </div>
+        <div class="menu-item" onclick="location.href='settings.html?v=100'">
+          <div class="ico">🔔</div><span class="label">消息通知</span><span class="arrow">›</span>
+        </div>
+        <div class="menu-item" onclick="location.href='settings.html?v=100'">
+          <div class="ico">🛡</div><span class="label">隐私设置</span><span class="arrow">›</span>
+        </div>
+        <div class="menu-item" onclick="location.href='settings.html?v=100'">
+          <div class="ico">⚙</div><span class="label">通用设置</span><span class="arrow">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 退出登录 -->
+    <div class="section">
+      <div class="menu-list glass">
+        <div class="menu-item danger" onclick="logout()">
+          <div class="ico">⏻</div><span class="label">退出登录</span><span class="arrow">›</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/store.js?v=100"></script>
+  <script src="js/app.js?v=100"></script>
+  <script>
+    StarhealApp.injectBackground();
+    StarhealApp.injectTopNav('profile');
+    function toast(msg){
+      const t=document.createElement('div');
+      t.className='toast';t.textContent=msg;
+      document.body.appendChild(t);
+      setTimeout(()=>t.remove(),2000);
+    }
+    function logout(){
+      if(confirm('确定要退出登录吗？')){
+        location.href='login.html';
+      }
+    }
+  </script>
+</body>
+</html>

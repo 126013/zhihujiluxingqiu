@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>orbit3 capture</title>
+<style>html,body{margin:0;background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh}#c{width:100%;height:auto;display:block}video{display:none}</style></head>
+<body>
+<video id="v" src="orbit3.mp4" autoplay loop muted playsinline></video>
+<canvas id="c" width="1280" height="720"></canvas>
+<script>
+const v=document.getElementById('v'),c=document.getElementById('c'),ctx=c.getContext('2d');
+function draw(){ctx.drawImage(v,0,0,1280,720);requestAnimationFrame(draw);}
+v.addEventListener('loadeddata',()=>{c.width=v.videoWidth;c.height=v.videoHeight;draw();});
+</script>
+</body></html>

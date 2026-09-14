@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#07070f">
+  <title>星球社区 — 星愈·双盲棱镜</title>
+  <link rel="stylesheet" href="css/style.css?v=100">
+  <style>
+    .page{padding-top:72px;padding-bottom:60px;max-width:860px;margin:0 auto}
+    .planet-header{display:flex;align-items:center;gap:16px;padding:20px;margin-bottom:18px}
+    .planet-header .mini-planet{width:64px;height:64px;border-radius:50%;flex-shrink:0;box-shadow:inset -8px -12px 24px rgba(0,0,0,.45),0 0 24px var(--planet-glow,rgba(200,180,230,.5))}
+    .planet-header .meta h1{margin:0;font-size:22px;font-weight:600;letter-spacing:.06em;background:linear-gradient(135deg,#fff,var(--planet-color,#b8b8d0));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .planet-header .meta .desc{font-size:13px;color:var(--text-dim);margin-top:6px;line-height:1.6}
+    .planet-header .meta .desc a{color:var(--accent-cyan);text-decoration:none}
+    .planet-header .meta .desc a:hover{text-decoration:underline}
+    .filter-bar{display:flex;gap:8px;padding:4px 0 18px;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
+    .filter-bar::-webkit-scrollbar{display:none}
+    .filter-bar .chip{flex-shrink:0;padding:7px 16px;border-radius:var(--radius-pill);background:rgba(255,255,255,.04);border:1px solid var(--glass-border);font-size:13px;color:var(--text-glow);cursor:pointer;transition:all .25s}
+    .filter-bar .chip:hover{background:rgba(255,255,255,.08)}
+    .filter-bar .chip.active{background:linear-gradient(90deg,rgba(107,91,149,.4),rgba(74,111,165,.4));border-color:transparent;color:#fff}
+    .post-card{padding:20px;margin-bottom:14px;cursor:pointer;transition:all .25s;border:1px solid transparent}
+    .post-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.06)}
+    .post-card .head{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:13px}
+    .post-card .head .avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--planet-color,#b8b8d0),rgba(80,60,120,.6));flex-shrink:0}
+    .post-card .head .name{color:var(--text-glow)}
+    .post-card .head .name.anon{color:var(--text-dim);font-style:italic}
+    .post-card .head .time{margin-left:auto;color:var(--text-faint);font-size:12px}
+    .post-card .q{font-family:var(--font-serif);font-size:17px;line-height:1.7;color:var(--text-star);margin-bottom:10px;font-weight:500}
+    .post-card .poetic{font-family:var(--font-serif);font-style:italic;font-size:14px;color:var(--accent-cyan);margin-bottom:12px;opacity:.85}
+    .post-card .ai-summary{font-size:13px;line-height:1.8;color:var(--text-glow);padding:10px 14px;background:rgba(168,216,234,.06);border-left:2px solid rgba(168,216,234,.3);border-radius:0 10px 10px 0;margin-bottom:12px}
+    .post-card .ai-summary .ai-tag{display:inline-block;padding:2px 8px;background:linear-gradient(135deg,rgba(107,91,149,.5),rgba(74,111,165,.5));border-radius:4px;font-size:11px;color:#fff;margin-right:8px}
+    .post-card .stats{display:flex;gap:8px;flex-wrap:wrap;padding-top:12px;border-top:1px dashed rgba(255,255,255,.08)}
+    .post-card .stat-pill{padding:4px 12px;border-radius:var(--radius-pill);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--text-dim)}
+    .post-card .stat-pill.topic{color:var(--planet-color,#b8b8d0);border-color:var(--planet-color,#b8b8d0)}
+    .load-more{text-align:center;padding:24px;color:var(--text-faint);font-size:12px;letter-spacing:.16em}
+    .empty-state{padding:80px 24px;text-align:center;color:var(--text-dim)}
+    .empty-state .ico{font-size:48px;opacity:.3;margin-bottom:16px}
+    .empty-state .t{font-size:16px;margin-bottom:8px;color:var(--text-glow)}
+    .empty-state .s{font-size:13px;color:var(--text-faint)}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="planet-header glass">
+      <div class="mini-planet" id="headPlanet"></div>
+      <div class="meta">
+        <h1 id="headName">推荐广场</h1>
+        <div class="desc" id="headDesc">跨星球精选 · 优先匹配高质量观点 · <a href="home.html?v=100">爱好星球</a></div>
+      </div>
+    </div>
+    <div class="filter-bar" id="filterBar"></div>
+    <div id="feedList" class="card-list"></div>
+    <div class="load-more" id="loadMore" style="display:none;">· 已全部加载 ·</div>
+  </main>
+
+  <script src="js/store.js?v=100"></script>
+  <script src="js/app.js?v=100"></script>
+  <script>
+    StarhealApp.injectBackground();
+    StarhealApp.injectTopNav('community');
+
+    // 行星数据 — 对应 home.html 爱好星球下的子星球
+    const PLANETS = {
+      '推荐广场': {color:'#ffffff', glow:'rgba(255,255,255,.5)', desc:'跨星球精选 · 优先匹配高质量观点'},
+      '萌宠': {color:'#f4b8c8', glow:'rgba(244,184,200,.5)', desc:'猫狗饲养 · 宠物生活 · 萌宠日常'},
+      '游戏': {color:'#7ed4e6', glow:'rgba(126,212,230,.5)', desc:'游戏攻略 · 开黑组队 · 游戏吐槽'},
+      '二次元': {color:'#c8a0f0', glow:'rgba(200,160,240,.5)', desc:'动漫番剧 · 同人创作 · 二次元文化'},
+      '影视综': {color:'#e8a878', glow:'rgba(232,168,120,.5)', desc:'电影电视剧 · 综艺讨论 · 影视推荐'},
+      '音乐': {color:'#80d0b0', glow:'rgba(128,208,176,.5)', desc:'音乐分享 · 歌单推荐 · 乐器交流'},
+      '读书': {color:'#b8b8d8', glow:'rgba(184,184,216,.5)', desc:'读书笔记 · 好书推荐 · 阅读感悟'},
+      '运动': {color:'#e87878', glow:'rgba(232,120,120,.5)', desc:'健身打卡 · 运动技巧 · 运动装备'},
+      '手工': {color:'#d8c080', glow:'rgba(216,192,128,.5)', desc:'手作教程 · DIY分享 · 创意手工'}
+    };
+
+    // 每个行星的模拟帖子
+    const PLANET_POSTS = {
+      '萌宠': [
+        {author:'匿名星客', anon:true, time:'3小时前', q:'家里的猫突然开始咬电线怎么办？试过很多方法都没用', poetic:'「小动物的世界，需要耐心去懂。」', ai:'猫咪咬电线可能是因为长牙期痒感或无聊。建议提供专用磨牙玩具，同时在电线上涂抹柑橘类气味（猫讨厌的味道），并确保猫咪有足够的互动和玩耍时间。'},
+        {author:'毛孩子家长', anon:false, time:'1天前', q:'第一次养狗，选柯基还是柴犬比较好？', poetic:'「选宠物不是选商品，是选家人。」', ai:'柯基性格活泼亲人，适合有一定活动空间的家庭；柴犬独立忠诚，但训练需要耐心。建议根据自己的居住环境、时间精力和性格偏好来选择，也可以考虑领养代替购买。'},
+        {author:'匿名星客', anon:true, time:'2天前', q:'宠物去世后怎么走出来？已经哭了一周了', poetic:'「它只是先去了彩虹桥等你。」', ai:'失去宠物的悲痛是正常的，允许自己悲伤。可以整理宠物的照片做纪念册，和同样经历过的人聊聊，或者参加宠物悼念活动。时间会慢慢治愈，也可以考虑在合适的时候迎接新的小生命。'}
+      ],
+      '游戏': [
+        {author:'匿名星客', anon:true, time:'2小时前', q:'玩了十年的游戏突然关服了，感觉青春结束了', poetic:'「游戏会关服，但回忆不会。」', ai:'陪伴十年的游戏关服确实让人失落。可以把游戏截图、视频整理成纪念册，和老战友保持联系。也可以尝试寻找类似的新游戏，把旧的热情延续下去。游戏会结束，但友谊和记忆永存。'},
+        {author:'深夜玩家', anon:false, time:'5小时前', q:'有没有适合上班族的轻松游戏推荐？每天只有1小时', poetic:'「游戏是生活的调味剂，不是负担。」', ai:'推荐轻度休闲游戏：《星露谷物语》种田治愈、《动物森友会》慢节奏、《哈迪斯》每局10-20分钟。避免MMO和需要大量时间投入的游戏，选择可以随时暂停的类型。'},
+        {author:'匿名星客', anon:true, time:'1天前', q:'被队友骂到不想玩了，但又舍不得朋友，怎么办？', poetic:'「重要的不是游戏，是一起玩的人。」', ai:'可以和朋友坦诚沟通你的感受，真正的朋友会理解。也可以换一种游戏模式，比如合作PVE而不是竞技PVP。记住游戏的初衷是快乐，如果不开心了，就换种方式玩。'}
+      ],
+      '二次元': [
+        {author:'匿名星客', anon:true, time:'4小时前', q:'追了五年的番完结了，心里空落落的', poetic:'「故事终会完结，但感动永存。」', ai:'追番完结后的空虚感很正常。可以去看原作漫画/小说，找同人文和Fanart延续故事，或者加入相关社群讨论。也可以把这部番的感动记录下来，分享给更多人。'},
+        {author:'二次元少女', anon:false, time:'8小时前', q:'第一次去漫展需要准备什么？有点紧张', poetic:'「勇敢迈出第一步，同好就在前方。」', ai:'准备：舒适的鞋子（要走很多路）、充电宝、水和小零食、少量现金。如果cosplay要提前准备服装和道具。保持开放心态，漫展的大家都很友善，大胆和同好交流吧！'},
+        {author:'匿名星客', anon:true, time:'2天前', q:'身边没人理解我喜欢二次元，感觉很孤独', poetic:'「圈子虽小，知己难求却珍贵。」', ai:'现实中找不到同好，可以去线上社群寻找。B站、微博、贴吧都有很多二次元同好。也可以参加本地的漫展和线下聚会，慢慢建立自己的同好圈。喜欢二次元不丢人，勇敢做自己。'}
+      ],
+      '影视综': [
+        {author:'匿名星客', anon:true, time:'1小时前', q:'最近有什么好看的悬疑剧推荐吗？剧荒了', poetic:'「好剧如好书，值得反复品味。」', ai:'推荐：《漫长的季节》国产悬疑神作、《隐秘的角落》社会派推理、《沉默的真相》正义追寻。喜欢美剧的话《真探》第一季、《东城梦魇》也很不错。记得在合法平台观看。'},
+        {author:'影评人小林', anon:false, time:'6小时前', q:'看电影总是看不懂深层含义，怎么办？', poetic:'「电影是导演的梦，观众各有各的解读。」', ai:'看不懂很正常，可以先看影评和解析辅助理解。多关注镜头语言、色彩、音乐这些细节。也可以看完后和朋友讨论，不同视角会带来新的理解。多看多思考，慢慢就有感觉了。'},
+        {author:'匿名星客', anon:true, time:'1天前', q:'综艺越来越无聊了，是我的问题还是综艺的问题？', poetic:'「不是你变了，是它变了。」', ai:'现在很多综艺套路化、剧本化严重。可以试试国外的综艺，或者看一些慢综艺、文化类综艺。也可以把时间用来看纪录片、脱口秀，可能会有新的发现。'}
+      ],
+      '音乐': [
+        {author:'匿名星客', anon:true, time:'3小时前', q:'有没有适合深夜一个人听的歌？最近失眠', poetic:'「音乐是夜晚最好的陪伴。」', ai:'推荐：坂本龙一《Merry Christmas Mr. Lawrence》、久石让《Summer》、Aimer《茜さす》、陈绮贞《旅行的意义》。可以试试Lo-fi、后摇、氛围音乐，帮助放松入睡。'},
+        {author:'音乐发烧友', anon:false, time:'7小时前', q:'想学吉他，零基础从哪里开始？', poetic:'「万丈高楼平地起，音乐也是。」', ai:'从基础开始：先学持琴姿势和右手拨弦，然后练C、G、Am、F四个基础和弦。每天坚持30分钟，一个月就能弹简单的曲子。推荐用《吉他自学三月通》或B站入门教程。'},
+        {author:'匿名星客', anon:true, time:'2天前', q:'演唱会抢不到票，黄牛票又太贵，怎么办？', poetic:'「好音乐值得等待，但不值得被宰。」', ai:'可以关注官方加场、live house小场演出。也可以看线上直播、演唱会回放。和朋友一起去KTV唱喜欢的歌也是一种体验。音乐的形式不重要，重要的是那份感动。'}
+      ],
+      '读书': [
+        {author:'匿名星客', anon:true, time:'2小时前', q:'总是买书不看书，书架堆满了还在买，怎么破？', poetic:'「买书如山倒，读书如抽丝。」', ai:'这是很多人的通病。建议：1.每月只买1-2本，看完再买；2.设置固定阅读时间，比如睡前30分钟；3.加入读书打卡群互相监督；4.先从最薄的一本开始，建立成就感。'},
+        {author:'书虫阿May', anon:false, time:'9小时前', q:'有什么治愈系的书推荐？最近压力很大', poetic:'「书中自有避风港。」', ai:'推荐：《解忧杂货店》东野圭吾、《小王子》圣埃克苏佩里、《岛上书店》加·泽文、《人间值得》中村恒子。这些书温暖治愈，适合压力大的时候慢慢读。'},
+        {author:'匿名星客', anon:true, time:'1天前', q:'读书总是记不住内容，读了等于白读', poetic:'「读书不是记住，而是成为。」', ai:'读书不必追求记住所有内容。可以做读书笔记、写读后感，或者和别人讨论。很多书的影响是潜移默化的，会融入你的思考方式。重要的是阅读过程中的思考和感悟。'}
+      ],
+      '运动': [
+        {author:'匿名星客', anon:true, time:'1小时前', q:'办了健身卡就没去过几次，怎么坚持下去？', poetic:'「坚持不是靠意志力，是靠习惯。」', ai:'建议：1.找健身搭子互相监督；2.选择自己喜欢的运动（不一定要健身房）；3.设定小目标，比如每周2次；4.记录身体变化获得正反馈；5.把运动变成日常习惯，而不是任务。'},
+        {author:'运动达人', anon:false, time:'5小时前', q:'跑步膝盖疼，还要坚持吗？', poetic:'「身体是革命的本钱，不要硬撑。」', ai:'膝盖疼要重视！可能是跑姿不对、鞋子不合适或运动量过大。建议：1.休息几天观察；2.纠正跑姿，小步快频；3.换缓震好的跑鞋；4.在塑胶跑道跑；5.严重的话看医生。运动是为了健康，不要受伤。'},
+        {author:'匿名星客', anon:true, time:'2天前', q:'想减肥但管不住嘴，运动也坚持不了', poetic:'「减脂没有捷径，但有方法。」', ai:'不用极端节食。建议：1.三餐正常吃，减少高糖高油；2.用小碗吃饭，慢慢吃；3.找一项喜欢的运动，哪怕是散步；4.每周称一次体重，关注趋势而非每天波动。健康比体重更重要。'}
+      ],
+      '手工': [
+        {author:'匿名星客', anon:true, time:'4小时前', q:'想做手工但怕做不好，有什么简单的入门推荐？', poetic:'「手作的乐趣在于过程，不在于完美。」', ai:'入门推荐：1.折纸（材料最简单）；2.羊毛毡戳戳乐（解压又好看）；3.热缩片（可以做小挂件）；4.钩针编织（实用又治愈）。先从简单的开始，享受动手的过程就好。'},
+        {author:'手作娘', anon:false, time:'8小时前', q:'手工材料太贵了，有没有省钱的方法？', poetic:'「手作的灵魂是创意，不是材料。」', ai:'省钱技巧：1.利用废旧材料（快递盒、旧衣服、瓶盖）；2.等电商大促囤材料；3.和手作爱好者交换材料；4.关注手工博主的材料团购。很多好看的作品用的都是日常材料，关键是创意。'},
+        {author:'匿名星客', anon:true, time:'1天前', q:'做手工总是半途而废，成品堆了一半', poetic:'「完成比完美更重要。」', ai:'建议：1.一次只做一个项目；2.设定完成期限；3.把大项目拆成小步骤，每天做一点；4.加入手工打卡群；5.做之前先想好成品用途，有动力就不容易放弃。'}
+      ],
+      '推荐广场': [
+        {author:'匿名星客', anon:true, time:'30分钟前', q:'最近总觉得自己被生活推着走，怎么找回自己的节奏？', poetic:'「不必追赶，试着把自己抵达。」', ai:'试着把"我应该"换成"我选择"——哪些是别人的期待，哪些是自己真正想要的。每天留10分钟独处，问问自己今天想做什么。节奏不是别人给的，是自己调的。'},
+        {author:'星海漫游者', anon:false, time:'7小时前', q:'面对海量信息怎么保持自己的判断？', poetic:'「来源、立场、利益，三层追问后，才是你自己的判断。」', ai:'通过来源、立场、利益三层追问，区分事实与叙事。信息过载时，先问三个问题：谁说的？为什么说？对谁有利？慢慢培养自己的信息筛选能力。'},
+        {author:'匿名星客', anon:true, time:'1天前', q:'职场里努力但不被看见怎么办？', poetic:'「不汇报，不是低调，是把选择权关在抽屉里。」', ai:'学会主动汇报工作进展，不是邀功，而是让领导知道你的价值。可以定期写工作小结，邮件或面对面沟通。让努力被看见，也是职场能力的一部分。'}
+      ]
+    };
+
+    const planetName = new URLSearchParams(location.search).get('planet') || '推荐广场';
+    const planet = PLANETS[planetName] || PLANETS['推荐广场'];
+
+    // 设置行星主题色
+    document.documentElement.style.setProperty('--planet-color', planet.color);
+    document.documentElement.style.setProperty('--planet-glow', planet.glow);
+    document.body.style.setProperty('--topic-color', planet.color);
+    document.body.style.setProperty('--topic-glow', planet.glow);
+
+    // 更新头部
+    document.getElementById('headName').textContent = planetName;
+    document.getElementById('headPlanet').style.background =
+      'radial-gradient(circle at 30% 28%, #fff, ' + planet.color + ' 30%, ' + planet.color + ' 65%)';
+    document.getElementById('headDesc').innerHTML =
+      planet.desc + ' · <a href="home.html?v=100" style="color:var(--accent-cyan);text-decoration:none;">爱好星球</a>';
+
+    // 渲染筛选条
+    const filterBar = document.getElementById('filterBar');
+    Object.keys(PLANETS).forEach(function(name){
+      const chip = document.createElement('span');
+      chip.className = 'chip' + (name === planetName ? ' active' : '');
+      chip.textContent = name;
+      chip.onclick = function(){ location.href = 'community.html?v=100&planet=' + encodeURIComponent(name); };
+      filterBar.appendChild(chip);
+    });
+
+    // 渲染帖子
+    const posts = PLANET_POSTS[planetName] || [];
+    const list = document.getElementById('feedList');
+    if(posts.length === 0){
+      list.innerHTML = '<div class="empty-state glass"><div class="ico">✧</div><div class="t">这里还没有公开观点</div><div class="s">第一个把你的思辨分享出来吧</div></div>';
+    } else {
+      list.innerHTML = posts.map(function(p, i){
+        return '<div class="post-card glass" data-id="' + i + '">' +
+          '<div class="head">' +
+            '<div class="avatar"></div>' +
+            '<span class="name' + (p.anon ? ' anon' : '') + '">' + p.author + '</span>' +
+            '<span class="time">' + p.time + '</span>' +
+          '</div>' +
+          '<div class="q">' + p.q + '</div>' +
+          '<div class="poetic">' + p.poetic + '</div>' +
+          '<div class="ai-summary"><span class="ai-tag">AI 阐释</span>' + p.ai + '</div>' +
+          '<div class="stats">' +
+            '<span class="stat-pill">引用 ' + Math.floor(Math.random()*50) + '</span>' +
+            '<span class="stat-pill">匹配 ' + Math.floor(Math.random()*200) + '</span>' +
+            '<span class="stat-pill">复用 ' + Math.floor(Math.random()*30) + '</span>' +
+            '<span class="stat-pill topic">' + planetName + '</span>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+      document.getElementById('loadMore').style.display = 'block';
+    }
+
+    // 点击帖子跳转到详情
+    list.querySelectorAll('.post-card').forEach(function(card){
+      card.onclick = function(){ alert('帖子详情页开发中…'); };
+    });
+  </script>
+</body>
+</html>

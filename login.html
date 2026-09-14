@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 — 星愈·双盲棱镜</title>
+  <link rel="stylesheet" href="css/style.css?v=100">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%;overflow:hidden}
+    body{background:#050818;font-family:'Noto Sans SC',-apple-system,sans-serif;color:#fff;position:relative}
+    .stars-bg{position:fixed;inset:0;z-index:0;overflow:hidden}
+    .stars-bg .star{position:absolute;background:#fff;border-radius:50%;opacity:.6;animation:twinkle 3s infinite ease-in-out}
+    @keyframes twinkle{0%,100%{opacity:.2}50%{opacity:.9}}
+    .nebula{position:absolute;border-radius:50%;filter:blur(80px);opacity:.35}
+    .nebula.pink{width:500px;height:500px;background:radial-gradient(circle,#6a3a7a,transparent 70%);top:-100px;left:-150px;animation:floatN 20s infinite ease-in-out}
+    .nebula.orange{width:600px;height:600px;background:radial-gradient(circle,#b6573a,transparent 70%);bottom:-200px;right:-200px;animation:floatN 25s infinite ease-in-out reverse}
+    @keyframes floatN{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,-30px)}}
+    .login-wrap{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+    .logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:42px;font-weight:400;letter-spacing:.08em;background:linear-gradient(135deg,#fff,#c8b8e8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+    .slogan{font-size:13px;color:rgba(255,255,255,.5);letter-spacing:.2em;margin-bottom:40px}
+    .login-card{width:100%;max-width:380px;padding:36px 32px;border-radius:20px;background:linear-gradient(160deg,rgba(25,20,50,.85),rgba(15,12,35,.9));border:1px solid rgba(200,180,230,.15);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(80,40,120,.3)}
+    .tab-row{display:flex;gap:8px;margin-bottom:24px}
+    .tab{flex:1;padding:10px;text-align:center;border-radius:10px;font-size:14px;color:rgba(255,255,255,.5);cursor:pointer;transition:all .3s;background:rgba(255,255,255,.03);border:1px solid transparent}
+    .tab.active{color:#fff;background:linear-gradient(135deg,rgba(107,91,149,.4),rgba(74,111,165,.4));border-color:rgba(255,255,255,.1)}
+    .field{margin-bottom:16px}
+    .field label{display:block;font-size:12px;color:rgba(255,255,255,.5);margin-bottom:8px;letter-spacing:.05em}
+    .field input{width:100%;padding:12px 16px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:14px;outline:none;transition:all .3s;font-family:inherit}
+    .field input:focus{border-color:rgba(168,216,234,.5);background:rgba(255,255,255,.08);box-shadow:0 0 0 3px rgba(168,216,234,.1)}
+    .field input::placeholder{color:rgba(255,255,255,.25)}
+    .row{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:24px;color:rgba(255,255,255,.5)}
+    .row a{color:var(--accent-cyan);text-decoration:none}
+    .btn-login{width:100%;padding:13px;border:none;border-radius:10px;background:linear-gradient(135deg,#6b5b95,#4a6fa5);color:#fff;font-size:15px;letter-spacing:.1em;cursor:pointer;transition:all .3s;font-family:inherit}
+    .btn-login:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(107,91,149,.4)}
+    .divider{display:flex;align-items:center;gap:12px;margin:24px 0;color:rgba(255,255,255,.3);font-size:12px}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1)}
+    .sso{display:flex;gap:12px;justify-content:center}
+    .sso-btn{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;font-size:18px}
+    .sso-btn:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
+    .btn-zhihu{width:100%;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,#0084FF,#0066CC);color:#fff;font-size:14px;cursor:pointer;transition:all .3s;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;letter-spacing:.05em}
+    .btn-zhihu:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,132,255,.4)}
+    .btn-zhihu:active{transform:translateY(0)}
+    .zhihu-icon{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;background:#fff;color:#0084FF;font-size:13px;font-weight:700;font-family:'Noto Sans SC',sans-serif}
+    .tip{text-align:center;font-size:12px;color:rgba(255,255,255,.35);margin-top:20px}
+    .tip a{color:var(--accent-cyan);text-decoration:none}
+    .skip{position:fixed;top:24px;right:24px;z-index:10;padding:8px 16px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);font-size:12px;cursor:pointer;transition:all .3s}
+    .skip:hover{color:#fff;background:rgba(255,255,255,.1)}
+  </style>
+</head>
+<body>
+  <div class="stars-bg" id="starsBg"></div>
+  <div class="nebula pink"></div>
+  <div class="nebula orange"></div>
+  <button class="skip" onclick="enter()">跳过 →</button>
+  <div class="login-wrap">
+    <div class="logo">星愈宇宙</div>
+    <div class="slogan">双盲棱镜 · 匿名共鸣</div>
+    <div class="login-card">
+      <div class="tab-row">
+        <div class="tab active" data-tab="sms">短信登录</div>
+        <div class="tab" data-tab="pwd">密码登录</div>
+      </div>
+      <form id="loginForm" onsubmit="enter(event)">
+        <div class="field">
+          <label>手机号</label>
+          <input type="tel" placeholder="请输入手机号" maxlength="11">
+        </div>
+        <div class="field" id="smsField">
+          <label>验证码</label>
+          <div style="display:flex;gap:8px">
+            <input type="text" placeholder="6位验证码" maxlength="6" style="flex:1">
+            <button type="button" onclick="sendCode(this)" style="padding:0 14px;border-radius:10px;background:rgba(168,216,234,.1);border:1px solid rgba(168,216,234,.3);color:var(--accent-cyan);font-size:12px;cursor:pointer;white-space:nowrap">获取验证码</button>
+          </div>
+        </div>
+        <div class="field" id="pwdField" style="display:none">
+          <label>密码</label>
+          <input type="password" placeholder="请输入密码">
+        </div>
+        <div class="row">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" style="width:auto"> 记住我</label>
+          <a href="#">忘记密码？</a>
+        </div>
+        <button type="submit" class="btn-login">登 录</button>
+      </form>
+      <div class="divider">其他方式</div>
+      <button type="button" class="btn-zhihu" onclick="zhihuLogin()">
+        <span class="zhihu-icon">知</span>
+        <span>知乎账号登录</span>
+      </button>
+      <div class="sso">
+        <div class="sso-btn" title="微信">💬</div>
+        <div class="sso-btn" title="QQ">🐧</div>
+        <div class="sso-btn" title="微博">🌸</div>
+        <div class="sso-btn" title="邮箱">✉</div>
+      </div>
+      <div class="tip">登录即表示同意 <a href="#">用户协议</a> 与 <a href="#">隐私政策</a></div>
+    </div>
+  </div>
+  <script src="js/app.js?v=100"></script>
+  <script>
+    // 生成星空
+    (function(){
+      const bg=document.getElementById('starsBg');
+      for(let i=0;i<120;i++){
+        const s=document.createElement('div');
+        s.className='star';
+        const size=Math.random()*2+1;
+        s.style.width=size+'px';s.style.height=size+'px';
+        s.style.left=Math.random()*100+'%';
+        s.style.top=Math.random()*100+'%';
+        s.style.animationDelay=(Math.random()*3)+'s';
+        bg.appendChild(s);
+      }
+    })();
+    // Tab切换
+    document.querySelectorAll('.tab').forEach(t=>{
+      t.onclick=function(){
+        document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+        this.classList.add('active');
+        const tab=this.dataset.tab;
+        document.getElementById('smsField').style.display=tab==='sms'?'':'none';
+        document.getElementById('pwdField').style.display=tab==='pwd'?'':'none';
+      };
+    });
+    function sendCode(btn){
+      let n=60;btn.disabled=true;
+      const t=setInterval(()=>{btn.textContent=n+'s';if(--n<0){clearInterval(t);btn.disabled=false;btn.textContent='获取验证码'}},1000);
+    }
+    function zhihuLogin(){
+      const btn=document.querySelector('.btn-zhihu');
+      const original=btn.innerHTML;
+      btn.disabled=true;
+      btn.style.opacity='.7';
+      btn.innerHTML='<span class="zhihu-icon">知</span><span>正在跳转知乎授权...</span>';
+      setTimeout(()=>{
+        btn.innerHTML='<span class="zhihu-icon">知</span><span>授权成功，正在登录...</span>';
+        setTimeout(()=>{location.href='skill.html?v=12';},800);
+      },1200);
+    }
+    function enter(e){if(e)e.preventDefault();location.href='skill.html?v=12';}
+  </script>
+</body>
+</html>
