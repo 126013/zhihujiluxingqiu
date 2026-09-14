@@ -10,7 +10,7 @@
       --muted: #8eb8c3;
       --cyan: #7cecff;
       --deep: #02090d;
-      --card-w: 120px;
+      --card-w: 140px;
     }
 
     * { box-sizing: border-box; }
@@ -113,7 +113,7 @@
     .sphere--rear {
       /* The rear planet keeps its existing top anchor, while its diameter
          is capped so the complete planet remains visible in the hero. */
-      width: 539px;
+      width: 630px;
       aspect-ratio: 1;
       left: 50%;
       top: 30px;
@@ -155,7 +155,7 @@
 
     .sphere--main {
       /* Exactly the same diameter and top anchor as the rear sphere. */
-      width: 536px;
+      width: 660px;
       aspect-ratio: 1;
       left: 50%;
       top: 30px;
@@ -542,8 +542,8 @@
       function layout() {
         const width = orbit.clientWidth;
         const height = orbit.clientHeight;
-          const rx = Math.min(width * .265, 356);
-          const ry = Math.min(height * .1094, 80);
+          const rx = Math.min(width * .31, 416);
+          const ry = Math.min(height * .128, 94);
         let activeIndex = 0;
         let smallest = Infinity;
 
@@ -554,7 +554,7 @@
           const x = Math.sin(rad) * rx;
           // Keep the front card near the lower centre while preserving enough
           // room for the full card, its glow and the instruction underneath.
-          const y = Math.cos(rad) * ry + height * .239;
+          const y = Math.cos(rad) * ry + height * .28;
           const depth = (frontness + 1) / 2;
           const scale = .62 + depth * .48;
           const opacity = .23 + depth * .77;
