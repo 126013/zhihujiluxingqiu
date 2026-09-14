@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+  <script>try{var p=(location.pathname.split('/').pop()||'').toLowerCase();var l=p==='community.html'||p==='messages.html';document.documentElement.setAttribute('data-theme',l?(localStorage.getItem('starheal-theme')||'dark'):'dark')}catch(e){}</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>星愈宇宙 — 双盲棱镜</title>
-  <link rel="stylesheet" href="css/style.css?v=100">
+  <link rel="stylesheet" href="css/style.css?v=302">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+SC:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
@@ -27,8 +28,14 @@
     .ui-overlay.panel-open .esc-btn{display:block}
     .sidebar{grid-area:sidebar;pointer-events:auto;padding:120px 20px 24px 28px;display:flex;flex-direction:column;gap:4px;overflow-y:auto;background:linear-gradient(180deg,rgba(8,6,24,.5),rgba(8,6,24,.15) 40%,rgba(8,6,24,.05));backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
     .sidebar::-webkit-scrollbar{width:0}
-    .cosmos-title{font-family:'Cormorant Garamond','Noto Serif SC',serif;font-style:italic;font-size:24px;font-weight:400;color:rgba(255,255,255,.9);letter-spacing:.02em;margin-bottom:16px;padding:8px 14px;border-radius:10px;cursor:pointer;transition:all .3s}
+    .cosmos-title{font-family:'Cormorant Garamond','Noto Serif SC',serif;font-style:italic;font-size:24px;font-weight:400;color:rgba(255,255,255,.9);letter-spacing:.02em;margin-bottom:12px;padding:8px 14px;border-radius:10px;cursor:pointer;transition:all .3s}
     .cosmos-title:hover{background:rgba(20,16,48,.5)}
+    .plaza-entry{display:flex;align-items:center;gap:12px;padding:10px 14px;margin-bottom:14px;border-radius:12px;cursor:pointer;transition:all .3s;border:1px solid rgba(255,180,100,.3);background:linear-gradient(135deg,rgba(255,160,80,.16),rgba(255,120,60,.06));box-shadow:0 0 14px rgba(255,150,80,.18),inset 0 1px 0 rgba(255,220,180,.1)}
+    .plaza-entry:hover{background:linear-gradient(135deg,rgba(255,160,80,.3),rgba(255,120,60,.14));border-color:rgba(255,180,100,.55);box-shadow:0 0 22px rgba(255,150,80,.4),inset 0 1px 0 rgba(255,220,180,.18);transform:translateX(3px)}
+    .plaza-entry__dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 30%,#fff6e0,#ffb860 55%,#ff8a40);box-shadow:0 0 12px rgba(255,170,80,.9),0 0 4px rgba(255,255,255,.6)}
+    .plaza-entry__name{font-family:'Cormorant Garamond','Noto Serif SC',serif;font-size:18px;color:#ffe8cc;letter-spacing:.06em;font-weight:500}
+    .plaza-entry__arrow{margin-left:auto;color:rgba(255,180,100,.7);font-size:14px;transition:transform .25s}
+    .plaza-entry:hover .plaza-entry__arrow{transform:translateX(4px);color:#ffd9a8}
     .planet-list{display:flex;flex-direction:column;gap:2px}
     .planet-item{display:flex;align-items:center;gap:12px;padding:7px 14px;border-radius:10px;cursor:pointer;transition:all .3s;border:1px solid transparent}
     .planet-item:hover{background:rgba(255,255,255,.05)}
@@ -43,6 +50,7 @@
     .cosmos-tab{padding:9px 20px;border-radius:20px;font-family:'Cormorant Garamond','Noto Serif SC',serif;font-size:14px;color:rgba(255,255,255,.5);cursor:pointer;transition:all .3s;letter-spacing:.04em;border:1px solid transparent}
     .cosmos-tab:hover{color:rgba(255,255,255,.85)}
     .cosmos-tab.active{color:#fff;background:linear-gradient(135deg,rgba(140,100,180,.45),rgba(80,120,170,.35));border-color:rgba(255,255,255,.1);box-shadow:0 2px 14px rgba(120,100,180,.25),inset 0 1px 0 rgba(255,255,255,.1)}
+    .cosmos-tab.prism-tab{font-weight:700;color:rgba(255,255,255,.9)}
     .detail-panel{grid-area:panel;pointer-events:auto;padding:120px 28px 28px 0;overflow-y:auto;animation:panel-in .45s cubic-bezier(.2,.8,.2,1)}
     @keyframes panel-in{0%{opacity:0;transform:translateX(40px)}100%{opacity:1;transform:translateX(0)}}
     .detail-card{background:linear-gradient(160deg,rgba(30,25,58,.98),rgba(22,18,48,.99));border:1px solid rgba(200,180,230,.22);border-radius:18px;padding:28px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 10px 40px rgba(80,60,140,.35)}
@@ -54,6 +62,13 @@
     .detail-features{display:flex;flex-direction:column;gap:12px;margin-bottom:22px}
     .detail-feature{font-size:12.5px;color:rgba(255,255,255,.55);line-height:1.6;padding-left:14px;position:relative}
     .detail-feature::before{content:'✦';position:absolute;left:0;color:#c8b8f0;font-size:10px;top:3px}
+    .detail-subs{display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
+    .sub-option{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;border:1px solid rgba(200,180,230,.12);background:rgba(255,255,255,.03);cursor:pointer;transition:all .25s}
+    .sub-option:hover{background:rgba(140,100,180,.18);border-color:rgba(200,180,230,.3)}
+    .sub-option.selected{background:linear-gradient(135deg,rgba(140,100,180,.42),rgba(80,120,170,.32));border-color:rgba(200,180,230,.5);box-shadow:0 0 14px rgba(140,100,180,.3)}
+    .sub-option__dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;box-shadow:0 0 8px currentColor}
+    .sub-option__name{font-size:14px;color:rgba(255,255,255,.8);letter-spacing:.04em}
+    .sub-option.selected .sub-option__name{color:#fff}
     .detail-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px}
     .detail-chip{padding:5px 12px;border-radius:14px;background:rgba(140,100,180,.2);border:1px solid rgba(200,180,230,.15);font-size:11.5px;color:rgba(255,255,255,.65);letter-spacing:.03em}
     .detail-actions{display:flex;gap:10px}
@@ -65,7 +80,24 @@
     .label-el{position:fixed;color:white;padding:2px 8px;font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:.05em;background:rgba(0,0,0,.55);border-radius:4px;border:1px solid rgba(200,180,230,.3);white-space:nowrap;pointer-events:none;transform:translate(-50%,-100%);transition:opacity .2s;z-index:15}
     .loading{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:#0a0818;font-family:'Cormorant Garamond',serif;color:rgba(255,255,255,.6);font-size:16px;letter-spacing:.1em;transition:opacity .5s}
     .loading.hide{opacity:0;pointer-events:none}
-    @media(max-width:768px){.ui-overlay{grid-template-columns:1fr}.sidebar{display:none}.ui-overlay.panel-open{grid-template-columns:1fr}.detail-panel{display:none!important}}
+    /* 顶部搜索框 */
+    .search-bar{position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:50;pointer-events:auto;display:flex;align-items:center;gap:0;width:min(460px,calc(100vw - 340px));min-width:280px;height:42px;border-radius:22px;background:rgba(20,16,48,.55);border:1px solid rgba(200,180,230,.22);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 4px 20px rgba(80,60,140,.25);transition:all .3s}
+    .search-bar:focus-within{border-color:rgba(140,200,255,.6);box-shadow:0 0 22px rgba(140,200,255,.35)}
+    .search-bar input{flex:1;height:100%;background:transparent;border:none;outline:none;color:rgba(255,255,255,.9);font-family:'Noto Serif SC',serif;font-size:14px;padding:0 0 0 18px;letter-spacing:.03em}
+    .search-bar input::placeholder{color:rgba(255,255,255,.4)}
+    .search-bar button{height:100%;padding:0 18px;border-radius:22px;border:none;cursor:pointer;background:linear-gradient(135deg,rgba(140,100,180,.5),rgba(80,120,170,.45));color:#fff;font-family:'Cormorant Garamond','Noto Serif SC',serif;font-size:13px;letter-spacing:.06em;transition:all .3s}
+    .search-bar button:hover{background:linear-gradient(135deg,rgba(140,100,180,.7),rgba(80,120,170,.6));box-shadow:0 0 14px rgba(140,100,180,.5)}
+    .search-bar .search-icon{padding-left:14px;color:rgba(140,200,255,.7);font-size:15px}
+    /* 搜索建议下拉 */
+    .search-suggest{position:absolute;top:48px;left:0;right:0;max-height:0;overflow:hidden;border-radius:14px;background:rgba(30,25,58,.97);border:1px solid rgba(200,180,230,.18);backdrop-filter:blur(16px);box-shadow:0 8px 32px rgba(80,60,140,.4);transition:max-height .25s ease}
+    .search-bar.show-suggest .search-suggest{max-height:280px;overflow-y:auto}
+    .search-suggest::-webkit-scrollbar{width:4px}
+    .search-suggest::-webkit-scrollbar-thumb{background:rgba(200,180,230,.3);border-radius:2px}
+    .suggest-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;transition:background .2s;color:rgba(255,255,255,.75);font-family:'Noto Serif SC',serif;font-size:13.5px}
+    .suggest-item:hover{background:rgba(140,100,180,.25);color:#fff}
+    .suggest-item .s-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .suggest-empty{padding:12px 16px;color:rgba(255,255,255,.4);font-size:12.5px;text-align:center}
+    @media(max-width:768px){.ui-overlay{grid-template-columns:1fr}.sidebar{display:none}.ui-overlay.panel-open{grid-template-columns:1fr}.detail-panel{display:none!important}.search-bar{width:min(320px,80vw)}}
   </style>
 </head>
 <body>
@@ -75,30 +107,40 @@
       <div class="brand-name">星愈宇宙</div>
       <div class="brand-sub">双盲棱镜 · 匿名观点社区</div>
     </div>
+    <div class="search-bar" id="searchBar">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="搜索社区 · 直达星球帖子界面" autocomplete="off">
+      <button id="searchBtn">搜索</button>
+      <div class="search-suggest" id="searchSuggest"></div>
+    </div>
     <div class="status-corner">
-      <div class="status-progress"><span class="diamond">✦</span> <span id="progressText">0 / 8 worlds discovered</span></div>
       <button class="esc-btn" id="escBtn">← 返回轨道</button>
       <button class="music-btn" id="musicBtn">♪ music off</button>
     </div>
     <aside class="sidebar">
-      <div class="cosmos-title">爱好星球</div>
+      <div class="cosmos-title">七大方向</div>
+      <div class="plaza-entry" id="plazaEntry">
+        <div class="plaza-entry__dot"></div>
+        <div class="plaza-entry__name">推荐广场</div>
+        <div class="plaza-entry__arrow">→</div>
+      </div>
       <div class="planet-list" id="planetList"></div>
     </aside>
     <div class="detail-panel" id="detailPanel"></div>
     <div class="bottom-bar">
-      <div class="cosmos-desc">爱好星球 — 萌宠 · 游戏 · 二次元 · 影视综 · 音乐 · 读书 · 运动 · 手工。点击星球探索，或使用左侧列表选择 · 拖拽旋转视角 · 滚轮缩放</div>
+      <div class="cosmos-desc">七大方向 — 爱好 · 成长 · 情绪 · 生活 · 职场 · 身份 · 潮流。点击左侧大星球切换，选择小星球进入社区 · 拖拽旋转视角 · 滚轮缩放</div>
       <div class="cosmos-tabs">
         <div class="cosmos-tab active" data-tab="all">✦ 全部星球</div>
-        <div class="cosmos-tab" data-tab="prism">✧ 双盲棱镜</div>
-        <div class="cosmos-tab" data-tab="me" onclick="location.href='profile.html?v=5'">◉ 我的星球</div>
+        <div class="cosmos-tab prism-tab" data-tab="prism">✧ 双盲棱镜</div>
         <div class="cosmos-tab" data-tab="messages" onclick="location.href='messages.html?v=5'">✦ 消息</div>
+        <div class="cosmos-tab" data-tab="me" onclick="location.href='profile.html?v=5'">◉ 我的星球</div>
       </div>
     </div>
   </div>
   <div class="discover-toast" id="discoverToast"></div>
 
   <script src="js/store.js?v=10"></script>
-  <script src="js/app.js?v=100"></script>
+  <script src="js/app.js?v=204"></script>
   <script src="libs/three.min.js"></script>
   <script src="js/cosmic-sphere.js?v=10"></script>
 <script>
@@ -209,8 +251,8 @@
       self.target.add(xAxis.multiplyScalar(-panX)).add(yAxis.multiplyScalar(panY));
     }
     function onWheel(e){
-      if(e.deltaY<0) self._scale /= (0.95*self.zoomSpeed);
-      else self._scale *= (0.95*self.zoomSpeed);
+      if(e.deltaY<0) self._scale *= (0.95*self.zoomSpeed);
+      else self._scale /= (0.95*self.zoomSpeed);
       e.preventDefault();
     }
     function onContextMenu(e){ e.preventDefault(); }
@@ -239,6 +281,22 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x050818);
 scene.fog = new THREE.FogExp2(0x050818, 0.006);
 
+// 主题切换时同步 3D 背景色
+window.addEventListener('themechange', function(e){
+  const isLight = e.detail === 'light';
+  const bg = isLight ? 0xdde2f0 : 0x050818;
+  scene.background = new THREE.Color(bg);
+  scene.fog = new THREE.FogExp2(bg, isLight ? 0.004 : 0.006);
+});
+// 初始化时根据当前主题设置背景
+(function syncSceneBg(){
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  if(isLight){
+    scene.background = new THREE.Color(0xdde2f0);
+    scene.fog = new THREE.FogExp2(0xdde2f0, 0.004);
+  }
+})();
+
 const camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 0.1, 2000);
 camera.position.set(0, 2, 32);
 
@@ -254,7 +312,7 @@ controls.enableDamping = true;
 controls.autoRotate = false;
 controls._sphericalDelta.set(0, 0, 0); // 清空残余旋转动量，立即停止相机运动
 controls.minDistance = 10;
-controls.maxDistance = 60;
+controls.maxDistance = 50;
 controls.rotateSpeed = 0.8; // 鼠标拖拽灵敏度提高
 // 垂直方向锁定在水平线上下各 10°（总共 20° 幅度）
 controls.minPolarAngle = Math.PI / 2 - 10 * Math.PI / 180;
@@ -336,9 +394,9 @@ const starGroup = new THREE.Group();
   scene.add(camera);
 })();
 
-/* 中心恒星 — 橙紫渐变发光星球（参考图） */
+/* 中心恒星 — 推荐广场（橙紫渐变发光星球，固定样式） */
 const centralGroup = new THREE.Group();
-// 辉光 Sprite（橙紫色调）
+// 辉光 Sprite（橙紫色调，固定）
 const gC = document.createElement('canvas'); gC.width=gC.height=256;
 const gc = gC.getContext('2d');
 const gg = gc.createRadialGradient(128,128,0,128,128,128);
@@ -354,7 +412,7 @@ const glow1 = new THREE.Sprite(glowMat); glow1.scale.set(8,8,1); centralGroup.ad
 const glow2 = new THREE.Sprite(glowMat); glow2.scale.set(13,13,1); glow2.material.opacity=0.5; centralGroup.add(glow2);
 const glow3 = new THREE.Sprite(glowMat); glow3.scale.set(20,20,1); glow3.material.opacity=0.3; centralGroup.add(glow3);
 
-// 恒星本体 — 橙紫渐变 ShaderMaterial
+// 恒星本体 — 橙紫渐变 ShaderMaterial（固定，不随大星球切换）
 const starUniforms = {
   uColorA: {value: new THREE.Color('#ff8c4a')},
   uColorB: {value: new THREE.Color('#7a4a9e')},
@@ -399,7 +457,7 @@ const starMesh = new THREE.Mesh(
 starMesh.userData.isCentral = true;
 centralGroup.add(starMesh);
 
-// 大气层辉光球
+// 大气层辉光球（固定橙色）
 const atmoStar = new THREE.Mesh(
   new THREE.SphereGeometry(3.1, 64, 64),
   new THREE.ShaderMaterial({
@@ -412,7 +470,7 @@ const atmoStar = new THREE.Mesh(
 );
 centralGroup.add(atmoStar);
 
-// 推荐广场标签
+// 推荐广场标签（固定，不随大星球切换）
 const centralLabel = document.createElement('div');
 centralLabel.className = 'label-el';
 centralLabel.textContent = '推荐广场';
@@ -480,90 +538,207 @@ function makePlanetMaterial(colorA, colorB, rimColor){
   });
 }
 
-/* 行星数据 — 第一个大方向「爱好星球」下的全部小星球 */
-const planets = [
-  {name:'萌宠',   colorA:0xf4b8c8, colorB:0xa080d0, rim:0xffc8d8, size:0.9, ring:false, a:6.5, b:2.4, tiltX:0.25,  tiltY:0.12, speed:0.20, offset:0.3},
-  {name:'游戏',   colorA:0x7ed4e6, colorB:0x5a8fd0, rim:0x80e0f0, size:1.0, ring:true,  a:8.0, b:3.0, tiltX:-0.18, tiltY:0.20, speed:0.16, offset:1.1},
-  {name:'二次元', colorA:0xc8a0f0, colorB:0xf4a8c0, rim:0xd8b0f0, size:0.85, ring:false, a:9.5, b:3.6, tiltX:0.32,  tiltY:-0.15, speed:0.13, offset:2.0},
-  {name:'影视综', colorA:0xe8a878, colorB:0xd06080, rim:0xf0b890, size:0.95, ring:true,  a:11.0, b:4.1, tiltX:-0.28, tiltY:0.08, speed:0.11, offset:2.8},
-  {name:'音乐',   colorA:0x80d0b0, colorB:0x60a8c0, rim:0x90e8c8, size:0.8, ring:false, a:12.5, b:4.6, tiltX:0.15,  tiltY:0.25, speed:0.095, offset:3.6},
-  {name:'读书',   colorA:0xb8b8d8, colorB:0x9070b0, rim:0xc8c8e8, size:0.75, ring:false, a:14.0, b:5.0, tiltX:-0.12, tiltY:-0.18, speed:0.082, offset:4.4},
-  {name:'运动',   colorA:0xe87878, colorB:0xe8a060, rim:0xf09090, size:0.88, ring:true,  a:15.5, b:5.5, tiltX:0.38,  tiltY:0.10, speed:0.072, offset:5.2},
-  {name:'手工',   colorA:0xd8c080, colorB:0xb8a060, rim:0xe8d090, size:0.82, ring:false, a:17.0, b:6.0, tiltX:-0.22, tiltY:0.30, speed:0.064, offset:6.0}
+/* 七大方向（大星球）数据 — 每个大星球包含若干小星球（代表图层） */
+const bigPlanets = [
+  { name:'爱好星球', color:0xff8c4a, colorA:0xff8c4a, colorB:0x7a4a9e, rim:'#ffc080', style:'软萌治愈 · 热血玩梗 · 结界黑话 · 文艺安静',
+    subs:[{name:'萌宠'},{name:'游戏'},{name:'二次元'},{name:'影视综'},{name:'音乐'},{name:'读书'},{name:'运动'},{name:'手工'}] },
+  { name:'成长星球', color:0x80e0a0, colorA:0x7affc0, colorB:0x2a8a6a, rim:'#b0ffd0', style:'干货互助 · 焦虑共勉 · 硬核极客 · 正能量',
+    subs:[{name:'校园'},{name:'考试'},{name:'语言'},{name:'编程'},{name:'技能'},{name:'自律打卡'}] },
+  { name:'情绪星球', color:0x9080e0, colorA:0x9080e0, colorB:0x4060c0, rim:'#b0d8ff', style:'私密温柔 · 无评判倾诉 · 抱团取暖 · 轻松玩梗',
+    subs:[{name:'树洞'},{name:'治愈'},{name:'失恋'},{name:'独居'},{name:'关系'},{name:'心理'},{name:'玄学'}] },
+  { name:'生活星球', color:0xffd080, colorA:0xffd080, colorB:0xc08040, rim:'#ffe0a0', style:'精致种草 · 温馨晒家 · 自由远方 · 佛系松弛',
+    subs:[{name:'穿搭'},{name:'家居'},{name:'旅行'},{name:'省钱'},{name:'养生'}] },
+  { name:'职场星球', color:0x80d8e8, colorA:0x80d8e8, colorB:0x4080c0, rim:'#a0e8f8', style:'信息互助 · 自嘲共鸣 · 搞钱交流 · 鸡血焦虑',
+    subs:[{name:'求职'},{name:'打工人'},{name:'副业'},{name:'职业'},{name:'创业'}] },
+  { name:'身份星球', color:0xe0e0f0, colorA:0xe0e0f0, colorB:0xa0a0c0, rim:'#e8ecff', style:'亲切接地气 · 情怀 · 共鸣抱团 · 方言梗',
+    subs:[{name:'同城'},{name:'校友'},{name:'同龄'},{name:'留学生'},{name:'老乡'}] },
+  { name:'潮流星球', color:0xff90c8, colorA:0xff90c8, colorB:0xc060a0, rim:'#ffc0e0', style:'爱意应援 · 围观吃瓜 · 参数党 · 小众结界',
+    subs:[{name:'饭圈'},{name:'吃瓜'},{name:'数码'},{name:'梗文化'},{name:'亚文化'}] }
 ];
 
+/* 小星球材质 — 程序化渐变 + 云层 + 城市光点 + Fresnel 辉光（不用贴图） */
+const satVert = `
+  varying vec3 vLocalPos;
+  varying vec3 vNormal;
+  varying vec3 vViewDir;
+  void main(){
+    vLocalPos = position;
+    vNormal = normalize(normalMatrix * normal);
+    vec4 mvPos = viewMatrix * modelMatrix * vec4(position, 1.0);
+    vViewDir = normalize(-mvPos.xyz);
+    gl_Position = projectionMatrix * mvPos;
+  }
+`;
+const satFrag = `
+  uniform vec3 uColorA;
+  uniform vec3 uColorB;
+  uniform vec3 uRimColor;
+  uniform float uTime;
+  varying vec3 vLocalPos;
+  varying vec3 vNormal;
+  varying vec3 vViewDir;
+  vec3 hash3(vec3 p){p=vec3(dot(p,vec3(127.1,311.7,74.7)),dot(p,vec3(269.5,183.3,246.1)),dot(p,vec3(113.5,271.9,124.6)));return fract(sin(p)*43758.5453123);}
+  float noise3(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);float n000=dot(hash3(i+vec3(0,0,0))-0.5,f-vec3(0,0,0));float n100=dot(hash3(i+vec3(1,0,0))-0.5,f-vec3(1,0,0));float n010=dot(hash3(i+vec3(0,1,0))-0.5,f-vec3(0,1,0));float n110=dot(hash3(i+vec3(1,1,0))-0.5,f-vec3(1,1,0));float n001=dot(hash3(i+vec3(0,0,1))-0.5,f-vec3(0,0,1));float n101=dot(hash3(i+vec3(1,0,1))-0.5,f-vec3(1,0,1));float n011=dot(hash3(i+vec3(0,1,1))-0.5,f-vec3(0,1,1));float n111=dot(hash3(i+vec3(1,1,1))-0.5,f-vec3(1,1,1));float nx00=mix(n000,n100,f.x),nx10=mix(n010,n110,f.x),nx01=mix(n001,n101,f.x),nx11=mix(n011,n111,f.x);float nxy0=mix(nx00,nx10,f.y),nxy1=mix(nx01,nx11,f.y);return mix(nxy0,nxy1,f.z)*2.0;}
+  float fbm(vec3 p){float v=0.0,a=0.5;for(int i=0;i<5;i++){v+=a*noise3(p);p*=2.02;a*=0.5;}return v;}
+  void main(){
+    vec3 N=normalize(vNormal),V=normalize(vViewDir);
+    vec3 pos=normalize(vLocalPos);
+    float cloudLow=fbm(pos*1.5), cloudMid=fbm(pos*3.0+vec3(uTime*0.05,0,0));
+    float t=pos.x*0.5+0.5+cloudLow*0.15;
+    t=clamp(t,0.0,1.0);
+    vec3 col=mix(uColorA,uColorB,t);
+    float cloudMask=smoothstep(0.1,0.55,cloudLow);
+    vec3 cloudCol=mix(vec3(1.0,0.96,0.9),vec3(1.0,0.9,0.82),cloudMid*0.5+0.5);
+    col=mix(col,cloudCol,cloudMask*0.45);
+    float darkCloud=smoothstep(0.0,-0.35,cloudMid*1.2);
+    col=mix(col,col*0.5,darkCloud*0.4);
+    float cityNoise=fbm(pos*9.0);
+    float cityMask=smoothstep(0.52,0.66,cityNoise)*smoothstep(0.1,0.6,t);
+    vec3 cityColor=mix(vec3(1.0,0.96,0.75),vec3(1.0,0.82,0.5),cityNoise);
+    col+=cityColor*cityMask*1.8;
+    float fresnel=pow(1.0-max(dot(N,V),0.0),2.5);
+    col+=uRimColor*fresnel*1.0;
+    col+=noise3(pos*70.0)*0.02;
+    gl_FragColor=vec4(col,1.0);
+  }
+`;
+function makeSatMaterial(colorA, colorB, rimColor){
+  return new THREE.ShaderMaterial({
+    uniforms:{
+      uColorA:{value:new THREE.Color(colorA)},
+      uColorB:{value:new THREE.Color(colorB)},
+      uRimColor:{value:new THREE.Color(rimColor)},
+      uTime:{value:0}
+    },
+    vertexShader:satVert,
+    fragmentShader:satFrag
+  });
+}
+
 const satellites = [];
+const orbitLines = [];
 const planetList = document.getElementById('planetList');
 const projV = new THREE.Vector3();
+let currentBigIndex = -1;
+let selectedSubName = null;
 
-// 推荐广场 — 列表首位
-const plazaItem = document.createElement('div');
-plazaItem.className = 'planet-item';
-plazaItem.innerHTML = '<div class="planet-dot" style="background:#ffffff;color:#ffffff;box-shadow:0 0 10px rgba(255,255,255,.6);"></div><div class="planet-name">推荐广场</div>';
-plazaItem.onclick = function(){ location.href='community.html?v=10'; };
-planetList.appendChild(plazaItem);
+/* 创建 7 个公转小星球（一次性，不随切换重建） */
+function buildSatellites(){
+  bigPlanets.forEach(function(bp, idx){
+    const p = {
+      size: 1.0 + (idx%3)*0.12,
+      ring: idx%2===1,
+      a: 6.5 + idx*1.8,
+      b: 2.2 + idx*0.6,
+      tiltX: (idx%2===0?1:-1) * (0.12 + (idx%4)*0.07),
+      tiltY: ((idx%5)-2) * 0.06,
+      speed: 0.20 - idx*0.016,
+      offset: idx * 0.85
+    };
 
-planets.forEach(function(p, idx){
-  const group = new THREE.Group();
-  const color = new THREE.Color(p.colorA);
+    const group = new THREE.Group();
+    const mat = makeSatMaterial(bp.colorA, bp.colorB, bp.rim);
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(p.size, 64, 64), mat);
+    group.add(mesh);
 
-  // 行星本体 — 程序化 Shader
-  const mesh = new THREE.Mesh(
-    new THREE.SphereGeometry(p.size, 64, 64),
-    makePlanetMaterial(p.colorA, p.colorB, p.rim)
-  );
-  group.add(mesh);
+    // 星环
+    if(p.ring){
+      const ringGeo = new THREE.RingGeometry(p.size*1.5, p.size*2.2, 64);
+      const ringMat = new THREE.MeshBasicMaterial({color:bp.color, transparent:true, opacity:0.35, side:THREE.DoubleSide, depthWrite:false});
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.rotation.x = Math.PI/2 - 0.3;
+      group.add(ring);
+    }
 
-  // 星环
-  if(p.ring){
-    const ringGeo = new THREE.RingGeometry(p.size*1.5, p.size*2.2, 64);
-    const ringMat = new THREE.MeshBasicMaterial({color:p.colorA, transparent:true, opacity:0.4, side:THREE.DoubleSide, depthWrite:false});
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    ring.rotation.x = Math.PI/2 - 0.3;
-    group.add(ring);
+    // 辉光
+    const col = new THREE.Color(bp.color);
+    const gc = document.createElement('canvas'); gc.width=gc.height=128;
+    const g = gc.getContext('2d');
+    const gg = g.createRadialGradient(64,64,0,64,64,64);
+    gg.addColorStop(0,'rgba('+Math.round(col.r*255)+','+Math.round(col.g*255)+','+Math.round(col.b*255)+',0.6)');
+    gg.addColorStop(0.4,'rgba('+Math.round(col.r*255)+','+Math.round(col.g*255)+','+Math.round(col.b*255)+',0.2)');
+    gg.addColorStop(1,'rgba(0,0,0,0)');
+    g.fillStyle=gg; g.fillRect(0,0,128,128);
+    const glow = new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(gc), transparent:true, depthWrite:false, blending:THREE.AdditiveBlending}));
+    glow.scale.set(p.size*5, p.size*5, 1);
+    group.add(glow);
+
+    scene.add(group);
+
+    // 标签
+    const labelEl = document.createElement('div');
+    labelEl.className = 'label-el';
+    labelEl.textContent = bp.name;
+    document.body.appendChild(labelEl);
+
+    satellites.push({
+      group, planet:mesh, labelEl, material:mat,
+      orbitA:p.a, orbitB:p.b, tiltX:p.tiltX, tiltY:p.tiltY,
+      angleOffset:p.offset, speed:p.speed, rotationSpeed:0.3,
+      name:bp.name, size:p.size, color:'#'+bp.color.toString(16).padStart(6,'0'),
+      bigIdx:idx
+    });
+
+    // 椭圆轨道线
+    const curve = new THREE.EllipseCurve(0, 0, p.a, p.b, 0, Math.PI*2, false, 0);
+    const pts = curve.getPoints(128);
+    const geo = new THREE.BufferGeometry().setFromPoints(pts.map(function(pt){return new THREE.Vector3(pt.x, pt.y, 0);}));
+    const lineMat = new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:0.15});
+    const line = new THREE.Line(geo, lineMat);
+    line.rotation.x = p.tiltX; line.rotation.y = p.tiltY;
+    scene.add(line);
+    orbitLines.push(line);
+  });
+}
+
+/* 渲染左侧大星球列表 */
+function buildSidebar(){
+  planetList.innerHTML = '';
+  bigPlanets.forEach(function(bp, idx){
+    const col = '#'+bp.color.toString(16).padStart(6,'0');
+    const item = document.createElement('div');
+    item.className = 'planet-item' + (idx===currentBigIndex?' active':'');
+    item.dataset.bigIdx = idx;
+    item.innerHTML = '<div class="planet-dot" style="background:'+col+';color:'+col+';box-shadow:0 0 10px '+col+';"></div><div class="planet-name">'+bp.name+'</div>';
+    item.onclick = function(){ selectBigPlanet(idx); };
+    planetList.appendChild(item);
+  });
+}
+
+/* 点击左侧大星球 → 镜头放大到对应公转小星球 + 显示该大星球的小星球面板 */
+function selectBigPlanet(idx){
+  currentBigIndex = idx;
+  buildSidebar();
+  const sat = satellites.find(function(s){return s.bigIdx===idx;});
+  if(sat){ focusOnSatellite(sat); }
+  showBigPlanetPanel(bigPlanets[idx]);
+}
+
+function resetCamera(){
+  if(focusAnim){ cancelAnimationFrame(focusAnim); focusAnim=null; }
+  focusedSat = null;
+  focusLocked = true;
+  const fromPos = camera.position.clone();
+  const fromTarget = controls.target.clone();
+  const toPos = new THREE.Vector3(0, 2, 32);
+  const toTarget = new THREE.Vector3(0, 0, 0);
+  const start = performance.now();
+  function tick(now){
+    const t = Math.min(1, (now-start)/800);
+    const e = t<0.5?2*t*t:-1+(4-2*t)*t;
+    camera.position.lerpVectors(fromPos, toPos, e);
+    controls.target.lerpVectors(fromTarget, toTarget, e);
+    if(t<1){
+      requestAnimationFrame(tick);
+    }else{
+      focusLocked = false;
+    }
   }
+  requestAnimationFrame(tick);
+}
 
-  // 辉光
-  const gc = document.createElement('canvas'); gc.width=gc.height=128;
-  const g = gc.getContext('2d');
-  const gg = g.createRadialGradient(64,64,0,64,64,64);
-  gg.addColorStop(0,'rgba('+Math.round(color.r*255)+','+Math.round(color.g*255)+','+Math.round(color.b*255)+',0.6)');
-  gg.addColorStop(0.4,'rgba('+Math.round(color.r*255)+','+Math.round(color.g*255)+','+Math.round(color.b*255)+',0.2)');
-  gg.addColorStop(1,'rgba(0,0,0,0)');
-  g.fillStyle=gg; g.fillRect(0,0,128,128);
-  const glow = new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(gc), transparent:true, depthWrite:false, blending:THREE.AdditiveBlending}));
-  glow.scale.set(p.size*5, p.size*5, 1);
-  group.add(glow);
-
-  scene.add(group);
-
-  // DOM label
-  const labelEl = document.createElement('div');
-  labelEl.className = 'label-el';
-  labelEl.textContent = p.name;
-  document.body.appendChild(labelEl);
-
-  satellites.push({group, planet:mesh, labelEl, orbitA:p.a, orbitB:p.b, tiltX:p.tiltX, tiltY:p.tiltY, angleOffset:p.offset, speed:p.speed, rotationSpeed:0.3, name:p.name, size:p.size, color:'#'+p.colorA.toString(16).padStart(6,'0')});
-
-  // 列表项
-  const item = document.createElement('div');
-  item.className = 'planet-item';
-  item.innerHTML = '<div class="planet-dot" style="background:'+satellites[idx].color+';color:'+satellites[idx].color+';"></div><div class="planet-name">'+p.name+'</div>';
-  item.onclick = function(){ focusOnSatellite(satellites[idx]); showDetailPanel(p); };
-  planetList.appendChild(item);
-});
-
-/* 椭圆轨道线 */
-satellites.forEach(function(sat){
-  const curve = new THREE.EllipseCurve(0, 0, sat.orbitA, sat.orbitB, 0, Math.PI*2, false, 0);
-  const pts = curve.getPoints(128);
-  const geo = new THREE.BufferGeometry().setFromPoints(pts.map(function(p){return new THREE.Vector3(p.x, p.y, 0);}));
-  const mat = new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:0.18});
-  const line = new THREE.Line(geo, mat);
-  line.rotation.x = sat.tiltX;
-  line.rotation.y = sat.tiltY;
-  scene.add(line);
-});
+buildSidebar();
+buildSatellites();
 
 /* 螺旋星系粒子带 */
 let galaxyParticles;
@@ -604,29 +779,48 @@ renderer.domElement.addEventListener('click', function(e){
   const hits = raycaster.intersectObjects(meshes, false);
   if(hits.length>0){
     if(hits[0].object.userData.isCentral){
-      location.href = 'community.html?v=10';
+      // 点击中心恒星（推荐广场）→ 跳转推荐广场
+      location.href='community.html?v=10';
       return;
     }
     const sat = satellites.find(function(s){return s.planet===hits[0].object;});
-    if(sat){ focusOnSatellite(sat); showDetailPanel(sat); }
+    if(sat){
+      // 点击公转小星球 → 放大 + 显示该大星球面板
+      currentBigIndex = sat.bigIdx;
+      buildSidebar();
+      focusOnSatellite(sat);
+      showBigPlanetPanel(bigPlanets[sat.bigIdx]);
+    }
   }
 });
 
+let focusedSat = null;
+let focusAnim = null;
+let focusLocked = false; // focus 动画进行中，跳过 animate 里的 controls 操作
 function focusOnSatellite(sat){
-  const pos = sat.group.position.clone();
-  const targetPos = pos.clone().add(new THREE.Vector3(0, 1.5, 4));
+  focusedSat = sat;
+  focusLocked = true;
+  if(focusAnim) cancelAnimationFrame(focusAnim);
   const fromPos = camera.position.clone();
   const fromTarget = controls.target.clone();
   const start = performance.now();
+  const duration = 900;
   function tick(now){
-    const t = Math.min(1, (now-start)/800);
+    const t = Math.min(1, (now-start)/duration);
     const e = t<0.5?2*t*t:-1+(4-2*t)*t;
+    // 跟随卫星当前位置（卫星在公转，镜头需要追上它）
+    // offset 距离 sqrt(4+110.25)≈10.7 > minDistance(10)，避免 update() 弹回
+    const satPos = sat.group.position.clone();
+    const targetPos = satPos.clone().add(new THREE.Vector3(0, 2.0, 10.5));
     camera.position.lerpVectors(fromPos, targetPos, e);
-    controls.target.lerpVectors(fromTarget, pos, e);
-    controls.update();
-    if(t<1) requestAnimationFrame(tick);
+    controls.target.lerpVectors(fromTarget, satPos, e);
+    if(t<1){
+      focusAnim = requestAnimationFrame(tick);
+    }else{
+      focusLocked = false;
+    }
   }
-  requestAnimationFrame(tick);
+  focusAnim = requestAnimationFrame(tick);
 }
 
 /* 详情面板 */
@@ -634,34 +828,57 @@ const uiOverlay = document.getElementById('uiOverlay');
 const detailPanel = document.getElementById('detailPanel');
 const escBtn = document.getElementById('escBtn');
 
-function showDetailPanel(p){
+function showBigPlanetPanel(bp){
+  // 侧栏高亮当前大星球
   document.querySelectorAll('.planet-item').forEach(function(i){i.classList.remove('active');});
   const items = document.querySelectorAll('.planet-item');
-  const idx = satellites.findIndex(function(s){return s.name===p.name;});
-  if(items[idx+1]) items[idx+1].classList.add('active');
+  if(items[currentBigIndex]) items[currentBigIndex].classList.add('active');
+
+  const col = '#'+bp.color.toString(16).padStart(6,'0');
+  // 小星球选项列表
+  const subOptions = bp.subs.map(function(s){
+    const sel = s.name===selectedSubName ? ' selected' : '';
+    return '<div class="sub-option'+sel+'" data-name="'+s.name+'">'+
+             '<div class="sub-option__dot" style="background:'+col+';"></div>'+
+             '<div class="sub-option__name">'+s.name+'</div>'+
+           '</div>';
+  }).join('');
+
   detailPanel.innerHTML =
     '<div class="detail-card">'+
       '<div class="detail-top">'+
-        '<div class="detail-sprite" style="background:radial-gradient(circle at 30% 30%,'+satellites[idx].color+'80, '+satellites[idx].color+'20, transparent);"></div>'+
-        '<div><div class="detail-name">'+p.name+'</div><div class="detail-tag">探索这个世界</div></div>'+
+        '<div class="detail-sprite" style="background:radial-gradient(circle at 30% 30%,'+col+'99, '+col+'33, transparent);"></div>'+
+        '<div><div class="detail-name">'+bp.name+'</div><div class="detail-tag">'+bp.style+'</div></div>'+
       '</div>'+
-      '<div class="detail-desc">点击进入 ' + p.name + '，发现更多内容。</div>'+
-      '<div class="detail-features">'+
-        '<div class="detail-feature">匿名提问，真诚表达情绪与观点</div>'+
-        '<div class="detail-feature">AI 棱镜智能匹配，找到同频的声音</div>'+
-        '<div class="detail-feature">知识沉淀，你的经历帮助后来人</div>'+
+      '<div class="detail-desc">选择代表图层（小星球），点击「进入社区」探索。</div>'+
+      '<div class="detail-subs">'+subOptions+'</div>'+
+      '<div class="detail-tags">'+
+        bp.style.split(' · ').map(function(t){return '<div class="detail-chip">'+t+'</div>';}).join('')+
       '</div>'+
-      '<div class="detail-tags"><div class="detail-chip">匿名</div><div class="detail-chip">安全</div><div class="detail-chip">同频共鸣</div></div>'+
       '<div class="detail-actions">'+
         '<button class="detail-btn primary" id="ec">进入社区</button>'+
         '<button class="detail-btn" id="cp">关闭</button>'+
       '</div>'+
     '</div>';
-  document.getElementById('ec').onclick = function(){ location.href='community.html?v=11&planet='+encodeURIComponent(p.name); };
+
+  // 小星球选项点击
+  detailPanel.querySelectorAll('.sub-option').forEach(function(opt){
+    opt.addEventListener('click', function(){
+      selectedSubName = opt.dataset.name;
+      detailPanel.querySelectorAll('.sub-option').forEach(function(o){o.classList.remove('selected');});
+      opt.classList.add('selected');
+    });
+  });
+
+  document.getElementById('ec').onclick = function(){
+    if(selectedSubName){
+      location.href='community.html?v=11&big='+encodeURIComponent(bp.name)+'&planet='+encodeURIComponent(selectedSubName);
+    }
+  };
   document.getElementById('cp').onclick = closeDetailPanel;
   uiOverlay.classList.add('panel-open');
   const toast = document.getElementById('discoverToast');
-  toast.textContent = '✦ Discovered: ' + p.name;
+  toast.textContent = '✦ ' + bp.name;
   toast.classList.add('show');
   clearTimeout(toast._timer);
   toast._timer = setTimeout(function(){toast.classList.remove('show');}, 2500);
@@ -671,25 +888,82 @@ function closeDetailPanel(){
   document.querySelectorAll('.planet-item').forEach(function(i){i.classList.remove('active');});
 }
 escBtn.onclick = closeDetailPanel;
+// 推荐广场入口 — 直接跳转到推荐广场社区
+document.getElementById('plazaEntry').addEventListener('click', function(){
+  location.href='community.html?v=10';
+});
+
+/* ========== 顶部搜索框 ========== */
+// 收集所有可搜索社区（推荐广场 + 七大方向下的所有代表图层）
+const searchableCommunities = [{name:'推荐广场', color:'#ffffff', big:''}];
+bigPlanets.forEach(function(bp){
+  bp.subs.forEach(function(s){
+    searchableCommunities.push({name:s.name, color:'#'+bp.color.toString(16).padStart(6,'0'), big:bp.name});
+  });
+});
+
+const searchBar = document.getElementById('searchBar');
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+const searchSuggest = document.getElementById('searchSuggest');
+
+function renderSuggest(keyword){
+  const kw = (keyword||'').trim().toLowerCase();
+  let list = searchableCommunities;
+  if(kw){ list = list.filter(function(c){return c.name.toLowerCase().includes(kw);}); }
+  searchSuggest.innerHTML = '';
+  if(list.length === 0){
+    searchSuggest.innerHTML = '<div class="suggest-empty">未找到匹配的社区</div>';
+  } else {
+    list.forEach(function(c){
+      const item = document.createElement('div');
+      item.className = 'suggest-item';
+      item.innerHTML = '<span class="s-dot" style="background:'+c.color+';box-shadow:0 0 6px '+c.color+';"></span><span>'+c.name+'</span>';
+      item.onclick = function(){ goToCommunity(c.name, c.big); };
+      searchSuggest.appendChild(item);
+    });
+  }
+  searchBar.classList.add('show-suggest');
+}
+
+function goToCommunity(name, big){
+  if(!name || !name.trim()) return;
+  let url = 'community.html?v=10&planet=' + encodeURIComponent(name.trim());
+  if(big) url += '&big=' + encodeURIComponent(big);
+  location.href = url;
+}
+
+searchInput.addEventListener('input', function(){ renderSuggest(this.value); });
+searchInput.addEventListener('focus', function(){ renderSuggest(this.value); });
+searchInput.addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){ e.preventDefault(); doSearch(); }
+});
+searchBtn.addEventListener('click', function(){ doSearch(); });
+
+function doSearch(){
+  const val = searchInput.value.trim();
+  if(!val) return;
+  // 优先精确匹配，带上 big
+  const exact = searchableCommunities.find(function(c){ return c.name === val; });
+  if(exact){ goToCommunity(exact.name, exact.big); return; }
+  // 否则取第一个匹配项
+  const kw = val.toLowerCase();
+  const hit = searchableCommunities.find(function(c){ return c.name.toLowerCase().includes(kw); });
+  if(hit){ goToCommunity(hit.name, hit.big); return; }
+  goToCommunity(val, '');
+}
+
+// 点击搜索框外部关闭建议下拉
+document.addEventListener('click', function(e){
+  if(!searchBar.contains(e.target)){ searchBar.classList.remove('show-suggest'); }
+});
+
 document.addEventListener('keydown', function(e){ if(e.key==='Escape' && uiOverlay.classList.contains('panel-open')) closeDetailPanel(); });
 
 // 点击"爱好星球"标题 — 关闭详情面板并重置相机到全星系视图
 document.querySelector('.cosmos-title').addEventListener('click', function(){
   closeDetailPanel();
-  const fromPos = camera.position.clone();
-  const fromTarget = controls.target.clone();
-  const toPos = new THREE.Vector3(0, 2, 32);
-  const toTarget = new THREE.Vector3(0, 0, 0);
-  const start = performance.now();
-  function tick(now){
-    const t = Math.min(1, (now-start)/800);
-    const e = t<0.5?2*t*t:-1+(4-2*t)*t;
-    camera.position.lerpVectors(fromPos, toPos, e);
-    controls.target.lerpVectors(fromTarget, toTarget, e);
-    controls.update();
-    if(t<1) requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
+  resetCamera();
 });
 
 document.querySelectorAll('.cosmos-tab').forEach(function(tab){
@@ -701,8 +975,6 @@ document.querySelectorAll('.cosmos-tab').forEach(function(tab){
     else if(k==='me') location.href='profile.html?v=9';
   });
 });
-
-document.getElementById('progressText').textContent = '✦ 0 / ' + planets.length + ' worlds discovered';
 
 window.addEventListener('resize', function(){
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -760,7 +1032,7 @@ function animate(){
   glow1.material.opacity = pulse;
   glow2.material.opacity = pulse * 0.5;
 
-  // 卫星 3D 椭圆公转 + 自转
+  // 卫星 3D 椭圆公转 + 自转 + 材质 uTime 更新
   satellites.forEach(function(sat){
     const theta = sat.angleOffset + t * sat.speed;
     const x0 = Math.cos(theta) * sat.orbitA;
@@ -771,10 +1043,16 @@ function animate(){
     sat.group.position.set(x1, y1, z1);
     sat.planet.rotation.y = t * sat.rotationSpeed;
     sat.planet.rotation.x = t * sat.rotationSpeed * 0.3;
+    if(sat.material && sat.material.uniforms.uTime){
+      sat.material.uniforms.uTime.value = t;
+    }
   });
 
-  controls._sphericalDelta.set(0, 0, 0); // 每帧强制清零，彻底停止相机运动
-  controls.update();
+  // focus 动画进行中时跳过 controls 操作，避免冲突导致闪屏
+  if(!focusLocked){
+    controls._sphericalDelta.set(0, 0, 0); // 每帧强制清零，彻底停止相机运动
+    controls.update();
+  }
   updateLabels();
   renderer.render(scene, camera);
 }

@@ -88,38 +88,127 @@ window.StarhealApp = (function () {
     });
   }
 
+  /* —— 主题切换（仅社区/消息页支持亮色，其余强制暗色）—— */
+  function isLightAllowed() {
+    const path = (location.pathname.split('/').pop() || '').toLowerCase();
+    return path === 'community.html' || path === 'messages.html';
+  }
+  function initTheme() {
+    const allowed = isLightAllowed();
+    const saved = localStorage.getItem('starheal-theme') || 'dark';
+    // 非允许页面强制暗色，不修改 localStorage
+    const theme = allowed ? saved : 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    if (allowed) localStorage.setItem('starheal-theme', saved);
+    if (allowed) injectThemeToggle();
+    // 防御性重应用 + 监听
+    const reapply = function () {
+      const want = allowed ? (localStorage.getItem('starheal-theme') || 'dark') : 'dark';
+      if (document.documentElement.getAttribute('data-theme') !== want) {
+        document.documentElement.setAttribute('data-theme', want);
+      }
+    };
+    requestAnimationFrame(reapply);
+    setTimeout(reapply, 0);
+    setTimeout(reapply, 100);
+    if (window.MutationObserver) {
+      new MutationObserver(function () { reapply(); })
+        .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    }
+  }
+  function applyTheme(theme) {
+    if (!isLightAllowed()) theme = 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('starheal-theme', theme);
+    window.dispatchEvent(new CustomEvent('themechange', { detail: theme }));
+  }
+  function injectThemeToggle() {
+    if (document.querySelector('.theme-toggle')) return;
+    if (!isLightAllowed()) return;
+    const btn = document.createElement('button');
+    btn.className = 'theme-toggle';
+    btn.title = '切换亮色/暗色';
+    btn.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? '☀' : '☾';
+    btn.addEventListener('click', function () {
+      const cur = document.documentElement.getAttribute('data-theme');
+      const next = cur === 'light' ? 'dark' : 'light';
+      applyTheme(next);
+      btn.textContent = next === 'light' ? '☀' : '☾';
+    });
+    document.body.appendChild(btn);
+  }
+
   /* —— 顶部固定导航（网页版）—— */
   function injectTopNav(active) {
     if (document.querySelector('.top-nav')) return;
     const nav = document.createElement('nav');
     nav.className = 'top-nav';
-    // 品牌
-    const brand = document.createElement('a');
-    brand.className = 'brand';
-    brand.href = 'home.html';
-    brand.innerHTML = '<span class="star">✦</span><span>星愈</span>';
-    nav.appendChild(brand);
-    // 导航项
-    const items = [
-      { key: 'home', icon: '✦', label: '星系', href: 'home.html' },
-      { key: 'community', icon: '◈', label: '社区', href: 'community.html' },
-      { key: 'core', icon: '✧', label: '双盲棱镜', href: 'prism.html', core: true },
-      { key: 'msg',  icon: '✉', label: '消息', href: 'messages.html' },
-      { key: 'me',   icon: '◉', label: '我的', href: 'profile.html' }
-    ];
-    items.forEach(function (it) {
-      const el = document.createElement('a');
-      if (it.core) {
-        el.className = 'nav-core';
-        el.innerHTML = '<span>' + it.icon + '</span><span>' + it.label + '</span>';
-        el.title = it.label;
-      } else {
-        el.className = 'nav-item' + (it.key === active ? ' active' : '');
-        el.innerHTML = '<span class="nav-icon">' + it.icon + '</span><span>' + it.label + '</span>';
-      }
-      el.href = it.href;
-      nav.appendChild(el);
-    });
+    // 需要"返回+搜索"样式的页面（双盲棱镜、我的星球、消息）
+    const withBack = (active === 'core' || active === 'profile' || active === 'messages' || active === 'community');
+    if (withBack) nav.classList.add('nav--with-search');
+    // 左侧：返回按钮 或 品牌
+    if (withBack) {
+      const back = document.createElement('a');
+      back.className = 'brand back-btn';
+      back.href = 'home.html';
+      back.innerHTML = '<span class="back-arrow">‹</span><span>返回</span>';
+      back.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          location.href = 'home.html';
+        }
+      });
+      nav.appendChild(back);
+    } else {
+      const brand = document.createElement('a');
+      brand.className = 'brand';
+      brand.href = 'home.html';
+      brand.innerHTML = '<span class="star">✦</span><span>星愈</span>';
+      nav.appendChild(brand);
+    }
+    // 星系导航项
+    const homeItem = document.createElement('a');
+    homeItem.className = 'nav-item' + (active === 'home' ? ' active' : '');
+    homeItem.href = 'home.html';
+    homeItem.innerHTML = '<span class="nav-icon">✦</span><span>星系</span>';
+    nav.appendChild(homeItem);
+    // 搜索框（withBack 页面才显示）
+    if (withBack) {
+      const search = document.createElement('label');
+      search.className = 'nav-search';
+      search.innerHTML = '<span class="s-ico">🔍</span><input type="text" placeholder="搜索社区，回车直达" />';
+      search.querySelector('input').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          const v = this.value.trim();
+          // community 页面由自身逻辑处理实时过滤，不跳转
+          if (v && !/community\.html/i.test(location.pathname)) {
+            location.href = 'community.html?q=' + encodeURIComponent(v);
+          }
+        }
+      });
+      nav.appendChild(search);
+    }
+    // 双盲棱镜核心按钮
+    const core = document.createElement('a');
+    core.className = 'nav-core';
+    core.href = 'prism.html';
+    core.innerHTML = '<span>✧</span><span>双盲棱镜</span>';
+    core.title = '双盲棱镜';
+    nav.appendChild(core);
+    // 消息
+    const msg = document.createElement('a');
+    msg.className = 'nav-item' + (active === 'messages' ? ' active' : '');
+    msg.href = 'messages.html';
+    msg.innerHTML = '<span class="nav-icon">✉</span><span>消息</span>';
+    nav.appendChild(msg);
+    // 我的
+    const me = document.createElement('a');
+    me.className = 'nav-item' + (active === 'profile' || active === 'settings' ? ' active' : '');
+    me.href = 'profile.html';
+    me.innerHTML = '<span class="nav-icon">◉</span><span>我的</span>';
+    nav.appendChild(me);
     document.body.appendChild(nav);
   }
 
@@ -177,6 +266,7 @@ window.StarhealApp = (function () {
   function init(opts) {
     opts = opts || {};
     injectBackground();
+    initTheme();
     if (opts.topNav) injectTopNav(opts.topNav);
     else if (opts.bottomNav) injectTopNav(opts.bottomNav); // 兼容旧调用
     // 登录守卫
@@ -237,6 +327,8 @@ window.StarhealApp = (function () {
     escapeHtml: escapeHtml,
     handleError: handleError,
     injectBackground: injectBackground,
+    initTheme: initTheme,
+    applyTheme: applyTheme,
     injectTopNav: injectTopNav,
     injectBottomNav: injectBottomNav,
     renderPlanet: renderPlanet,
@@ -298,7 +390,10 @@ window.StarhealApp = (function () {
   }
 })();
 
-// —— 页面加载完成后自动注入背景层 ——
+// —— 页面加载完成后自动注入背景层 + 主题切换 ——
 document.addEventListener('DOMContentLoaded', function () {
-  if (window.StarhealApp) window.StarhealApp.injectBackground();
+  if (window.StarhealApp) {
+    window.StarhealApp.injectBackground();
+    window.StarhealApp.initTheme();
+  }
 });

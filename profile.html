@@ -1,147 +1,754 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+  <script>try{var p=(location.pathname.split('/').pop()||'').toLowerCase();var l=p==='community.html'||p==='messages.html';document.documentElement.setAttribute('data-theme',l?(localStorage.getItem('starheal-theme')||'dark'):'dark')}catch(e){}</script>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#07070f">
-  <title>我的 — 星愈·双盲棱镜</title>
-  <link rel="stylesheet" href="css/style.css?v=100">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>个人主页 — 星愈·双盲棱镜</title>
+  <link rel="stylesheet" href="css/style.css?v=302">
   <style>
-    .page{padding-top:72px;padding-bottom:60px;max-width:860px;margin:0 auto}
-    .profile-card{display:flex;align-items:center;gap:18px;padding:24px;margin-bottom:18px}
-    .profile-card .avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#6b5b95,#4a6fa5);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;box-shadow:0 0 30px rgba(107,91,149,.4)}
-    .profile-card .info{flex:1}
-    .profile-card .name{font-size:20px;font-weight:600;color:#fff;margin-bottom:6px}
-    .profile-card .meta{font-size:13px;color:var(--text-dim);display:flex;gap:12px;flex-wrap:wrap}
-    .profile-card .meta span{display:flex;align-items:center;gap:4px}
-    .profile-card .actions{display:flex;gap:8px}
-    .icon-btn{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center}
-    .icon-btn:hover{background:rgba(255,255,255,.1);color:#fff}
-    .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
-    .stat-card{padding:18px 12px;text-align:center;border-radius:14px}
-    .stat-card .num{font-size:22px;font-weight:600;color:#fff;margin-bottom:4px}
-    .stat-card .label{font-size:12px;color:var(--text-dim)}
-    .section{margin-bottom:18px}
-    .section-title{font-size:13px;color:var(--text-dim);padding:0 8px 10px;letter-spacing:.08em}
-    .menu-list{border-radius:14px;overflow:hidden}
-    .menu-item{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;transition:all .2s;border-bottom:1px solid rgba(255,255,255,.04)}
-    .menu-item:last-child{border-bottom:none}
-    .menu-item:hover{background:rgba(255,255,255,.03)}
-    .menu-item .ico{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-    .menu-item .label{flex:1;font-size:14px;color:var(--text-star)}
-    .menu-item .arrow{color:var(--text-faint);font-size:14px}
-    .menu-item.danger .label{color:#ff8080}
-    .menu-item.danger .ico{background:rgba(255,80,80,.08)}
-    .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:10px;background:rgba(20,16,40,.95);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:13px;z-index:999;animation:toastIn .3s}
-    @keyframes toastIn{from{opacity:0;transform:translate(-50%,-10px)}to{opacity:1;transform:translate(-50%,0)}}
+    :root {
+      --ink: #eafcff;
+      --muted: #8eb8c3;
+      --cyan: #7cecff;
+      --deep: #02090d;
+      --card-w: 140px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #010304;
+      font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+    /* 亮色模式覆盖 */
+    html[data-theme="light"] body {
+      color: #1a1a2e;
+      background: #eef1f8;
+    }
+    .orbit-title {
+      position: absolute;
+      top: 76px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: .18em;
+      font-weight: 400;
+      color: var(--ink);
+      text-shadow: 0 0 14px rgba(120, 220, 200, .45);
+      text-align: center;
+      white-space: nowrap;
+    }
+    html[data-theme="light"] .orbit-title {
+      color: #1a1a2e;
+      text-shadow: 0 0 16px rgba(107,91,149,.3);
+    }
+    .orbit-section {
+      position: relative;
+      min-height: 100vh;
+      isolation: isolate;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 15% 88%, rgba(220, 170, 235, .08), transparent 35%),
+        radial-gradient(circle at 85% 88%, rgba(220, 170, 235, .08), transparent 35%),
+        radial-gradient(ellipse 80% 30% at 50% 90%, rgba(200, 130, 210, .2), transparent 60%),
+        linear-gradient(180deg, #010304 0%, #02090d 72%, #06161b 100%);
+    }
+    html[data-theme="light"] .orbit-section {
+      background:
+        radial-gradient(circle at 15% 88%, rgba(255,180,220,.12), transparent 35%),
+        radial-gradient(circle at 85% 88%, rgba(180,200,255,.12), transparent 35%),
+        radial-gradient(ellipse 80% 30% at 50% 90%, rgba(255,200,230,.18), transparent 60%),
+        linear-gradient(180deg, #eef1f8 0%, #e6e9f5 72%, #dde2f0 100%);
+    }
+    .orbit-section::after {
+      content: "";
+      position: absolute;
+      left: -10%;
+      right: -10%;
+      bottom: -12%;
+      height: 35%;
+      background: radial-gradient(ellipse 60% 100% at 50% 100%, rgba(210, 150, 225, .16), transparent 70%);
+      filter: blur(26px);
+      pointer-events: none;
+    }
+    .scene {
+      position: relative;
+      width: 1200px;
+      height: 560px;
+      perspective: 1200px;
+      user-select: none;
+      touch-action: pan-y;
+      transform: translateX(-60px) scale(0.78);
+      transform-origin: center center;
+    }
+    .scene__hint {
+      position: absolute;
+      left: 50%;
+      bottom: -62px;
+      transform: translateX(-50%);
+      color: rgba(190, 241, 249, .62);
+      font-size: 13px;
+      letter-spacing: .16em;
+      white-space: nowrap;
+      z-index: 120;
+      pointer-events: none;
+    }
+    html[data-theme="light"] .scene__hint { color: rgba(80,80,120,.6); }
+    .sphere {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: auto;
+      cursor: pointer;
+      border: 0;
+      padding: 0;
+    }
+    .sphere--rear {
+      width: 580px;
+      aspect-ratio: 1;
+      left: 50%;
+      top: 30px;
+      transform: translateX(-33%);
+      z-index: 4;
+      background:
+        radial-gradient(circle at 32% 27%, rgba(190, 234, 246, .3), transparent 25%),
+        radial-gradient(circle at 45% 42%, #142b38 0%, #07121d 44%, #02050c 75%);
+      box-shadow:
+        0 0 20px rgba(166, 226, 242, .84),
+        0 0 88px rgba(50, 168, 201, .24),
+        inset -40px -18px 75px rgba(0, 0, 0, .86);
+      transition: filter .25s ease, transform .25s ease;
+    }
+    .sphere--rear:hover,
+    .sphere--rear:focus-visible {
+      filter: brightness(1.35);
+      transform: translateX(-33%) scale(1.015);
+      outline: none;
+    }
+    .sphere--rear::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: inset 18px 12px 20px rgba(230, 251, 255, .15), inset -40px -20px 55px rgba(0, 0, 0, .8);
+    }
+    .sphere__label {
+      position: absolute;
+      right: 12%;
+      top: 18%;
+      z-index: 2;
+      color: #d9fbff;
+      font-size: 18px;
+      letter-spacing: .18em;
+      text-shadow: 0 0 16px #9ceeff;
+      writing-mode: vertical-rl;
+    }
+    .sphere--main {
+      width: 653px;
+      aspect-ratio: 1;
+      left: 50%;
+      top: 30px;
+      transform: translateX(-50%);
+      z-index: 38;
+      background: url("assets/planet-profile.jpg") center/168% 168% no-repeat;
+      box-shadow:
+        0 0 12px rgba(160, 220, 200, .18),
+        0 0 30px rgba(140, 210, 180, .08),
+        0 0 55px rgba(120, 190, 160, .05);
+      overflow: hidden;
+      cursor: pointer;
+      transition: filter .25s ease;
+    }
+    /* 内部星点 —— 已由图片提供，隐藏 */
+    .sphere--main .sphere__sparkles {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0;
+      background-image:
+        radial-gradient(2.5px 2.5px at 46% 50%, rgba(255,255,255,1), transparent),
+        radial-gradient(2px 2px at 50% 47%, rgba(255,220,245,.98), transparent),
+        radial-gradient(3px 3px at 53% 51%, rgba(230,180,255,.95), transparent),
+        radial-gradient(1.5px 1.5px at 43% 58%, rgba(255,255,255,.95), transparent),
+        radial-gradient(2px 2px at 57% 49%, rgba(240,205,255,.9), transparent),
+        radial-gradient(1.5px 1.5px at 48% 62%, rgba(190,255,230,.95), transparent),
+        radial-gradient(1px 1px at 51% 54%, rgba(255,245,252,.95), transparent),
+        radial-gradient(2.5px 2.5px at 45% 48%, rgba(255,190,230,.85), transparent),
+        radial-gradient(1px 1px at 59% 55%, rgba(210,255,240,.88), transparent),
+        radial-gradient(1.5px 1.5px at 41% 53%, rgba(230,205,255,.92), transparent),
+        radial-gradient(1px 1px at 55% 61%, rgba(255,255,255,.85), transparent),
+        radial-gradient(2px 2px at 49% 52%, rgba(255,215,240,.8), transparent),
+        radial-gradient(1px 1px at 39% 51%, rgba(255,220,245,.82), transparent),
+        radial-gradient(1.5px 1.5px at 61% 50%, rgba(235,255,248,.84), transparent),
+        radial-gradient(1px 1px at 44% 65%, rgba(215,185,255,.78), transparent),
+        radial-gradient(1px 1px at 53% 44%, rgba(255,255,255,.8), transparent),
+        radial-gradient(1.5px 1.5px at 40% 47%, rgba(255,205,240,.75), transparent),
+        radial-gradient(1px 1px at 58% 59%, rgba(170,255,230,.78), transparent),
+        radial-gradient(1px 1px at 48% 55%, rgba(255,255,255,.95), transparent),
+        radial-gradient(1.5px 1.5px at 54% 48%, rgba(230,185,255,.84), transparent),
+        radial-gradient(2px 2px at 43% 56%, rgba(255,235,250,.88), transparent),
+        radial-gradient(1px 1px at 56% 45%, rgba(205,255,232,.82), transparent),
+        radial-gradient(1.5px 1.5px at 50% 60%, rgba(235,210,255,.86), transparent),
+        radial-gradient(1px 1px at 45% 45%, rgba(255,250,255,.88), transparent),
+        radial-gradient(1px 1px at 52% 63%, rgba(185,255,228,.8), transparent),
+        radial-gradient(1.5px 1.5px at 47% 53%, rgba(255,225,245,.9), transparent),
+        radial-gradient(1px 1px at 60% 52%, rgba(255,255,255,.78), transparent),
+        radial-gradient(1px 1px at 42% 60%, rgba(220,190,255,.76), transparent);
+      animation: spark-twinkle 2.8s ease-in-out infinite;
+    }
+    @keyframes spark-twinkle {
+      0%, 100% { opacity: .92; }
+      50% { opacity: .58; }
+    }
+    .sphere--main::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 5;
+      box-shadow: inset 0 0 0 1px rgba(180, 230, 220, .25);
+    }
+    /* 外围亮绿光环 */
+    .sphere--main::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1px solid rgba(180, 230, 220, .15);
+      box-shadow:
+        0 0 8px rgba(160, 220, 200, .12),
+        0 0 20px rgba(140, 210, 180, .06),
+        inset 0 0 8px rgba(160, 220, 200, .05);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .sphere__color-layer {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      z-index: 1;
+      mix-blend-mode: color;
+      pointer-events: none;
+    }
+    .sphere__color-layer--current { opacity: 0; }
+    .sphere__color-layer--next {
+      opacity: 0;
+      will-change: opacity, mask-position;
+      -webkit-mask-image: linear-gradient(135deg, transparent 0%, transparent 20%, #000 80%, #000 100%);
+      mask-image: linear-gradient(135deg, transparent 0%, transparent 20%, #000 80%, #000 100%);
+      -webkit-mask-size: 240% 240%;
+      mask-size: 240% 240%;
+      -webkit-mask-position: 100% 100%;
+      mask-position: 100% 100%;
+    }
+    .sphere__color-layer--next.is-wiping {
+      opacity: .78;
+      animation: diagonal-gradient 2s cubic-bezier(.2,.8,.25,1) forwards;
+    }
+    .sphere--main::before { z-index: 3; }
+    .sphere--main:hover,
+    .sphere--main:focus-visible { filter: brightness(1.08); outline: none; }
+    @keyframes diagonal-gradient {
+      0% { opacity: .82; -webkit-mask-position: 100% 100%; mask-position: 100% 100%; }
+      72% { opacity: .42; }
+      100% { opacity: 0; -webkit-mask-position: 0% 0%; mask-position: 0% 0%; }
+    }
+    .orbit {
+      position: absolute;
+      inset: 0;
+      z-index: auto;
+      cursor: grab;
+      touch-action: none;
+      pointer-events: auto;
+    }
+    .orbit.is-dragging { cursor: grabbing; }
+    .card {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: var(--card-w);
+      aspect-ratio: .86;
+      transform-origin: center center;
+      border: 1px solid rgba(228, 253, 255, .9);
+      border-radius: 14px;
+      color: #e8fcff;
+      background: linear-gradient(145deg, rgba(255, 190, 220, .55), rgba(77, 212, 237, .38) 55%, rgba(7, 47, 65, .4));
+      box-shadow:
+        0 0 8px rgba(200, 230, 255, .85),
+        0 0 24px rgba(77, 212, 237, .32),
+        inset 0 0 18px rgba(240, 220, 255, .2);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 14px 12px;
+      text-align: left;
+      transition: filter .3s ease, border-color .3s ease, box-shadow .3s ease;
+      will-change: transform, opacity;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-left: 1px solid rgba(236, 255, 255, .62);
+      border-radius: 4px;
+      pointer-events: none;
+    }
+    .card__title, .card__tag { position: relative; z-index: 1; }
+    .card__title {
+      font-size: 16px;
+      letter-spacing: .08em;
+      line-height: 1.2;
+      text-shadow: 0 0 12px rgba(209, 252, 255, .88);
+    }
+    .card__tag {
+      margin-top: 7px;
+      color: rgba(225, 253, 255, .75);
+      font-size: 11px;
+      letter-spacing: .12em;
+    }
+    .card.is-active {
+      border-color: #fff;
+      box-shadow:
+        0 0 12px rgba(236, 255, 255, 1),
+        0 0 42px rgba(85, 224, 245, .75),
+        inset 0 0 23px rgba(245, 255, 255, .33);
+      filter: brightness(1.2);
+    }
+    .card.is-selected {
+      translate: 0 -8px;
+      scale: 1.06;
+      border-color: #ffffff;
+      box-shadow: 0 0 16px rgba(255,255,255,1), 0 0 46px rgba(85,224,245,.95), inset 0 0 24px rgba(245,255,255,.38);
+      filter: brightness(1.3) saturate(1.15);
+    }
+    .card:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 34px;
+      z-index: 300;
+      transform: translate(-50%, 20px);
+      padding: 12px 22px;
+      border: 1px solid rgba(190, 249, 255, .62);
+      border-radius: 999px;
+      color: #ebfeff;
+      background: rgba(2, 25, 32, .84);
+      box-shadow: 0 0 28px rgba(86, 226, 248, .34);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .28s ease, transform .28s ease;
+      letter-spacing: .08em;
+    }
+    .toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+    .star-field {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+    }
+    .star--big { width: 3px; height: 3px; box-shadow: 0 0 4px rgba(220, 180, 255, .8); }
+    .star--mid { width: 2px; height: 2px; box-shadow: 0 0 3px rgba(200, 180, 255, .5); }
+    .star--sml { width: 1px; height: 1px; opacity: .6; }
+    .star--glow {
+      width: 4px; height: 4px;
+      background: rgba(220, 180, 255, .7);
+      box-shadow: 0 0 6px rgba(210, 150, 230, .6), 0 0 12px rgba(210, 150, 230, .25);
+    }
+    .star--cross {
+      width: 8px; height: 8px;
+      background: transparent;
+      position: absolute;
+    }
+    .star--cross::before, .star--cross::after {
+      content: '';
+      position: absolute;
+      left: 50%; top: 50%;
+      background: rgba(230, 200, 255, .9);
+      box-shadow: 0 0 4px rgba(210, 150, 230, .7);
+    }
+    .star--cross::before { width: 8px; height: 1px; transform: translate(-50%, -50%); }
+    .star--cross::after { width: 1px; height: 8px; transform: translate(-50%, -50%); }
+    /* 亮色模式：星星变蓝/玫粉 */
+    html[data-theme="light"] .star { background: #55c8ff; }
+    html[data-theme="light"] .star--big { box-shadow: 0 0 4px rgba(85,200,255,.8); }
+    html[data-theme="light"] .star--mid { box-shadow: 0 0 3px rgba(255,139,216,.6); }
+    html[data-theme="light"] .star--glow { background: rgba(255,139,216,.7); box-shadow: 0 0 6px rgba(255,139,216,.6), 0 0 12px rgba(255,139,216,.25); }
+    html[data-theme="light"] .star--cross::before,
+    html[data-theme="light"] .star--cross::after { background: rgba(85,200,255,.9); box-shadow: 0 0 4px rgba(255,139,216,.7); }
+    @keyframes float-up { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    @keyframes twinkle { 0%,100% { opacity: .2; } 50% { opacity: 1; } }
+    @keyframes twinkle-cross { 0%,100% { opacity: 0; transform: scale(.5) rotate(0deg); } 50% { opacity: 1; transform: scale(1) rotate(45deg); } }
+    .aurora {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .aurora::before {
+      content: '';
+      position: absolute;
+      top: 8%;
+      left: -20%;
+      width: 140%;
+      height: 200px;
+      background: linear-gradient(90deg, transparent, rgba(180, 130, 220, .06), rgba(130, 180, 230, .05), transparent);
+      filter: blur(60px);
+      transform: rotate(-3deg);
+      animation: aurora-drift 18s ease-in-out infinite alternate;
+    }
+    .aurora::after {
+      content: '';
+      position: absolute;
+      top: 35%;
+      left: -20%;
+      width: 140%;
+      height: 150px;
+      background: linear-gradient(90deg, transparent, rgba(160, 120, 200, .05), rgba(100, 160, 210, .04), transparent);
+      filter: blur(50px);
+      transform: rotate(2deg);
+      animation: aurora-drift 24s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes aurora-drift {
+      0% { transform: translateX(-5%) rotate(-3deg); opacity: .3; }
+      50% { opacity: .7; }
+      100% { transform: translateX(5%) rotate(3deg); opacity: .3; }
+    }
   </style>
 </head>
 <body>
-  <main class="page">
-    <!-- 个人信息卡 -->
-    <div class="profile-card glass">
-      <div class="avatar">🌌</div>
-      <div class="info">
-        <div class="name">星海漫游者</div>
-        <div class="meta">
-          <span>✦ demo_95gdaj</span>
-          <span>· 默认匿名</span>
-        </div>
-      </div>
-      <div class="actions">
-        <button class="icon-btn" title="编辑资料" onclick="toast('编辑资料功能开发中…')">✎</button>
-        <button class="icon-btn" title="设置" onclick="location.href='settings.html?v=100'">⚙</button>
-      </div>
-    </div>
-
-    <!-- 数据统计 -->
-    <div class="stat-row">
-      <div class="stat-card glass"><div class="num">12</div><div class="label">发布观点</div></div>
-      <div class="stat-card glass"><div class="num">156</div><div class="label">收到共鸣</div></div>
-      <div class="stat-card glass"><div class="num">8</div><div class="label">关注星球</div></div>
-      <div class="stat-card glass"><div class="num">34</div><div class="label">收藏</div></div>
-    </div>
-
-    <!-- 账号与内容 -->
-    <div class="section">
-      <div class="section-title">账号与内容</div>
-      <div class="menu-list glass">
-        <div class="menu-item" onclick="toast('我的观点功能开发中…')">
-          <div class="ico">✦</div><span class="label">我的观点</span><span class="arrow">›</span>
-        </div>
-        <div class="menu-item" onclick="toast('我的匿名身份功能开发中…')">
-          <div class="ico">🎭</div><span class="label">我的匿名身份</span><span class="arrow">›</span>
-        </div>
-        <div class="menu-item" onclick="toast('我的收藏功能开发中…')">
-          <div class="ico">★</div><span class="label">我的收藏</span><span class="arrow">›</span>
-        </div>
-        <div class="menu-item" onclick="toast('我的星球功能开发中…')">
-          <div class="ico">🪐</div><span class="label">我的星球</span><span class="arrow">›</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 双盲棱镜 -->
-    <div class="section">
-      <div class="section-title">双盲棱镜</div>
-      <div class="menu-list glass">
-        <div class="menu-item" onclick="toast('同频匹配报告功能开发中…')">
-          <div class="ico">🔮</div><span class="label">同频匹配报告</span><span class="arrow">›</span>
-        </div>
-        <div class="menu-item" onclick="toast('共鸣星图功能开发中…')">
-          <div class="ico">✨</div><span class="label">共鸣星图</span><span class="arrow">›</span>
-        </div>
-        <div class="menu-item" onclick="toast('匿名模式设置功能开发中…')">
-          <div class="ico">🕶</div><span class="label">匿名模式设置</span><span class="arrow">›</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 通用设置 -->
-    <div class="section">
-      <div class="section-title">设置</div>
-      <div class="menu-list glass">
-        <div class="menu-item" onclick="location.href='settings.html?v=100'">
-          <div class="ico">🔒</div><span class="label">账号与安全</span><span class="arrow">›</span>
-        </div>
-        <div class="menu-item" onclick="location.href='settings.html?v=100'">
-          <div class="ico">🔔</div><span class="label">消息通知</span><span class="arrow">›</span>
-        </div>
-        <div class="menu-item" onclick="location.href='settings.html?v=100'">
-          <div class="ico">🛡</div><span class="label">隐私设置</span><span class="arrow">›</span>
-        </div>
-        <div class="menu-item" onclick="location.href='settings.html?v=100'">
-          <div class="ico">⚙</div><span class="label">通用设置</span><span class="arrow">›</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 退出登录 -->
-    <div class="section">
-      <div class="menu-list glass">
-        <div class="menu-item danger" onclick="logout()">
-          <div class="ico">⏻</div><span class="label">退出登录</span><span class="arrow">›</span>
-        </div>
-      </div>
+  <main class="orbit-section" aria-label="个人中心导航">
+    <div class="aurora"></div>
+    <div class="star-field" id="starField"></div>
+    <h1 class="orbit-title">个人主页</h1>
+    <div class="scene">
+      <button class="sphere sphere--rear" type="button" aria-label="进入历史记录">
+        <span class="sphere__label">历史记录</span>
+      </button>
+      <button class="sphere sphere--main" type="button" aria-label="进入当前选中的项目">
+        <span class="sphere__sparkles" aria-hidden="true"></span>
+        <span class="sphere__color-layer sphere__color-layer--current" aria-hidden="true"></span>
+        <span class="sphere__color-layer sphere__color-layer--next" aria-hidden="true"></span>
+      </button>
+      <div class="orbit" aria-label="个人中心卡片列表"></div>
+      <p class="scene__hint">拖动、滚轮或滑动来探索更多内容</p>
     </div>
   </main>
+  <div class="toast" role="status" aria-live="polite"></div>
 
   <script src="js/store.js?v=100"></script>
-  <script src="js/app.js?v=100"></script>
+  <script src="js/app.js?v=204"></script>
   <script>
     StarhealApp.injectBackground();
     StarhealApp.injectTopNav('profile');
-    function toast(msg){
-      const t=document.createElement('div');
-      t.className='toast';t.textContent=msg;
-      document.body.appendChild(t);
-      setTimeout(()=>t.remove(),2000);
-    }
-    function logout(){
-      if(confirm('确定要退出登录吗？')){
-        location.href='login.html';
+  </script>
+
+  <script>
+    /* —— 星空粒子 —— */
+    (() => {
+      const starField = document.getElementById('starField');
+      const starTypes = ['star--sml', 'star--sml', 'star--sml', 'star--sml', 'star--mid', 'star--mid', 'star--big', 'star--glow'];
+      for (let i = 0; i < 180; i++) {
+        const s = document.createElement('div');
+        s.className = 'star ' + starTypes[Math.floor(Math.random() * starTypes.length)];
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        const dur = 3 + Math.random() * 5;
+        const delay = Math.random() * 5;
+        s.style.animation = `float-up ${dur}s ease-in-out ${delay}s infinite, twinkle ${dur * 1.3}s ease-in-out ${delay}s infinite`;
+        if (Math.random() > 0.65) s.style.background = 'rgba(220, 180, 255, .8)';
+        starField.appendChild(s);
       }
-    }
+      for (let i = 0; i < 25; i++) {
+        const s = document.createElement('div');
+        s.className = 'star star--cross';
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        const dur = 4 + Math.random() * 6;
+        const delay = Math.random() * 6;
+        s.style.animation = `twinkle-cross ${dur}s ease-in-out ${delay}s infinite`;
+        starField.appendChild(s);
+      }
+    })();
+  </script>
+
+  <script>
+    /* —— 轨道轮播 —— */
+    (() => {
+      const skills = [
+        ["我的观点", "观点", ""],
+        ["我的收藏", "收藏", ""],
+        ["我的星球", "星球", ""],
+        ["同频匹配报告", "匹配", ""],
+        ["共鸣星图", "共鸣", ""],
+        ["我的匿名身份", "身份", ""],
+        ["匿名模式设置", "匿名", ""],
+        ["账号与安全", "安全", "settings.html"],
+        ["消息通知", "通知", "settings.html"],
+        ["隐私设置", "隐私", "settings.html"],
+        ["通用设置", "设置", "settings.html"],
+        ["退出登录", "退出", ""]
+      ];
+      const orbit = document.querySelector(".orbit");
+      const mainSphere = document.querySelector(".sphere--main");
+      const currentLayer = mainSphere.querySelector(".sphere__color-layer--current");
+      const nextLayer = mainSphere.querySelector(".sphere__color-layer--next");
+      const rearSphere = document.querySelector(".sphere--rear");
+      const toast = document.querySelector(".toast");
+      const section = document.querySelector(".orbit-section");
+      let toastTimer;
+      let selectedIndex = 0;
+
+      const cards = skills.map(([title, tag, href], index) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "card";
+        card.dataset.index = index;
+        card.dataset.id = `card-${String(index + 1).padStart(2, "0")}`;
+        card.dataset.href = href;
+        card.setAttribute("aria-label", `${title}，${tag}`);
+        card.innerHTML = `<span class="card__title">${title}</span><span class="card__tag">${tag}</span>`;
+        card.addEventListener("click", (event) => {
+          event.stopPropagation();
+          if (moved) return;
+          // 直接触发对应动作
+          if (title === "退出登录") {
+            if (confirm("确定要退出登录吗？")) {
+              try { StarhealStore.handleMock("POST", "/v1/session/logout", {}); } catch (e) {}
+              location.href = "login.html";
+            }
+            return;
+          }
+          if (href) {
+            showToast(`正在进入：${title}`);
+            setTimeout(() => location.href = href, 400);
+          } else {
+            showToast(`${title}功能开发中…`);
+          }
+        });
+        orbit.appendChild(card);
+        return card;
+      });
+
+      // 触发卡片对应动作
+      function triggerCard(index) {
+        const [title, tag, href] = skills[index];
+        if (title === "退出登录") {
+          if (confirm("确定要退出登录吗？")) {
+            try { StarhealStore.handleMock("POST", "/v1/session/logout", {}); } catch (e) {}
+            location.href = "login.html";
+          }
+          return;
+        }
+        if (href) {
+          showToast(`正在进入：${title}`);
+          setTimeout(() => location.href = href, 400);
+        } else {
+          showToast(`${title}功能开发中…`);
+        }
+      }
+
+      const count = cards.length;
+      const step = 360 / count;
+      let rotation = 0;
+      let velocity = 0;
+      let lastTime = performance.now();
+      let dragging = false;
+      let moved = false;
+      let lastX = 0;
+      let startX = 0;
+      let pressedCardIndex = null;
+      let sectionVisible = false;
+      let selectionPaused = false;
+      let transitionLock = false;
+      let snap = null;
+
+      const themeByTag = {
+        "观点": "blue", "收藏": "gold", "星球": "violet", "匹配": "rose",
+        "共鸣": "violet", "身份": "violet", "匿名": "violet", "安全": "red",
+        "通知": "warm", "隐私": "blue", "设置": "blue", "退出": "red"
+      };
+      const themePalette = {
+        warm:   { light: "rgba(255,231,198,.9)", bright: "#ffb45c", mid: "#c95a37", dark: "#34131b", glow: "rgba(194,77,51,.9)", tint: "rgba(255,126,72,.76)" },
+        green:  { light: "rgba(225,255,210,.9)", bright: "#85ef9d", mid: "#208c78", dark: "#082e2b", glow: "rgba(24,157,122,.9)", tint: "rgba(54,220,125,.76)" },
+        gold:   { light: "rgba(255,248,205,.9)", bright: "#ffd86b", mid: "#c28b32", dark: "#3b230d", glow: "rgba(210,152,34,.9)", tint: "rgba(255,194,59,.76)" },
+        violet: { light: "rgba(238,218,255,.9)", bright: "#d58dff", mid: "#6845b5", dark: "#190d38", glow: "rgba(137,78,209,.9)", tint: "rgba(177,92,255,.76)" },
+        blue:   { light: "rgba(215,242,255,.9)", bright: "#55c8ff", mid: "#2762bb", dark: "#0b173e", glow: "rgba(33,115,215,.9)", tint: "rgba(57,157,255,.76)" },
+        rose:   { light: "rgba(255,220,244,.9)", bright: "#ff8bd8", mid: "#b544a3", dark: "#3d123b", glow: "rgba(205,65,165,.9)", tint: "rgba(255,83,193,.76)" },
+        red:    { light: "rgba(255,228,215,.9)", bright: "#ff8068", mid: "#c53e42", dark: "#3e101b", glow: "rgba(216,56,54,.9)", tint: "rgba(255,78,77,.76)" }
+      };
+      const planetGradient = (palette) => [
+        `radial-gradient(circle at 29% 25%, rgba(255,255,255,.98) 0 5%, ${palette.light} 19%, transparent 43%)`,
+        `radial-gradient(circle at 66% 58%, ${palette.bright}, ${palette.mid} 52%, ${palette.dark} 82%)`
+      ].join(", ");
+      const applyThemeStyles = (theme, layer = currentLayer) => {
+        const palette = themePalette[theme] || themePalette.blue;
+        mainSphere.dataset.theme = theme;
+        layer.style.background = planetGradient(palette);
+      };
+      applyThemeStyles("blue");
+
+      const normalize = (angle) => ((angle + 180) % 360 + 360) % 360 - 180;
+      const showToast = (message) => {
+        toast.textContent = message;
+        toast.classList.add("is-visible");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 1600);
+      };
+
+      function layout() {
+        const width = orbit.clientWidth;
+        const height = orbit.clientHeight;
+        const rx = Math.min(width * .31, 416);
+        const ry = Math.min(height * .128, 94);
+        let activeIndex = 0;
+        let smallest = Infinity;
+        cards.forEach((card, index) => {
+          const angle = index * step + rotation;
+          const rad = angle * Math.PI / 180;
+          const frontness = Math.cos(rad);
+          const x = Math.sin(rad) * rx;
+          const y = Math.cos(rad) * ry + height * .28;
+          const depth = (frontness + 1) / 2;
+          const scale = .62 + depth * .48;
+          const opacity = .23 + depth * .77;
+          const blur = depth < .38 ? (1 - depth) * 1.2 : 0;
+          const z = Math.round(frontness * 50 + 55);
+          card.style.transform = `translate3d(calc(-50% + ${x}px), calc(-50% + ${y}px), 0) scale(${scale})`;
+          card.style.opacity = opacity.toFixed(3);
+          card.style.filter = `brightness(${(.68 + depth * .56).toFixed(2)}) blur(${blur.toFixed(2)}px)`;
+          card.style.zIndex = z;
+          const distance = Math.abs(normalize(angle));
+          if (distance < smallest) { smallest = distance; activeIndex = index; }
+        });
+        cards.forEach((card, index) => card.classList.toggle("is-active", index === activeIndex));
+      }
+
+      function beginSnap(index, afterSnap) {
+        const angle = index * step + rotation;
+        const targetRotation = rotation - normalize(angle);
+        snap = { from: rotation, to: targetRotation, start: performance.now(), duration: 520, after: afterSnap };
+        velocity = 0;
+      }
+      function finishInertia() {
+        let active = 0, smallest = Infinity;
+        cards.forEach((_, index) => {
+          const distance = Math.abs(normalize(index * step + rotation));
+          if (distance < smallest) { smallest = distance; active = index; }
+        });
+        beginSnap(active);
+      }
+      function selectCard(index) {
+        if (transitionLock) return;
+        transitionLock = true;
+        cards.forEach((card, cardIndex) => card.classList.toggle("is-selected", cardIndex === index));
+        selectionPaused = true;
+        selectedIndex = index;
+        velocity = 0;
+        snap = null;
+        const [title] = skills[index];
+        showToast(`已选择：${title} · 点击主星球进入`);
+        setTimeout(() => { transitionLock = false; }, 300);
+      }
+
+      orbit.addEventListener("pointerdown", (event) => {
+        dragging = true;
+        selectionPaused = false;
+        moved = false;
+        const pressedCard = event.target.closest?.(".card");
+        pressedCardIndex = pressedCard ? Number(pressedCard.dataset.index) : null;
+        lastX = event.clientX;
+        startX = event.clientX;
+        orbit.classList.add("is-dragging");
+        orbit.setPointerCapture(event.pointerId);
+      });
+      orbit.addEventListener("pointermove", (event) => {
+        if (!dragging) return;
+        const delta = event.clientX - lastX;
+        lastX = event.clientX;
+        if (Math.abs(event.clientX - startX) > 7) moved = true;
+        rotation += delta * .34;
+        velocity = delta * .045;
+        snap = null;
+      });
+      const release = (event) => {
+        if (!dragging) return;
+        dragging = false;
+        orbit.classList.remove("is-dragging");
+        try { orbit.releasePointerCapture(event.pointerId); } catch {}
+        const cardIndex = pressedCardIndex;
+        pressedCardIndex = null;
+        // 按下了卡片且没有拖动 → 直接触发该卡片动作
+        if (cardIndex !== null && !moved) {
+          triggerCard(cardIndex);
+          return;
+        }
+        if (Math.abs(velocity) < .035) finishInertia();
+      };
+      orbit.addEventListener("pointerup", release);
+      orbit.addEventListener("pointercancel", release);
+      orbit.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        selectionPaused = false;
+        const delta = Math.max(-80, Math.min(80, event.deltaY));
+        rotation += delta * .13;
+        velocity = delta * .012;
+        snap = null;
+        clearTimeout(orbit._wheelTimer);
+        orbit._wheelTimer = setTimeout(finishInertia, 170);
+      }, { passive: false });
+
+      rearSphere.addEventListener("click", () => {
+        showToast("历史记录功能开发中…");
+      });
+
+      const visibilityObserver = new IntersectionObserver(([entry]) => {
+        sectionVisible = entry.isIntersecting && entry.intersectionRatio >= .18;
+      }, { threshold: [0, .18, .5] });
+      visibilityObserver.observe(section);
+
+      function frame(now) {
+        const dt = Math.min(50, now - lastTime);
+        lastTime = now;
+        if (snap) {
+          const progress = Math.min(1, (now - snap.start) / snap.duration);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          rotation = snap.from + (snap.to - snap.from) * eased;
+          if (progress >= 1) {
+            const callback = snap.after;
+            snap = null;
+            callback?.();
+          }
+        } else if (!dragging) {
+          if (Math.abs(velocity) > .01) {
+            rotation += velocity * dt;
+            velocity *= Math.pow(.001, dt / 1000);
+          } else if (sectionVisible && !selectionPaused) {
+            rotation += .008 * dt;
+          }
+        }
+        layout();
+        requestAnimationFrame(frame);
+      }
+      layout();
+      requestAnimationFrame(frame);
+    })();
   </script>
 </body>
 </html>
