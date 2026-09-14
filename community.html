@@ -1,11 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+  <script>try{var p=(location.pathname.split('/').pop()||'').toLowerCase();var l=p==='community.html'||p==='messages.html';document.documentElement.setAttribute('data-theme',l?(localStorage.getItem('starheal-theme')||'dark'):'dark')}catch(e){}</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#07070f">
   <title>星球社区 — 星愈·双盲棱镜</title>
-  <link rel="stylesheet" href="css/style.css?v=100">
+  <link rel="stylesheet" href="css/style.css?v=302">
   <style>
     .page{padding-top:72px;padding-bottom:60px;max-width:860px;margin:0 auto}
     .planet-header{display:flex;align-items:center;gap:16px;padding:20px;margin-bottom:18px}
@@ -38,6 +39,28 @@
     .empty-state .ico{font-size:48px;opacity:.3;margin-bottom:16px}
     .empty-state .t{font-size:16px;margin-bottom:8px;color:var(--text-glow)}
     .empty-state .s{font-size:13px;color:var(--text-faint)}
+    /* 顶部导航：返回按钮 + 搜索框 */
+    .top-nav .brand.back-btn{
+      padding: 8px 16px; border-radius: var(--radius-pill);
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+      color: var(--text-star); font-size: 13px; -webkit-text-fill-color: var(--text-star);
+      background-clip: border-box; -webkit-background-clip: border-box;
+      transition: all .25s; gap: 6px;
+    }
+    .top-nav .brand.back-btn:hover{ background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.22); }
+    .top-nav .nav-search{
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: var(--radius-pill);
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+      min-width: 180px; transition: all .25s;
+    }
+    .top-nav .nav-search:focus-within{ border-color: rgba(140,200,255,.5); background: rgba(255,255,255,.08); box-shadow: 0 0 14px rgba(140,200,255,.2); }
+    .top-nav .nav-search input{
+      background: transparent; border: none; outline: none; color: #fff;
+      font-size: 13px; width: 100%; min-width: 120px;
+    }
+    .top-nav .nav-search input::placeholder{ color: var(--text-faint); }
+    .top-nav .nav-search .s-ico{ color: var(--accent-cyan); font-size: 13px; }
   </style>
 </head>
 <body>
@@ -55,12 +78,34 @@
   </main>
 
   <script src="js/store.js?v=100"></script>
-  <script src="js/app.js?v=100"></script>
+  <script src="js/app.js?v=204"></script>
   <script>
     StarhealApp.injectBackground();
     StarhealApp.injectTopNav('community');
 
-    // 行星数据 — 对应 home.html 爱好星球下的子星球
+    // 绑定注入的搜索框 → 实时过滤帖子
+    (function bindSearch(){
+      const input = document.querySelector('.top-nav .nav-search input');
+      if(!input) return;
+      input.id = 'navSearchInput';
+      input.addEventListener('input', function(){ searchPosts(this.value); });
+      input.addEventListener('keydown', function(e){
+        if(e.key === 'Enter'){ e.preventDefault(); searchPosts(this.value); }
+      });
+    })();
+
+    // 七大方向分组及其子星球（与 home.html 一致）
+    const BIG_PLANETS = {
+      '爱好星球': {color:'#ff8c4a', subs:['萌宠','游戏','二次元','影视综','音乐','读书','运动','手工']},
+      '成长星球': {color:'#80e0a0', subs:['校园','考试','语言','编程','技能','自律打卡']},
+      '情绪星球': {color:'#9080e0', subs:['树洞','治愈','失恋','独居','关系','心理','玄学']},
+      '生活星球': {color:'#ffd080', subs:['穿搭','家居','旅行','省钱','养生']},
+      '职场星球': {color:'#80d8e8', subs:['求职','打工人','副业','职业','创业']},
+      '身份星球': {color:'#e0e0f0', subs:['同城','校友','同龄','留学生','老乡']},
+      '潮流星球': {color:'#ff90c8', subs:['饭圈','吃瓜','数码','梗文化','亚文化']}
+    };
+
+    // 所有子星球的颜色与描述（推荐广场 + 七大方向下所有子星球）
     const PLANETS = {
       '推荐广场': {color:'#ffffff', glow:'rgba(255,255,255,.5)', desc:'跨星球精选 · 优先匹配高质量观点'},
       '萌宠': {color:'#f4b8c8', glow:'rgba(244,184,200,.5)', desc:'猫狗饲养 · 宠物生活 · 萌宠日常'},
@@ -70,7 +115,40 @@
       '音乐': {color:'#80d0b0', glow:'rgba(128,208,176,.5)', desc:'音乐分享 · 歌单推荐 · 乐器交流'},
       '读书': {color:'#b8b8d8', glow:'rgba(184,184,216,.5)', desc:'读书笔记 · 好书推荐 · 阅读感悟'},
       '运动': {color:'#e87878', glow:'rgba(232,120,120,.5)', desc:'健身打卡 · 运动技巧 · 运动装备'},
-      '手工': {color:'#d8c080', glow:'rgba(216,192,128,.5)', desc:'手作教程 · DIY分享 · 创意手工'}
+      '手工': {color:'#d8c080', glow:'rgba(216,192,128,.5)', desc:'手作教程 · DIY分享 · 创意手工'},
+      '校园': {color:'#80e0a0', glow:'rgba(128,224,160,.5)', desc:'校园生活 · 同学关系 · 校园趣事'},
+      '考试': {color:'#7ed4b8', glow:'rgba(126,212,184,.5)', desc:'考试经验 · 备考方法 · 成绩讨论'},
+      '语言': {color:'#90e8c8', glow:'rgba(144,232,200,.5)', desc:'语言学习 · 外语交流 · 翻译分享'},
+      '编程': {color:'#70d0a8', glow:'rgba(112,208,168,.5)', desc:'编程技术 · 代码分享 · 技术问答'},
+      '技能': {color:'#88e0b8', glow:'rgba(136,224,184,.5)', desc:'技能学习 · 证书备考 · 经验交流'},
+      '自律打卡': {color:'#9ce8c8', glow:'rgba(156,232,200,.5)', desc:'自律监督 · 打卡记录 · 习惯养成'},
+      '树洞': {color:'#a090e0', glow:'rgba(160,144,224,.5)', desc:'匿名倾诉 · 心事树洞 · 无评判空间'},
+      '治愈': {color:'#90a0e0', glow:'rgba(144,160,224,.5)', desc:'治愈系内容 · 温暖分享 · 心灵疗愈'},
+      '失恋': {color:'#8090d8', glow:'rgba(128,144,216,.5)', desc:'失恋陪伴 · 情感修复 · 走出情伤'},
+      '独居': {color:'#a0a0e8', glow:'rgba(160,160,232,.5)', desc:'独居生活 · 一人食 · 独立成长'},
+      '关系': {color:'#8888d0', glow:'rgba(136,136,208,.5)', desc:'人际关系 · 情感困扰 · 沟通技巧'},
+      '心理': {color:'#9888e0', glow:'rgba(152,136,224,.5)', desc:'心理健康 · 情绪管理 · 自我探索'},
+      '玄学': {color:'#b090e8', glow:'rgba(176,144,232,.5)', desc:'星座塔罗 · 占卜命理 · 神秘学'},
+      '穿搭': {color:'#ffd080', glow:'rgba(255,208,128,.5)', desc:'穿搭分享 · 潮流搭配 · 风格探索'},
+      '家居': {color:'#ffc870', glow:'rgba(255,200,112,.5)', desc:'家居布置 · 收纳技巧 · 生活美学'},
+      '旅行': {color:'#ffd890', glow:'rgba(255,216,144,.5)', desc:'旅行攻略 · 风景分享 · 在路上'},
+      '省钱': {color:'#ffc060', glow:'rgba(255,192,96,.5)', desc:'省钱技巧 · 薅羊毛 · 消费观'},
+      '养生': {color:'#ffe0a0', glow:'rgba(255,224,160,.5)', desc:'养生保健 · 健康饮食 · 作息调理'},
+      '求职': {color:'#80d8e8', glow:'rgba(128,216,232,.5)', desc:'求职经验 · 简历面试 · 职业选择'},
+      '打工人': {color:'#70c8e0', glow:'rgba(112,200,224,.5)', desc:'打工日常 · 职场吐槽 · 通勤生活'},
+      '副业': {color:'#88d8f0', glow:'rgba(136,216,240,.5)', desc:'副业探索 · 搞钱方法 · 收入提升'},
+      '职业': {color:'#78c8e8', glow:'rgba(120,200,232,.5)', desc:'职业规划 · 行业洞察 · 晋升路径'},
+      '创业': {color:'#8ce0f0', glow:'rgba(140,224,240,.5)', desc:'创业分享 · 项目复盘 · 商业思考'},
+      '同城': {color:'#d8d8f0', glow:'rgba(216,216,240,.5)', desc:'同城活动 · 本地生活 · 城市探索'},
+      '校友': {color:'#c8c8e8', glow:'rgba(200,200,232,.5)', desc:'校友交流 · 校园回忆 · 校友会'},
+      '同龄': {color:'#e0e0f5', glow:'rgba(224,224,245,.5)', desc:'同龄人交流 · 代际话题 · 共同成长'},
+      '留学生': {color:'#d0d0ee', glow:'rgba(208,208,238,.5)', desc:'留学体验 · 海外生活 · 文化冲击'},
+      '老乡': {color:'#e8e8f8', glow:'rgba(232,232,248,.5)', desc:'老乡见面 · 家乡话题 · 地域文化'},
+      '饭圈': {color:'#ff90c8', glow:'rgba(255,144,200,.5)', desc:'追星日常 · 应援分享 · 饭圈文化'},
+      '吃瓜': {color:'#ff88c0', glow:'rgba(255,136,192,.5)', desc:'八卦讨论 · 热点围观 · 理性吃瓜'},
+      '数码': {color:'#ffa0d0', glow:'rgba(255,160,208,.5)', desc:'数码产品 · 测评推荐 · 参数讨论'},
+      '梗文化': {color:'#ff80b8', glow:'rgba(255,128,184,.5)', desc:'网络热梗 · 表情包 · 玩梗交流'},
+      '亚文化': {color:'#ff98d0', glow:'rgba(255,152,208,.5)', desc:'小众文化 · 亚文化圈 · 个性表达'}
     };
 
     // 每个行星的模拟帖子
@@ -116,14 +194,28 @@
         {author:'匿名星客', anon:true, time:'1天前', q:'做手工总是半途而废，成品堆了一半', poetic:'「完成比完美更重要。」', ai:'建议：1.一次只做一个项目；2.设定完成期限；3.把大项目拆成小步骤，每天做一点；4.加入手工打卡群；5.做之前先想好成品用途，有动力就不容易放弃。'}
       ],
       '推荐广场': [
-        {author:'匿名星客', anon:true, time:'30分钟前', q:'最近总觉得自己被生活推着走，怎么找回自己的节奏？', poetic:'「不必追赶，试着把自己抵达。」', ai:'试着把"我应该"换成"我选择"——哪些是别人的期待，哪些是自己真正想要的。每天留10分钟独处，问问自己今天想做什么。节奏不是别人给的，是自己调的。'},
-        {author:'星海漫游者', anon:false, time:'7小时前', q:'面对海量信息怎么保持自己的判断？', poetic:'「来源、立场、利益，三层追问后，才是你自己的判断。」', ai:'通过来源、立场、利益三层追问，区分事实与叙事。信息过载时，先问三个问题：谁说的？为什么说？对谁有利？慢慢培养自己的信息筛选能力。'},
-        {author:'匿名星客', anon:true, time:'1天前', q:'职场里努力但不被看见怎么办？', poetic:'「不汇报，不是低调，是把选择权关在抽屉里。」', ai:'学会主动汇报工作进展，不是邀功，而是让领导知道你的价值。可以定期写工作小结，邮件或面对面沟通。让努力被看见，也是职场能力的一部分。'}
+        {author:'匿名星客', anon:true, time:'30分钟前', q:'最近总觉得自己被生活推着走，怎么找回自己的节奏？', poetic:'「不必追赶，试着把自己抵达。」', ai:'试着把"我应该"换成"我选择"——哪些是别人的期待，哪些是自己真正想要的。每天留10分钟独处，问问自己今天想做什么。节奏不是别人给的，是自己调的。', source:'心理'},
+        {author:'星海漫游者', anon:false, time:'7小时前', q:'面对海量信息怎么保持自己的判断？', poetic:'「来源、立场、利益，三层追问后，才是你自己的判断。」', ai:'通过来源、立场、利益三层追问，区分事实与叙事。信息过载时，先问三个问题：谁说的？为什么说？对谁有利？慢慢培养自己的信息筛选能力。', source:'读书'},
+        {author:'匿名星客', anon:true, time:'1天前', q:'职场里努力但不被看见怎么办？', poetic:'「不汇报，不是低调，是把选择权关在抽屉里。」', ai:'学会主动汇报工作进展，不是邀功，而是让领导知道你的价值。可以定期写工作小结，邮件或面对面沟通。让努力被看见，也是职场能力的一部分。', source:'打工人'},
+        {author:'匿名星客', anon:true, time:'2天前', q:'家里的猫突然开始咬电线怎么办？试过很多方法都没用', poetic:'「小动物的世界，需要耐心去懂。」', ai:'猫咪咬电线可能是因为长牙期痒感或无聊。建议提供专用磨牙玩具，同时在电线上涂抹柑橘类气味（猫讨厌的味道），并确保猫咪有足够的互动和玩耍时间。', source:'萌宠'},
+        {author:'匿名星客', anon:true, time:'3天前', q:'有没有适合深夜一个人听的歌？最近失眠', poetic:'「音乐是夜晚最好的陪伴。」', ai:'推荐：坂本龙一《Merry Christmas Mr. Lawrence》、久石让《Summer》、Aimer《茜さす》、陈绮贞《旅行的意义》。可以试试Lo-fi、后摇、氛围音乐，帮助放松入睡。', source:'音乐'},
+        {author:'匿名星客', anon:true, time:'5天前', q:'想减肥但管不住嘴，运动也坚持不了', poetic:'「减脂没有捷径，但有方法。」', ai:'不用极端节食。建议：1.三餐正常吃，减少高糖高油；2.用小碗吃饭，慢慢吃；3.找一项喜欢的运动，哪怕是散步；4.每周称一次体重，关注趋势而非每天波动。健康比体重更重要。', source:'运动'}
       ]
     };
 
-    const planetName = new URLSearchParams(location.search).get('planet') || '推荐广场';
+    const params = new URLSearchParams(location.search);
+    const planetName = params.get('planet') || '推荐广场';
     const planet = PLANETS[planetName] || PLANETS['推荐广场'];
+
+    // 判断当前子星球属于哪个大方向（用于筛选条与返回链接）
+    let bigName = params.get('big') || '爱好星球';
+    if(!BIG_PLANETS[bigName]){
+      // 自动识别：该子星球属于哪个大方向
+      for(const bn in BIG_PLANETS){
+        if(BIG_PLANETS[bn].subs.indexOf(planetName) >= 0){ bigName = bn; break; }
+      }
+    }
+    const bigPlanet = BIG_PLANETS[bigName] || BIG_PLANETS['爱好星球'];
 
     // 设置行星主题色
     document.documentElement.style.setProperty('--planet-color', planet.color);
@@ -136,25 +228,51 @@
     document.getElementById('headPlanet').style.background =
       'radial-gradient(circle at 30% 28%, #fff, ' + planet.color + ' 30%, ' + planet.color + ' 65%)';
     document.getElementById('headDesc').innerHTML =
-      planet.desc + ' · <a href="home.html?v=100" style="color:var(--accent-cyan);text-decoration:none;">爱好星球</a>';
+      planet.desc + ' · <a href="home.html?v=100" style="color:var(--accent-cyan);text-decoration:none;">' + bigName + '</a>';
 
-    // 渲染筛选条
+    // 渲染筛选条 — 推荐广场 + 来自不同大星球的精选社区
     const filterBar = document.getElementById('filterBar');
-    Object.keys(PLANETS).forEach(function(name){
+    // 从每个大星球各取若干子星球，组成跨星球社区列表
+    const crossPlanetChips = ['推荐广场'];
+    Object.keys(BIG_PLANETS).forEach(function(bn){
+      const subs = BIG_PLANETS[bn].subs;
+      // 每个大方向取前 2~3 个子星球
+      crossPlanetChips.push.apply(crossPlanetChips, subs.slice(0, 2));
+    });
+    // 去重
+    const chipNames = crossPlanetChips.filter(function(v, i, arr){ return arr.indexOf(v) === i; });
+    chipNames.forEach(function(name){
       const chip = document.createElement('span');
       chip.className = 'chip' + (name === planetName ? ' active' : '');
       chip.textContent = name;
-      chip.onclick = function(){ location.href = 'community.html?v=100&planet=' + encodeURIComponent(name); };
+      chip.onclick = function(e){
+        e.stopPropagation();
+        // 点击推荐广场：回到跨星球视图
+        if(name === '推荐广场'){
+          location.href = 'community.html?v=100&planet=' + encodeURIComponent(name);
+          return;
+        }
+        // 找到该子星球所属的大方向
+        let belongBig = bigName;
+        for(const bn in BIG_PLANETS){
+          if(BIG_PLANETS[bn].subs.indexOf(name) >= 0){ belongBig = bn; break; }
+        }
+        location.href = 'community.html?v=100&big=' + encodeURIComponent(belongBig) + '&planet=' + encodeURIComponent(name);
+      };
       filterBar.appendChild(chip);
     });
 
     // 渲染帖子
-    const posts = PLANET_POSTS[planetName] || [];
     const list = document.getElementById('feedList');
-    if(posts.length === 0){
-      list.innerHTML = '<div class="empty-state glass"><div class="ico">✧</div><div class="t">这里还没有公开观点</div><div class="s">第一个把你的思辨分享出来吧</div></div>';
-    } else {
-      list.innerHTML = posts.map(function(p, i){
+    function renderPosts(showPosts, topicLabel){
+      if(showPosts.length === 0){
+        list.innerHTML = '<div class="empty-state glass"><div class="ico">✧</div><div class="t">没有找到相关帖子</div><div class="s">换个关键词试试吧</div></div>';
+        document.getElementById('loadMore').style.display = 'none';
+        return;
+      }
+      list.innerHTML = showPosts.map(function(p, i){
+        // 来源社区：推荐广场的帖子显示 p.source，其他星球显示当前星球名
+        var srcLabel = p.source || topicLabel || planetName;
         return '<div class="post-card glass" data-id="' + i + '">' +
           '<div class="head">' +
             '<div class="avatar"></div>' +
@@ -168,17 +286,63 @@
             '<span class="stat-pill">引用 ' + Math.floor(Math.random()*50) + '</span>' +
             '<span class="stat-pill">匹配 ' + Math.floor(Math.random()*200) + '</span>' +
             '<span class="stat-pill">复用 ' + Math.floor(Math.random()*30) + '</span>' +
-            '<span class="stat-pill topic">' + planetName + '</span>' +
+            '<span class="stat-pill topic" title="来自 ' + srcLabel + '">来自：' + srcLabel + '</span>' +
           '</div>' +
         '</div>';
       }).join('');
       document.getElementById('loadMore').style.display = 'block';
+      // 点击帖子跳转到详情
+      list.querySelectorAll('.post-card').forEach(function(card){
+        card.onclick = function(){ alert('帖子详情页开发中…'); };
+      });
     }
 
-    // 点击帖子跳转到详情
-    list.querySelectorAll('.post-card').forEach(function(card){
-      card.onclick = function(){ alert('帖子详情页开发中…'); };
-    });
+    renderPosts(PLANET_POSTS[planetName] || [], planetName);
+
+    /* 搜索帖子：在所有星球的帖子中匹配关键词（话题/正文/诗意句/AI阐释） */
+    function searchPosts(keyword){
+      const kw = (keyword || '').trim().toLowerCase();
+      if(!kw){ renderPosts(PLANET_POSTS[planetName] || [], planetName); return; }
+      const results = [];
+      Object.keys(PLANET_POSTS).forEach(function(pn){
+        (PLANET_POSTS[pn] || []).forEach(function(p){
+          const text = (p.q + ' ' + p.poetic + ' ' + p.ai + ' ' + p.author).toLowerCase();
+          if(text.indexOf(kw) >= 0){
+            results.push({post:p, planet:pn});
+          }
+        });
+      });
+      // 按帖子渲染，话题标签显示来自哪个星球
+      const showPosts = results.map(function(r){ return r.post; });
+      const labels = results.map(function(r){ return r.planet; });
+      if(showPosts.length === 0){
+        list.innerHTML = '<div class="empty-state glass"><div class="ico">✧</div><div class="t">没有找到含「' + keyword + '」的帖子</div><div class="s">试试其他关键词，或去对应星球看看</div></div>';
+        document.getElementById('loadMore').style.display = 'none';
+        return;
+      }
+      list.innerHTML = showPosts.map(function(p, i){
+        return '<div class="post-card glass" data-id="' + i + '">' +
+          '<div class="head">' +
+            '<div class="avatar"></div>' +
+            '<span class="name' + (p.anon ? ' anon' : '') + '">' + p.author + '</span>' +
+            '<span class="time">' + p.time + '</span>' +
+          '</div>' +
+          '<div class="q">' + p.q + '</div>' +
+          '<div class="poetic">' + p.poetic + '</div>' +
+          '<div class="ai-summary"><span class="ai-tag">AI 阐释</span>' + p.ai + '</div>' +
+          '<div class="stats">' +
+            '<span class="stat-pill">引用 ' + Math.floor(Math.random()*50) + '</span>' +
+            '<span class="stat-pill">匹配 ' + Math.floor(Math.random()*200) + '</span>' +
+            '<span class="stat-pill">复用 ' + Math.floor(Math.random()*30) + '</span>' +
+            '<span class="stat-pill topic" title="来自 ' + labels[i] + '">来自：' + labels[i] + '</span>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+      document.getElementById('loadMore').style.display = 'none';
+      list.querySelectorAll('.post-card').forEach(function(card){
+        card.onclick = function(){ alert('帖子详情页开发中…'); };
+      });
+    }
   </script>
 </body>
 </html>
