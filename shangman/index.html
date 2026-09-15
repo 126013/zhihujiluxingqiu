@@ -218,33 +218,66 @@
       70%{box-shadow:0 0 0 8px rgba(217,167,108,0)}
       100%{box-shadow:0 0 0 0 rgba(217,167,108,0)}
     }
-    /* 顶部导航 */
-    .top-nav{display:flex;gap:8px;margin:0 auto;align-items:center}
-    .top-nav-btn{
+    /* 顶部导航 - 匹配截图样式 */
+    .topbar{position:fixed;top:0;left:0;right:0;z-index:100}
+    .top-nav{
+      display:grid;grid-template-columns:auto auto 1fr auto auto auto;
+      align-items:center;gap:8px;
+      padding:calc(10px + env(safe-area-inset-top)) 24px 10px;
+      background:linear-gradient(0deg,rgba(7,7,15,.75) 0%,rgba(7,7,15,.92) 100%);
+      backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav-back{
+      display:inline-flex;align-items:center;gap:4px;
+      padding:7px 16px;border-radius:999px;
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);
+      color:#eafcff;font-size:13px;text-decoration:none;cursor:pointer;
+      transition:all .25s;white-space:nowrap;
+    }
+    .nav-back:hover{background:rgba(255,255,255,.12);border-color:rgba(120,255,200,.4);color:#a8ffe8}
+    .nav-back .back-arrow{font-size:18px;font-weight:700;line-height:1}
+    .nav-link{
       display:inline-flex;align-items:center;justify-content:center;
-      padding:8px 16px;border-radius:999px;border:1px solid rgba(138,180,255,.18);
-      background:rgba(138,180,255,.06);color:var(--muted);font-size:14px;
-      letter-spacing:.05em;cursor:pointer;transition:all .25s;text-decoration:none;white-space:nowrap;
+      padding:8px 16px;border-radius:999px;border:none;background:none;
+      color:rgba(255,255,255,.55);font-size:13px;text-decoration:none;cursor:pointer;
+      transition:all .25s;white-space:nowrap;font-family:inherit;
     }
-    .top-nav-btn:hover{color:#fff;border-color:rgba(138,180,255,.4);background:rgba(138,180,255,.12)}
-    .top-nav-btn.active{color:#fff;border-color:var(--accent);background:rgba(138,180,255,.2);box-shadow:0 0 16px rgba(138,180,255,.25)}
+    .nav-link:hover{color:#fff;background:rgba(255,255,255,.06)}
+    .nav-link.active{color:#fff;background:rgba(255,255,255,.1)}
     .nav-search{
-      display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;
-      border:1px solid rgba(138,180,255,.18);background:rgba(138,180,255,.06);
+      display:flex;align-items:center;gap:6px;
+      padding:6px 14px;border-radius:999px;
+      background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+      transition:all .25s;
     }
+    .nav-search:focus-within{border-color:rgba(140,200,255,.5);background:rgba(255,255,255,.08);box-shadow:0 0 14px rgba(140,200,255,.2)}
     .nav-search .s-ico{font-size:13px;opacity:.6}
-    .nav-search input{
-      background:none;border:none;outline:none;color:#fff;font-size:13px;width:140px;
-      font-family:inherit;
-    }
+    .nav-search input{background:none;border:none;outline:none;color:#fff;font-size:13px;width:100%;font-family:inherit}
     .nav-search input::placeholder{color:rgba(255,255,255,.3)}
+    .nav-core{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 22px;border-radius:999px;border:1px solid rgba(255,255,255,.22);
+      background:linear-gradient(135deg,#6b5b95 0%,#4a6fa5 100%);
+      box-shadow:0 0 24px rgba(107,91,149,.55),0 0 48px rgba(74,111,165,.35),inset 0 1px 0 rgba(255,255,255,.18);
+      color:#fff;font-size:14px;font-weight:600;letter-spacing:.08em;cursor:pointer;
+      transition:all .25s;font-family:inherit;
+    }
+    .nav-core:hover{transform:translateY(-2px);box-shadow:0 0 36px rgba(107,91,149,.85),0 0 72px rgba(74,111,165,.5)}
+    .nav-core.active{animation:core-pulse 2.4s ease-in-out infinite}
+    @keyframes core-pulse{
+      0%,100%{box-shadow:0 0 24px rgba(107,91,149,.55),0 0 48px rgba(74,111,165,.35),inset 0 1px 0 rgba(255,255,255,.18)}
+      50%{box-shadow:0 0 34px rgba(107,91,149,.85),0 0 68px rgba(74,111,165,.5),inset 0 1px 0 rgba(255,255,255,.25)}
+    }
     @media(max-width:768px){
-      .nav-search input{width:80px}
-      .top-nav-btn{padding:6px 10px;font-size:12px}
+      .top-nav{grid-template-columns:auto auto 1fr auto auto auto;gap:4px;padding-left:12px;padding-right:12px}
+      .nav-back,.nav-link{padding:6px 10px;font-size:12px}
+      .nav-core{padding:8px 14px;font-size:13px}
+      .nav-search input{width:60px}
     }
     /* 个人中心视图 */
     #prismView{display:block}
-    #meView{display:none;position:fixed;inset:0;z-index:90;background:#010304}
+    #meView{display:none;position:fixed;top:56px;left:0;right:0;bottom:0;z-index:90;background:#010304}
     #meView iframe{width:100%;height:100%;border:0}
     body.view-me #prismView{display:none}
     body.view-me #meView{display:block}
@@ -1865,25 +1898,17 @@
   <div class="planet-bg"></div>
   <canvas id="starfield" class="starfield"></canvas>
   <header class="topbar">
-    <div class="brand">
-      <strong>双盲诗</strong>
-      <span>DOUBLE-BLIND POEM</span>
-    </div>
     <nav class="top-nav">
-      <a class="top-nav-btn" href="../home.html" onclick="event.preventDefault();if(history.length>1)history.back();else location.href='../home.html'">返回</a>
-      <a class="top-nav-btn" href="../home.html">星系</a>
+      <a class="nav-back" href="../home.html" onclick="event.preventDefault();if(history.length>1)history.back();else location.href='../home.html'"><span class="back-arrow">‹</span> 返回</a>
+      <a class="nav-link" href="../home.html">星系</a>
       <label class="nav-search">
         <span class="s-ico">🔍</span>
         <input type="text" placeholder="搜索社区，回车直达" onkeydown="if(event.key==='Enter'&&this.value.trim())location.href='../community.html?q='+encodeURIComponent(this.value.trim())" />
       </label>
-      <button class="top-nav-btn active" data-view="prism" onclick="switchView('prism')">双盲棱镜</button>
-      <a class="top-nav-btn" href="../messages.html">消息</a>
-      <button class="top-nav-btn" data-view="me" onclick="switchView('me')">我的</button>
+      <button class="nav-core active" data-view="prism" onclick="switchView('prism')"><span>✧</span> 双盲棱镜</button>
+      <a class="nav-link" href="../messages.html">消息</a>
+      <button class="nav-link" data-view="me" onclick="switchView('me')">我的</button>
     </nav>
-    <div class="status-badge" id="topStatus">
-      <span class="dot"></span>
-      <span>模拟体验模式</span>
-    </div>
   </header>
 
   <main id="prismView">
@@ -4396,8 +4421,14 @@
     function switchView(view){
       const prismView = document.getElementById('prismView');
       const meView = document.getElementById('meView');
-      const buttons = document.querySelectorAll('.top-nav-btn');
-      buttons.forEach(b => b.classList.toggle('active', b.dataset.view === view));
+      const buttons = document.querySelectorAll('[data-view]');
+      buttons.forEach(b => {
+        if(b.dataset.view === view){
+          b.classList.add('active');
+        } else {
+          b.classList.remove('active');
+        }
+      });
 
       if(view === 'me'){
         document.body.classList.add('view-me');
