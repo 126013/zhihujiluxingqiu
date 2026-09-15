@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>星愈宇宙 · 作品集</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#050810;--bg2:#0a0e1a;--ink:#eafcff;--muted:#7a9ab0;
+  --accent:#8ab4ff;--accent2:#6b5b95;--glow:rgba(138,180,255,.15);
+  --card:rgba(20,28,45,.6);--border:rgba(138,180,255,.12);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Serif SC','Georgia',serif;
+  background:var(--bg);color:var(--ink);overflow-x:hidden;
+  line-height:1.6;
+}
+/* 星空背景 */
+.starfield{position:fixed;inset:0;z-index:0;pointer-events:none}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle 3s infinite}
+@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:1}}
+.planet-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 30% 20%,rgba(107,91,149,.12) 0%,transparent 50%),
+             radial-gradient(ellipse at 70% 80%,rgba(74,111,165,.1) 0%,transparent 50%)}
+/* 导航 */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;
+  background:linear-gradient(0deg,rgba(7,7,15,.75) 0%,rgba(7,7,15,.92) 100%);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,.06)}
+.top-nav{display:flex;align-items:center;gap:8px;padding:10px 24px;max-width:1200px;margin:0 auto}
+.nav-back{display:inline-flex;align-items:center;gap:4px;padding:7px 16px;border-radius:999px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);
+  color:var(--ink);font-size:13px;text-decoration:none;cursor:pointer;transition:.25s;white-space:nowrap}
+.nav-back:hover{background:rgba(255,255,255,.12);border-color:rgba(120,255,200,.4);color:#a8ffe8}
+.nav-back .back-arrow{font-size:18px;font-weight:700}
+.nav-link{padding:8px 16px;border-radius:999px;border:none;background:none;
+  color:rgba(255,255,255,.55);font-size:13px;text-decoration:none;cursor:pointer;transition:.25s;white-space:nowrap;font-family:inherit}
+.nav-link:hover{color:#fff;background:rgba(255,255,255,.06)}
+.nav-link.active{color:#fff;background:rgba(255,255,255,.1)}
+.nav-core{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.22);
+  background:linear-gradient(135deg,#6b5b95 0%,#4a6fa5 100%);
+  box-shadow:0 0 24px rgba(107,91,149,.55),inset 0 1px 0 rgba(255,255,255,.18);
+  color:#fff;font-size:14px;font-weight:600;letter-spacing:.08em;text-decoration:none;cursor:pointer;transition:.25s}
+.nav-core:hover{transform:translateY(-2px);box-shadow:0 0 36px rgba(107,91,149,.85)}
+@media(max-width:768px){
+  .top-nav{gap:4px;padding:8px 12px;flex-wrap:wrap}
+  .nav-back,.nav-link{padding:6px 10px;font-size:12px}
+  .nav-core{padding:8px 14px;font-size:13px}
+}
+/* 主内容 */
+main{position:relative;z-index:1;padding-top:60px}
+section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.section-inner{max-width:900px;width:100%}
+/* 登录视图 */
+#loginView{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at center,rgba(107,91,149,.08) 0%,transparent 60%)}
+.login-card{max-width:420px;width:90%;text-align:center;
+  background:var(--card);backdrop-filter:blur(16px);
+  border:1px solid var(--border);border-radius:24px;padding:48px 32px}
+.login-card h1{font-size:28px;margin-bottom:8px;
+  background:linear-gradient(135deg,#8ab4ff 0%,#c9b8ff 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.login-card .sub{color:var(--muted);font-size:14px;margin-bottom:32px}
+.login-btn{display:block;width:100%;padding:14px;border-radius:999px;border:none;
+  background:linear-gradient(135deg,#6b5b95 0%,#4a6fa5 100%);
+  color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:.25s;margin-bottom:12px}
+.login-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(107,91,149,.4)}
+.login-btn.secondary{background:rgba(255,255,255,.06);border:1px solid var(--border)}
+/* 首页 */
+.hero{text-align:center;margin-bottom:48px}
+.hero h2{font-size:clamp(32px,5vw,56px);margin-bottom:16px;
+  background:linear-gradient(135deg,#8ab4ff 0%,#c9b8ff 50%,#8ab4ff 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--muted);font-size:clamp(14px,2vw,18px);max-width:600px;margin:0 auto}
+.planet-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-top:40px}
+.planet-card{background:var(--card);backdrop-filter:blur(12px);
+  border:1px solid var(--border);border-radius:20px;padding:28px 20px;text-align:center;
+  cursor:pointer;transition:.3s;position:relative;overflow:hidden}
+.planet-card:hover{transform:translateY(-4px);border-color:rgba(138,180,255,.3);
+  box-shadow:0 12px 40px rgba(0,0,0,.3),0 0 24px rgba(138,180,255,.1)}
+.planet-card .icon{font-size:40px;margin-bottom:12px;display:block}
+.planet-card h3{font-size:18px;margin-bottom:8px}
+.planet-card p{font-size:13px;color:var(--muted)}
+.planet-card .orbit{width:60px;height:60px;border-radius:50%;margin:0 auto 12px;
+  border:1px solid rgba(138,180,255,.15);position:relative;animation:spin 8s linear infinite}
+.planet-card .orbit::before{content:'';position:absolute;width:8px;height:8px;border-radius:50%;
+  top:-4px;left:50%;transform:translateX(-50%)}
+.planet-card[data-color="purple"] .orbit{background:radial-gradient(circle at 30% 30%,#6b5b95,#3d2e5c)}
+.planet-card[data-color="purple"] .orbit::before{background:#a8b8ff}
+.planet-card[data-color="blue"] .orbit{background:radial-gradient(circle at 30% 30%,#4a6fa5,#1a2a4a)}
+.planet-card[data-color="blue"] .orbit::before{background:#8ab4ff}
+.planet-card[data-color="green"] .orbit{background:radial-gradient(circle at 30% 30%,#2d6a4f,#144d2e)}
+.planet-card[data-color="green"] .orbit::before{background:#7fe5b0}
+.planet-card[data-color="orange"] .orbit{background:radial-gradient(circle at 30% 30%,#c97b3e,#5a3a1e)}
+.planet-card[data-color="orange"] .orbit::before{background:#ffcc80}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* 双盲棱镜 */
+.prism-box{max-width:700px;margin:0 auto;text-align:center}
+.prism-box textarea{width:100%;min-height:120px;padding:16px 20px;border-radius:16px;
+  background:rgba(20,28,45,.6);border:1px solid var(--border);color:var(--ink);
+  font-size:16px;font-family:inherit;resize:vertical;outline:none;transition:.25s}
+.prism-box textarea:focus{border-color:rgba(138,180,255,.4);box-shadow:0 0 16px var(--glow)}
+.prism-box .row{display:flex;align-items:center;justify-content:space-between;margin-top:16px;flex-wrap:wrap;gap:12px}
+.prism-box .hint{font-size:13px;color:var(--muted)}
+.prism-btn{padding:12px 32px;border-radius:999px;border:none;
+  background:linear-gradient(135deg,#6b5b95 0%,#4a6fa5 100%);
+  color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:.25s;font-family:inherit}
+.prism-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(107,91,149,.4)}
+.prism-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.promise{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:40px}
+.promise article{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px}
+.promise .num{font-size:24px;color:var(--accent);font-weight:700;display:block;margin-bottom:8px}
+.promise b{font-size:15px;display:block;margin-bottom:4px}
+.promise p{font-size:13px;color:var(--muted)}
+/* 查询动画 */
+.ocean{position:fixed;inset:0;z-index:200;background:#010304;display:none;flex-direction:column;align-items:center;justify-content:center}
+.ocean.show{display:flex}
+.ocean h2{font-size:24px;margin-bottom:16px}
+.progress-bar{width:280px;height:4px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#6b5b95,#4a6fa5);width:0;transition:width .1s}
+.progress-label{color:var(--muted);font-size:13px;margin-top:12px}
+.ocean-cards{display:flex;gap:8px;margin-top:32px;flex-wrap:wrap;justify-content:center;max-width:600px}
+.ocean-card{padding:12px 20px;border-radius:12px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);font-size:14px;color:var(--muted);
+  animation:driftUp 2s ease forwards;opacity:0}
+@keyframes driftUp{to{opacity:1;transform:translateY(-10px)}}
+/* 结果展示 */
+.result-box{max-width:700px;margin:0 auto;text-align:center;display:none}
+.result-box.show{display:block}
+.result-quote{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:40px 32px;margin-bottom:24px}
+.result-quote .label{font-size:13px;color:var(--muted);margin-bottom:16px}
+.result-quote .text{font-size:clamp(20px,3vw,28px);line-height:1.5;margin-bottom:16px;font-weight:300}
+.result-quote .author{font-size:14px;color:var(--accent)}
+.result-quote .source{font-size:12px;color:var(--muted);margin-top:4px}
+.result-analysis{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:left;margin-bottom:24px}
+.result-analysis h4{font-size:15px;margin-bottom:12px;color:var(--accent)}
+.result-analysis p{font-size:14px;color:var(--muted);white-space:pre-line}
+.result-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+/* 个人中心 */
+.profile-scene{position:relative;width:100%;max-width:600px;height:400px;margin:0 auto}
+.profile-sphere{width:120px;height:120px;border-radius:50%;position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle at 35% 35%,#4a6fa5,#1a2a4a);
+  box-shadow:0 0 60px rgba(74,111,165,.3),inset 0 0 30px rgba(0,0,0,.3);cursor:pointer}
+.profile-sphere::after{content:'✧';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:32px;color:rgba(255,255,255,.3)}
+.skill-orbit{position:absolute;top:50%;left:50%;width:2px;height:2px}
+.skill-card{position:absolute;width:120px;padding:12px;border-radius:12px;
+  background:var(--card);border:1px solid var(--border);text-align:center;
+  cursor:pointer;transition:.3s;transform:translate(-50%,-50%)}
+.skill-card:hover{border-color:rgba(138,180,255,.3);box-shadow:0 0 20px rgba(138,180,255,.1)}
+.skill-card .card-icon{font-size:24px;display:block;margin-bottom:6px}
+.skill-card .card-title{font-size:13px;font-weight:600}
+.skill-card .card-tag{font-size:11px;color:var(--muted)}
+.skill-card.active{border-color:var(--accent);background:rgba(138,180,255,.08)}
+/* Toast */
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);
+  background:rgba(15,20,35,.95);color:#fff;padding:14px 28px;border-radius:999px;
+  border:1px solid rgba(138,180,255,.3);font-size:14px;z-index:9999;
+  box-shadow:0 4px 24px rgba(0,0,0,.5);transition:opacity .3s;opacity:0;pointer-events:none}
+.toast.show{opacity:1}
+/* 页脚 */
+footer{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;
+  border-top:1px solid rgba(255,255,255,.04)}
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{text-decoration:underline}
+/* 隐藏 */
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="planet-bg"></div>
+<div class="starfield" id="starfield"></div>
+
+<!-- 导航 -->
+<header class="topbar">
+  <nav class="top-nav">
+    <a class="nav-back" onclick="switchView('home')"><span class="back-arrow">‹</span> 返回</a>
+    <a class="nav-link active" onclick="switchView('home')">星系</a>
+    <a class="nav-core" onclick="switchView('prism')"><span>✧</span> 双盲棱镜</a>
+    <a class="nav-link" onclick="switchView('profile')">我的</a>
+  </nav>
+</header>
+
+<main>
+<!-- 登录视图 -->
+<section id="loginView">
+  <div class="login-card">
+    <h1>星愈宇宙</h1>
+    <p class="sub">在表达海洋中，找到一句与你同频的话</p>
+    <button class="login-btn" onclick="switchView('home')">进入星系</button>
+    <button class="login-btn secondary" onclick="switchView('prism')">直接体验双盲棱镜</button>
+  </div>
+</section>
+
+<!-- 首页 -->
+<section id="homeView" class="hidden">
+  <div class="section-inner">
+    <div class="hero">
+      <h2>星愈宇宙</h2>
+      <p>每一句话，都曾被真实地说出口。我们不替你编答案，只从无数真实表达里，找一句给你。</p>
+    </div>
+    <div class="planet-grid">
+      <div class="planet-card" data-color="purple" onclick="switchView('prism')">
+        <div class="orbit"></div>
+        <h3>双盲棱镜</h3>
+        <p>写下一个问题，在表达海洋中找到共鸣</p>
+      </div>
+      <div class="planet-card" data-color="blue" onclick="switchView('profile')">
+        <div class="orbit"></div>
+        <h3>个人中心</h3>
+        <p>你的星球，你的轨迹</p>
+      </div>
+      <div class="planet-card" data-color="green" onclick="showToast('社区功能正在建设中')">
+        <div class="orbit"></div>
+        <h3>星愈社区</h3>
+        <p>分享你的句子，照亮他人</p>
+      </div>
+      <div class="planet-card" data-color="orange" onclick="showToast('消息功能正在建设中')">
+        <div class="orbit"></div>
+        <h3>消息</h3>
+        <p>与共鸣者的对话</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 双盲棱镜 -->
+<section id="prismView" class="hidden">
+  <div class="section-inner">
+    <div class="prism-box" id="prismBox">
+      <textarea id="questionInput" placeholder="写下你此刻想问的问题……">我明明已经很努力了，为什么还是觉得自己没有进步？</textarea>
+      <div class="row">
+        <span class="hint">每一句话，都曾被真实地说出口</span>
+        <button class="prism-btn" id="startBtn" onclick="startSearch()">开始寻找</button>
+      </div>
+      <div class="promise">
+        <article><span class="num">01</span><b>不替你编答案</b><p>从真实表达里找一句给你，AI 只负责轻轻解释</p></article>
+        <article><span class="num">02</span><b>只给你一句</b><p>不罗列答案，只把最像在回应你的那一句停在你面前</p></article>
+        <article><span class="num">03</span><b>可以继续问</b><p>它记得你的上下文，觉得不够可以继续追问</p></article>
+      </div>
+    </div>
+    <div class="result-box" id="resultBox">
+      <div class="result-quote">
+        <div class="label">✧ 这句找到了你</div>
+        <p class="text" id="quoteText"></p>
+        <p class="author" id="quoteAuthor"></p>
+        <p class="source" id="quoteSource"></p>
+      </div>
+      <div class="result-analysis">
+        <h4>AI 解读</h4>
+        <p id="quoteAnalysis"></p>
+      </div>
+      <div class="result-actions">
+        <button class="prism-btn" onclick="resetPrism()">再找一个</button>
+        <button class="nav-back" onclick="switchView('profile')">存入我的星球</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 个人中心 -->
+<section id="profileView" class="hidden">
+  <div class="section-inner">
+    <div class="hero" style="margin-bottom:20px">
+      <h2 style="font-size:clamp(24px,4vw,36px)">个人中心</h2>
+      <p>点击星球或卡片，探索你的技能轨迹</p>
+    </div>
+    <div class="profile-scene" id="profileScene">
+      <div class="profile-sphere" id="mainSphere" onclick="showToast('点击卡片选择，再点击星球确认')"></div>
+    </div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="nav-back" onclick="doLogout()">退出登录</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- 查询动画 -->
+<div class="ocean" id="ocean">
+  <h2>正在寻找与你相似的感受</h2>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <p class="progress-label" id="progressLabel">正在读取表达海洋</p>
+  <div class="ocean-cards" id="oceanCards"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<footer>
+  <p>星愈宇宙 · 双盲棱镜 — <a href="https://github.com/126013/zhihujiluxingqiu" target="_blank">GitHub 源码</a> · <a href="https://126013.github.io/zhihujiluxingqiu/" target="_blank">在线版</a></p>
+  <p style="margin-top:8px;opacity:.5">本作品集可离线运行 · 适配电脑与手机</p>
+</footer>
+
+<script>
+// ============ 星空背景 ============
+(function(){
+  var sf=document.getElementById('starfield');
+  for(let i=0;i<80;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    const size=Math.random()*2+0.5;
+    s.style.width=size+'px';s.style.height=size+'px';
+    s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';
+    s.style.animationDelay=Math.random()*3+'s';
+    sf.appendChild(s);
+  }
+})();
+
+// ============ 数据 ============
+var QUOTES=[
+  {text:'有些路看起来没有变化，是因为你正在成为能走更远的人。',author:'知乎用户 林深时见鹿',source:'知乎公开回答 · 关于成长与自我怀疑',keywords:['努力','进步','成长','变化','路','成为','自我怀疑','走']},
+  {text:'树不会因为冬天来了，就怀疑自己不会再发芽。',author:'知乎用户 南风',source:'知乎用户投稿 · 关于等待与重新开始',keywords:['等待','冬天','发芽','怀疑','重新开始','低谷','坚持','春天']},
+  {text:'你感到迟缓的那一刻，也许正是根在地下生长。',author:'知乎用户 一页山河',source:'知乎用户投稿 · 关于低谷和沉淀',keywords:['迟缓','低谷','生长','根','地下','沉淀','积累','看不见']},
+  {text:'不要因为走得慢，就以为自己停在原地。',author:'知乎用户 步履不停',source:'知乎公开回答 · 关于速度与前进',keywords:['慢','走','原地','速度','前进','脚步','坚持']},
+  {text:'很多答案不是被找到的，是在一次次继续里慢慢长出来的。',author:'知乎用户 河流经过',source:'知乎公开回答 · 关于坚持与选择',keywords:['答案','继续','坚持','选择','长出来','慢慢','过程']},
+  {text:'你不用总是很坚强的，偶尔脆弱一下也没关系。',author:'知乎用户 晚安邮局',source:'知乎用户投稿 · 关于允许自己脆弱',keywords:['坚强','脆弱','没关系','累了','休息','心疼','安慰']},
+  {text:'被理解的那一刻，好像心里有什么东西轻轻落地了。',author:'知乎用户 月亮邮差',source:'知乎公开回答 · 关于被理解的感受',keywords:['理解','懂我','被看见','共鸣','心里','落地']},
+  {text:'有些夜晚你不是真的失眠，你只是在等一个愿意听你说话的人。',author:'知乎用户 深夜食堂',source:'知乎公开回答 · 关于孤独与倾诉',keywords:['失眠','夜晚','等','听你说话','倾诉','孤独','陪伴']},
+  {text:'最难的时候，有人陪你说一句"我懂"，比什么都重要。',author:'知乎用户 温水煮茶',source:'知乎用户投稿 · 关于陪伴与懂得',keywords:['难','陪伴','我懂','懂得','重要','安慰','温暖']},
+  {text:'真正喜欢一个人，是你突然有了软肋，也突然有了铠甲。',author:'知乎用户 半生瓜',source:'知乎公开回答 · 关于喜欢与勇气',keywords:['喜欢','爱','软肋','铠甲','勇气','心动','关系']},
+  {text:'最好的安慰不是"别难过"，而是"我陪你难过"。',author:'知乎用户 陈慢慢',source:'知乎用户投稿 · 关于安慰的方式',keywords:['安慰','别难过','我陪你','陪伴','心疼','懂']},
+  {text:'有些人的出现，就是为了告诉你，你值得被好好对待。',author:'知乎用户 春日部',source:'知乎公开回答 · 关于遇见与被爱',keywords:['遇见','值得','好好对待','爱','温暖','出现']},
+  {text:'生活不是等待暴风雨过去，而是学会在雨中起舞。',author:'佚名',source:'诗歌摘录 · 关于面对困境的心态',keywords:['生活','困难','暴风雨','等待','学会','起舞','面对','心态']},
+  {text:'慢慢来，比较快。',author:'知乎用户 老茶客',source:'知乎公开回答 · 关于节奏与耐心',keywords:['慢','慢慢来','快','节奏','耐心','不急','稳']},
+  {text:'你已经很努力了，这句话不需要任何前提条件。',author:'知乎用户 早晨的风',source:'知乎用户投稿 · 关于自我接纳',keywords:['努力','已经','不需要','条件','自我接纳','肯定','值得']},
+  {text:'山的那边还是山，但你已经不是原来那个爬山的人了。',author:'知乎用户 山行',source:'知乎公开回答 · 关于成长与变化',keywords:['山','成长','变化','原来','爬山','经历']},
+  {text:'你现在经历的所有迷茫，都是在为接下来的选择铺路。',author:'知乎用户 指路星',source:'知乎用户投稿 · 关于迷茫与方向',keywords:['迷茫','经历','选择','铺路','方向','未来','困惑']},
+  {text:'再往前走几步吧，说不定拐弯就会遇到惊喜。',author:'知乎用户 糖炒栗子',source:'知乎公开回答 · 关于希望与惊喜',keywords:['往前走','拐弯','惊喜','希望','继续','加油','未来']},
+  {text:'你不需要向所有人证明自己，你只需要对自己的人生负责。',author:'知乎用户 独处的人',source:'知乎公开回答 · 关于自我认同与边界',keywords:['证明','不需要','所有人','自己','人生','负责','边界','自我']},
+  {text:'学会说"不"，是你给自己最好的礼物。',author:'知乎用户 边界感',source:'知乎用户投稿 · 关于边界与拒绝',keywords:['说不','拒绝','边界','礼物','学会','自我保护']}
+];
+
+var PRESET_QA=[
+  {keywords:['努力','进步','成长','变化','原地踏步','没有进步','觉得自己','不够好','自我怀疑','不够努力','为什么我'],quote:QUOTES[14],analysis:'这句话的意思不是"你应该满足"，而是"有些东西需要时间才能被看见"。\n\n你的问题里带着一种自我要求——这本身不是坏事，但它有时候会让你低估已经走了多远。这句话想做的，是帮你把衡量进步的标尺，从别人的刻度，换成你自己的。'},
+  {keywords:['累','难过','低落','不开心','情绪','崩溃','想哭','撑不住','心情不好','难受','压抑','烦躁'],quote:QUOTES[5],analysis:'这句话没有在劝你"振作起来"，它只是在告诉你：你可以不用那么用力。\n\n有时候我们觉得累，不是因为事情太多，而是因为我们一直在跟自己较劲——跟"我应该更好"较劲。这句话想做的，是帮你把那个"应该"暂时放一放。'},
+  {keywords:['喜欢','爱','恋爱','分手','感情','表白','失恋','暗恋','心动'],quote:QUOTES[11],analysis:'这句话不是在教你"怎么谈恋爱"，它是在说：你值得被好好对待这件事，不取决于别人喜不喜欢你。\n\n你问的是感情问题，但我猜你真正在意的可能是——"我够不够好，配不配被爱"。这句话想告诉你的是：你的价值，不需要别人的喜欢来证明。'},
+  {keywords:['焦虑','迷茫','未来','想太多','害怕','担心','不安','恐慌','不知所措','没有方向','很迷茫'],quote:QUOTES[1],analysis:'这句话没有否定你的焦虑，它只是把时间的尺度拉长了一点给你看。\n\n你现在感到迷茫，就像一棵树在冬天里怀疑自己——"我是不是再也不会长叶子了？"但树不会这样怀疑，因为它知道冬天只是一个季节，不是全部的人生。'},
+  {keywords:['孤独','一个人','没人懂','朋友','孤单','寂寞','陪伴','没有人','没人陪','自己一个人','没有人懂'],quote:QUOTES[7],analysis:'这句话没有在说"你应该多交朋友"，它只是看见了你的孤独。\n\n你说"没人懂我"的时候，我听到的不是抱怨，而是一种很深的期待——你期待有人能穿过你表面的样子，看见里面那个真实的你。'},
+  {keywords:['选择','纠结','选哪个','决定','后悔','要不要','不知道选','难以抉择','选不出来','左右为难'],quote:QUOTES[4],analysis:'这句话不是在告诉你"怎么选才对"，它是在说：没有绝对正确的选择，是你走下去的每一步，让那个选择变得正确。\n\n你现在害怕选错，可能是因为你觉得"选对了"就一劳永逸。但人生不是这样的——大多数选择，都只是决定了你接下来往哪个方向走。'},
+  {keywords:['工作','上班','压力','辞职','离职','职场','加班','工资','同事','领导','不想上班','换工作'],quote:QUOTES[2],analysis:'这句话的意思不是"你应该慢慢来"，而是"你可以不用现在就知道所有答案"。\n\n你现在感到痛苦，可能不是因为工作本身，而是因为你一边在走，一边还在不停地问自己"这条路对不对"。先走着，方向是走出来的，不是想出来的。'},
+  {keywords:['失去','遗憾','错过','来不及','如果','后悔','回不去','没有珍惜','失去了'],quote:QUOTES[15],analysis:'这句话没有在说"别难过"，它是在说：你已经因为这段经历而不同了。\n\n你以为自己失去的东西，其实已经变成了你的一部分。你不是原来那个爬山的人了——这不是一句安慰，这是事实。'}
+];
+
+// ============ 视图切换 ============
+function switchView(view){
+  var views=['loginView','homeView','prismView','profileView'];
+  views.forEach(function(v){
+    var el=document.getElementById(v);
+    if(el) el.classList.toggle('hidden', v!==view+'View');
+  });
+  var links=document.querySelectorAll('.nav-link,.nav-core');
+  links.forEach(function(l){
+    l.classList.remove('active');
+    if((view==='home'&&(l.textContent.indexOf('星系')>=0||l.textContent.indexOf('返回')>=0))||(view==='prism'&&l.textContent.indexOf('双盲棱镜')>=0)||(view==='profile'&&l.textContent.indexOf('我的')>=0)){
+      if(l.textContent.indexOf('返回')<0) l.classList.add('active');
+    }
+  });
+  // 退出登录特殊处理
+  if(view==='login'){
+    views.forEach(function(v){document.getElementById(v).classList.add('hidden')});
+    document.getElementById('loginView').classList.remove('hidden');
+  }
+  window.scrollTo(0,0);
+}
+
+// ============ 双盲棱镜 ============
+function matchQuote(question){
+  var q=question.toLowerCase();
+  var bestPreset=null,bestScore=0;
+  PRESET_QA.forEach(function(p){
+    var score=p.keywords.reduce(function(s,k){return s+(q.indexOf(k)>=0?1:0)},0);
+    if(score>bestScore){bestScore=score;bestPreset=p}
+  });
+  if(bestPreset&&bestScore>0){
+    return{quote:bestPreset.quote,analysis:bestPreset.analysis};
+  }
+  // 关键词匹配
+  var bestQuote=null,bestQScore=0;
+  QUOTES.forEach(function(item){
+    var score=item.keywords.reduce(function(s,k){return s+(q.indexOf(k)>=0?1:0)},0);
+    if(score>bestQScore){bestQScore=score;bestQuote=item}
+  });
+  if(bestQuote&&bestQScore>0){
+    return{quote:bestQuote,analysis:'这句话出现在你面前，不是偶然的。\n\n你的问题里有一些关键词，和这句话被说出时的语境重合了。它不是在给你答案，它只是想让你知道：有人也走过这一段。'};
+  }
+  // 随机
+  var idx=Math.floor(Math.random()*QUOTES.length);
+  return{quote:QUOTES[idx],analysis:'这句话出现在你面前，不是偶然的。\n\n它不是在给你答案，它只是想让你知道：有人也走过这一段。如果愿意，可以继续说说你的感受。'};
+}
+
+function startSearch(){
+  var q=document.getElementById('questionInput').value.trim()||'我最近有点迷茫，该怎么继续？';
+  var btn=document.getElementById('startBtn');
+  btn.disabled=true;
+  // 显示动画
+  var ocean=document.getElementById('ocean');
+  ocean.classList.add('show');
+  var fill=document.getElementById('progressFill');
+  var label=document.getElementById('progressLabel');
+  var cards=document.getElementById('oceanCards');
+  cards.innerHTML='';
+  fill.style.width='0%';
+  label.textContent='正在读取表达海洋';
+  // 随机展示卡片
+  var shown=[];
+  var progress=0;
+  var timer=setInterval(function(){
+    progress+=2;
+    fill.style.width=progress+'%';
+    if(progress%10===0&&progress<80){
+      var idx=Math.floor(Math.random()*QUOTES.length);
+      while(shown.indexOf(idx)>=0&&shown.length<QUOTES.length){
+        idx=(idx+1)%QUOTES.length;
+      }
+      shown.push(idx);
+      var c=document.createElement('div');
+      c.className='ocean-card';
+      c.textContent=QUOTES[idx].text;
+      c.style.animationDelay=(shown.length*0.1)+'s';
+      cards.appendChild(c);
+    }
+    if(progress>=30)label.textContent='正在从真实表达中寻找共鸣';
+    if(progress>=60)label.textContent='正在匹配最相似的那一句';
+    if(progress>=100){
+      clearInterval(timer);
+      label.textContent='找到了';
+      setTimeout(function(){
+        ocean.classList.remove('show');
+        showResult(q);
+        btn.disabled=false;
+      },500);
+    }
+  },50);
+}
+
+function showResult(question){
+  var match=matchQuote(question);
+  document.getElementById('quoteText').textContent='"'+match.quote.text+'"';
+  document.getElementById('quoteAuthor').textContent='— '+match.quote.author;
+  document.getElementById('quoteSource').textContent=match.quote.source;
+  document.getElementById('quoteAnalysis').textContent=match.analysis;
+  document.getElementById('prismBox').classList.add('hidden');
+  document.getElementById('resultBox').classList.add('show');
+}
+
+function resetPrism(){
+  document.getElementById('prismBox').classList.remove('hidden');
+  document.getElementById('resultBox').classList.remove('show');
+  document.getElementById('questionInput').value='';
+  document.getElementById('questionInput').focus();
+}
+
+// ============ 个人中心 ============
+var SKILLS=[
+  {title:'双盲棱镜',tag:'核心功能',icon:'✧'},
+  {title:'我的发布',tag:'内容',icon:'📝'},
+  {title:'我的草稿',tag:'记录',icon:'✎'},
+  {title:'消息通知',tag:'社交',icon:'✉'},
+  {title:'星愈社区',tag:'分享',icon:'🌟'},
+  {title:'账号设置',tag:'管理',icon:'⚙'},
+  {title:'退出登录',tag:'安全',icon:'⏏'}
+];
+var selectedSkill=0;
+
+function buildProfileScene(){
+  var scene=document.getElementById('profileScene');
+  var existing=scene.querySelectorAll('.skill-orbit,.skill-card');
+  existing.forEach(function(e){e.remove()});
+  var orbit=document.createElement('div');
+  orbit.className='skill-orbit';
+  scene.appendChild(orbit);
+  var radius=150;
+  var count=SKILLS.length;
+  SKILLS.forEach(function(s,i){
+    var angle=(i/count)*Math.PI*2-Math.PI/2;
+    var x=Math.cos(angle)*radius;
+    var y=Math.sin(angle)*radius;
+    var card=document.createElement('div');
+    card.className='skill-card'+(i===selectedSkill?' active':'');
+    card.style.left=(50+x/6)+'%';
+    card.style.top=(50+y/6)+'%';
+    card.innerHTML='<span class="card-icon">'+s.icon+'</span><span class="card-title">'+s.title+'</span><span class="card-tag">'+s.tag+'</span>';
+    card.onclick=function(){selectSkill(i)};
+    orbit.appendChild(card);
+  });
+  // 旋转动画
+  var angle=0;
+  function rotate(){
+    angle+=0.003;
+    var cards=orbit.querySelectorAll('.skill-card');
+    var r=150;
+    var count=SKILLS.length;
+    cards.forEach(function(c,i){
+      var a=(i/count)*Math.PI*2-Math.PI/2+angle;
+      var x=Math.cos(a)*r;
+      var y=Math.sin(a)*r*0.7;
+      c.style.left=(50+x/6)+'%';
+      c.style.top=(50+y/6)+'%';
+    });
+    requestAnimationFrame(rotate);
+  }
+  rotate();
+}
+
+function selectSkill(i){
+  selectedSkill=i;
+  var cards=document.querySelectorAll('.skill-card');
+  cards.forEach(function(c,idx){c.classList.toggle('active',idx===i)});
+  showToast('已选择：'+SKILLS[i].title);
+}
+
+document.getElementById('mainSphere').addEventListener('click',function(){
+  if(SKILLS[selectedSkill].title==='退出登录'){
+    doLogout();
+  }else{
+    showToast('进入：'+SKILLS[selectedSkill].title);
+    if(SKILLS[selectedSkill].title==='双盲棱镜') setTimeout(function(){switchView('prism')},600);
+  }
+});
+
+// ============ 退出登录 ============
+function doLogout(){
+  showToast('已退出登录');
+  setTimeout(function(){switchView('login')},800);
+}
+
+// ============ Toast ============
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer=setTimeout(function(){t.classList.remove('show')},2000);
+}
+
+// ============ 初始化 ============
+buildProfileScene();
+// 检查登录状态
+var isLoggedIn=localStorage.getItem('starheal-user');
+if(isLoggedIn){
+  switchView('home');
+}else{
+  switchView('login');
+}
+</script>
+</body>
+</html>
