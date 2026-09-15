@@ -2562,7 +2562,7 @@
       }
 
       // Reset UI
-      $('topStatus').innerHTML = '<span class="dot"></span><span>正在匹配 · 模拟模式</span>';
+      if($('topStatus')) $('topStatus').innerHTML = '<span class="dot"></span><span>正在匹配 · 模拟模式</span>';
       $('progressBar').style.width = '0%';
       $('progressLabel').textContent = '正在读取表达海洋';
       $('matchNote').textContent = '正在从 58,240 条真实表达中寻找共鸣';
