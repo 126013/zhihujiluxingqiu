@@ -2699,7 +2699,7 @@
         chatSection.classList.remove('hidden-section');
         chatSection.classList.add('chat-enter');
         renderChat();
-        $('topStatus').innerHTML = '<span class="dot"></span><span>模拟体验模式</span>';
+        $('topStatus') && ($('topStatus').innerHTML = '<span class="dot"></span><span>模拟体验模式</span>');
         // Force reflow, then trigger chat fade-in
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
@@ -4225,7 +4225,7 @@
         state.conversationHistory = [];
         state.animationStarted = false;
         $('questionInput').value = '';
-        $('topStatus').innerHTML = '<span class="dot"></span><span>模拟体验模式</span>';
+        $('topStatus') && ($('topStatus').innerHTML = '<span class="dot"></span><span>模拟体验模式</span>');
         showSection('introSection');
         hideSection('oceanSection');
         hideSection('chatSection');
@@ -4251,7 +4251,7 @@
         state.conversationHistory = [];
         state.animationStarted = false;
         $('questionInput').value = '';
-        $('topStatus').innerHTML = '<span class="dot"></span><span>模拟体验模式</span>';
+        $('topStatus') && ($('topStatus').innerHTML = '<span class="dot"></span><span>模拟体验模式</span>');
         showSection('introSection');
         hideSection('oceanSection');
         hideSection('chatSection');
