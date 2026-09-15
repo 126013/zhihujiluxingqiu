@@ -393,9 +393,76 @@
       50% { opacity: .7; }
       100% { transform: translateX(5%) rotate(3deg); opacity: .3; }
     }
+    /* 顶部导航 - 与双盲棱镜一致 */
+    .topbar{position:fixed;top:0;left:0;right:0;z-index:100}
+    .top-nav{
+      display:grid;grid-template-columns:auto auto 1fr auto auto auto;
+      align-items:center;gap:8px;
+      padding:calc(10px + env(safe-area-inset-top)) 24px 10px;
+      background:linear-gradient(0deg,rgba(7,7,15,.75) 0%,rgba(7,7,15,.92) 100%);
+      backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav-back{
+      display:inline-flex;align-items:center;gap:4px;
+      padding:7px 16px;border-radius:999px;
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);
+      color:#eafcff;font-size:13px;text-decoration:none;cursor:pointer;
+      transition:all .25s;white-space:nowrap;
+    }
+    .nav-back:hover{background:rgba(255,255,255,.12);border-color:rgba(120,255,200,.4);color:#a8ffe8}
+    .nav-back .back-arrow{font-size:18px;font-weight:700;line-height:1}
+    .nav-link{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:8px 16px;border-radius:999px;border:none;background:none;
+      color:rgba(255,255,255,.55);font-size:13px;text-decoration:none;cursor:pointer;
+      transition:all .25s;white-space:nowrap;font-family:inherit;
+    }
+    .nav-link:hover{color:#fff;background:rgba(255,255,255,.06)}
+    .nav-link.active{color:#fff;background:rgba(255,255,255,.1)}
+    .nav-search{
+      display:flex;align-items:center;gap:6px;
+      padding:6px 14px;border-radius:999px;
+      background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+      transition:all .25s;
+    }
+    .nav-search:focus-within{border-color:rgba(140,200,255,.5);background:rgba(255,255,255,.08);box-shadow:0 0 14px rgba(140,200,255,.2)}
+    .nav-search .s-ico{font-size:13px;opacity:.6}
+    .nav-search input{background:none;border:none;outline:none;color:#fff;font-size:13px;width:100%;font-family:inherit}
+    .nav-search input::placeholder{color:rgba(255,255,255,.3)}
+    .nav-core{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 22px;border-radius:999px;border:1px solid rgba(255,255,255,.22);
+      background:linear-gradient(135deg,#6b5b95 0%,#4a6fa5 100%);
+      box-shadow:0 0 24px rgba(107,91,149,.55),0 0 48px rgba(74,111,165,.35),inset 0 1px 0 rgba(255,255,255,.18);
+      color:#fff;font-size:14px;font-weight:600;letter-spacing:.08em;text-decoration:none;cursor:pointer;
+      transition:all .25s;font-family:inherit;
+    }
+    .nav-core:hover{transform:translateY(-2px);box-shadow:0 0 36px rgba(107,91,149,.85),0 0 72px rgba(74,111,165,.5)}
+    .orbit-section{padding-top:70px}
+    @media(max-width:768px){
+      .top-nav{grid-template-columns:auto auto 1fr auto auto auto;gap:4px;padding-left:12px;padding-right:12px}
+      .nav-back,.nav-link{padding:6px 10px;font-size:12px}
+      .nav-core{padding:8px 14px;font-size:13px}
+      .nav-search input{width:60px}
+    }
   </style>
 </head>
 <body>
+  <!-- 顶部导航（仅独立页面显示） -->
+  <header class="topbar" id="skillTopbar" style="display:none">
+    <nav class="top-nav">
+      <a class="nav-back" href="home.html" onclick="event.preventDefault();if(history.length>1)history.back();else location.href='home.html'"><span class="back-arrow">‹</span> 返回</a>
+      <a class="nav-link" href="home.html">星系</a>
+      <label class="nav-search">
+        <span class="s-ico">🔍</span>
+        <input type="text" placeholder="搜索社区，回车直达" onkeydown="if(event.key==='Enter'&&this.value.trim())location.href='community.html?q='+encodeURIComponent(this.value.trim())" />
+      </label>
+      <a class="nav-core" href="shangman/"><span>✧</span> 双盲棱镜</a>
+      <a class="nav-link" href="messages.html">消息</a>
+      <a class="nav-link active" href="skill.html">我的</a>
+    </nav>
+  </header>
   <main class="orbit-section" aria-label="个人中心导航">
     <div class="aurora"></div>
     <div class="star-field" id="starField"></div>
@@ -609,6 +676,8 @@
       function doLogout() {
         try {
           localStorage.removeItem('starheal-user');
+          localStorage.removeItem('isLoggedIn');
+          localStorage.removeItem('currentUser');
           sessionStorage.clear();
           document.cookie = 'starheal_user=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
         } catch (e) {}
@@ -617,8 +686,8 @@
         if (window.parent && window.parent !== window) {
           window.parent.postMessage('doLogout', '*');
         } else {
-          // 独立页面则跳转回双盲棱镜
-          setTimeout(function(){ location.href = 'shangman/'; }, 1000);
+          // 独立页面则跳转回登录页
+          setTimeout(function(){ location.href = 'login.html'; }, 1200);
         }
       }
 
@@ -742,12 +811,10 @@
     })();
   </script>
 
-  <!-- 共享导航（仅独立页面显示，iframe 内嵌时不显示） -->
-  <script src="js/app.js?v=205"></script>
+  <!-- 顶部导航：仅独立页面显示，iframe 内嵌时不显示 -->
   <script>
     if (window.parent === window) {
-      StarhealApp.injectBackground();
-      StarhealApp.injectTopNav('profile');
+      document.getElementById('skillTopbar').style.display = 'block';
     }
   </script>
 </body>

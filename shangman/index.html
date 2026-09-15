@@ -4462,11 +4462,15 @@
     function doLogout(){
       try {
         localStorage.removeItem('starheal-user');
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('currentUser');
         sessionStorage.clear();
         document.cookie = 'starheal_user=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
       } catch(e){}
-      switchView('prism');
       showToast('已退出登录');
+      setTimeout(function(){
+        location.href = '../login.html';
+      }, 1200);
     }
 
     // 监听来自 iframe 的退出登录消息
